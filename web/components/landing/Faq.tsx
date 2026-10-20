@@ -71,7 +71,7 @@ export function Faq({ kicker = 'PREGUNTAS', titulo = 'Lo que quizá te estás pr
                   aria-expanded={estaAbierto}
                   aria-controls={panelId}
                   onClick={() => setAbierto(estaAbierto ? null : i)}
-                  className="flex min-h-14 w-full items-center justify-between gap-4 py-4 text-left [touch-action:manipulation]"
+                  className="flex min-h-14 w-full items-center justify-between gap-4 rounded-[12px] py-4 text-left transition-colors duration-100 active:bg-[var(--chip-bg)] [touch-action:manipulation]"
                 >
                   <span className="text-[16px] font-semibold text-[var(--text-primary)]">{it.pregunta}</span>
                   <ChevronDown

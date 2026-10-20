@@ -41,14 +41,14 @@ export function FooterLegal({ appName, logo, enlaces, soporteEmail, anio }: Foot
               {enlaces.map((e, i) => (
                 <li key={e.href} className="flex items-center">
                   {i > 0 && (
-                    <span aria-hidden="true" className="hidden px-1 text-[var(--text-tertiary)] sm:inline">
+                    <span aria-hidden="true" className="hidden self-center px-1 leading-none text-[var(--text-tertiary)] sm:inline">
                       ·
                     </span>
                   )}
                   {/* py-3 = área táctil ≥44px sin líneas pegadas */}
                   <a
                     href={e.href}
-                    className="px-1 py-3 text-[13px] text-[var(--text-tertiary)] underline-offset-4 hover:text-[var(--text-secondary)] hover:underline"
+                    className="py-3 text-[13px] text-[var(--text-tertiary)] underline-offset-4 hover:text-[var(--text-secondary)] hover:underline"
                   >
                     {e.label}
                   </a>

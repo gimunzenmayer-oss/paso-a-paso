@@ -35,13 +35,13 @@ function Logo() {
 
 function VisualHero() {
   return (
-    <div className="flex justify-center bg-[radial-gradient(ellipse_at_50%_30%,color-mix(in_oklab,var(--accent)_16%,transparent),transparent_70%)] px-4 py-8">
+    <div className="flex justify-center bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--accent)_16%,transparent),transparent)] px-4 py-8">
       <div className="relative aspect-[9/19.5] w-[220px] max-w-full overflow-hidden rounded-[30px] border-[5px] border-[var(--text-primary)] bg-[var(--surface)] shadow-[var(--shadow-2)]">
-        {/* Captura real de la app (tablero para hablar) */}
+        {/* Captura real de la app (un paso de la rutina: la promesa de días predecibles) */}
         <Image
           priority
-          src="/capturas/tablero.jpg"
-          alt="Tablero para hablar: botones con fotos como Quiero agua, Quiero comer y Quiero un abrazo"
+          src="/capturas/rutina.jpg"
+          alt="Paso de la rutina de la mañana con foto y botón ¡Hecho!"
           width={375}
           height={812}
           sizes="220px"
@@ -60,7 +60,7 @@ export default function PaginaDeVentas() {
         appName="Paso a Paso"
         logo={<Logo />}
         // Espacios que no se cortan: "en la crisis" queda en un solo renglón (sin "y, en la" suelto).
-        h1Marked={'Días predecibles y, en\u00a0la\u00a0crisis, [acento]sabrás qué hacer[/acento]'}
+        h1Marked={'Días predecibles y, en\u00a0la\u00a0crisis, [acento]sabrás\u00a0qué\u00a0hacer[/acento]'}
         subtitleMarked={'El [b]Método Antes, Durante y Después[/b]. Tu primera rutina, [b]lista\u00a0en\u00a02\u00a0minutos[/b].'}
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
@@ -84,7 +84,7 @@ export default function PaginaDeVentas() {
         frases={[
           'Cada semana se van [b]horas[/b] en material que se pierde o se rompe.',
           'Y la culpa queda dando vueltas: [b]"así vivo desde hace años"[/b].',
-          'Más páginas de internet no ayudan: [acento]te confunden más[/acento].',
+          'Más páginas de internet no ayudan: [b]te confunden más[/b].',
         ]}
         contraste={{
           labelHoy: 'Hoy',
@@ -115,7 +115,7 @@ export default function PaginaDeVentas() {
         tituloMarked="Así se ve [acento]su día[/acento] en tu celular"
         frames={[
           { src: '/capturas/espacio.jpg', alt: 'Espacio del niño con botones grandes: Mi día, Hablar, Esperar, Calma, Historias y Mis estrellas', label: 'Su espacio, con su nombre y sus fotos' },
-          { src: '/capturas/rutina.jpg', alt: 'Paso de la rutina con foto y botón ¡Hecho!', label: 'Cada paso con foto y "¡Hecho!"' },
+          { src: '/capturas/tablero.jpg', alt: 'Tablero para hablar: botones con fotos como Sí, No, Ayuda, Quiero y Me siento', label: 'Pide lo que necesita con fotos' },
           { src: '/capturas/siento.jpg', alt: 'Termómetro de emociones: de Necesito ayuda a Estoy tranquilo', label: '"¿Cómo me siento?" cuando no salen las palabras' },
           { src: '/capturas/guia.jpg', alt: 'Guía para familias con la lista de momentos difíciles', label: 'Qué hacer ahora, en 12 momentos difíciles' },
           { src: '/capturas/informe.jpg', alt: 'Informe de seguimiento para imprimir o guardar como PDF', label: 'Su semana, lista para la terapeuta' },
@@ -134,6 +134,7 @@ export default function PaginaDeVentas() {
             { resultado: 'Rutinas e historias listas: mañana, colegio, noche, médico y más', valor: '$10' },
           ],
           totalTachado: '$116',
+          nota: 'Tú pagas US$59.90 al año. Los primeros 7 días, nada.',
         }}
         anual={{
           nombre: 'Anual',
@@ -142,8 +143,7 @@ export default function PaginaDeVentas() {
           sufijo: 'USD/mes',
           totalAnual: 'Se cobra US$59.90 al año',
           ahorro: 'Ahorras 4 meses',
-          bajoCta: 'Hoy no pagas nada · 30 días de garantía',
-          descomposicionDia: 'menos de $0.17 al día',
+          bajoCta: 'Hoy no pagas nada · Garantía\u00a0del\u00a0Día\u00a0Tranquilo',
           ctaLabel: 'Empezar mis 7 días gratis',
           ctaHref: `${CTA_HREF}?plan=anual`,
           features: [
@@ -170,7 +170,7 @@ export default function PaginaDeVentas() {
 
       <Garantia
         nombre="La Garantía del Día Tranquilo"
-        condicionMarked="Si en 30 días Paso a Paso no te ayuda a tener [b]un día más predecible[/b], escribes a nuestro correo de soporte y te devolvemos todo. Sin preguntas."
+        condicionMarked="Si en 30 días no tienes [b]un día más predecible[/b], escríbenos y te devolvemos todo. Sin preguntas."
         pisoLegal="Respaldada por la garantía de Hotmart"
       />
 
@@ -181,12 +181,12 @@ export default function PaginaDeVentas() {
             respuestaMarked: 'Ya trae rutinas e historias listas con fotos. Cambias lo que quieras en [b]un par de minutos[/b].',
           },
           {
-            pregunta: 'Ya probé apps y pictos y los dejé. ¿Por qué esta?',
-            respuestaMarked: 'Porque no es solo para tu peque: [b]también te acompaña a ti[/b] en la crisis y con la terapeuta.',
+            pregunta: 'Ya probé apps y pictos, y hay apps gratis. ¿Por qué esta?',
+            respuestaMarked: 'Porque junta [b]antes, durante y después[/b] en un solo lugar, en español, y también te acompaña a ti en la crisis.',
           },
           {
-            pregunta: 'Hay apps gratis. ¿Qué tiene esta?',
-            respuestaMarked: 'Las gratis cubren una parte. Aquí tienes [b]antes, durante y después[/b] en un solo lugar y en español.',
+            pregunta: '¿Vale lo que cuesta?',
+            respuestaMarked: 'Son [b]menos de $0.17 al día[/b], menos que una hoja plastificada. Y si no te sirve, te devolvemos todo.',
           },
           {
             pregunta: '¿Y los datos de mi hijo?',

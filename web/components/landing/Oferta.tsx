@@ -168,7 +168,7 @@ export function Oferta({
                 </div>
                 <Features items={anual.features} origen="Oferta → anual" />
                 <div className="mt-6">
-                  <CtaButton href={anual.ctaHref} fullMobile>
+                  <CtaButton href={anual.ctaHref} full>
                     {anual.ctaLabel}
                   </CtaButton>
                   {anual.bajoCta && (

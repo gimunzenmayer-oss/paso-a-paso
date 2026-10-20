@@ -9,7 +9,7 @@
 
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'motion/react';
-import { Accent, Hairline, Kicker, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
+import { Accent, CheckCustom, Hairline, Kicker, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
 import { MarkedCopy, warnCopy } from './MarkedCopy';
 
 export interface PasoMecanismo {
@@ -117,14 +117,15 @@ export function Solucion({
               <p className="mt-2 text-[15px] leading-snug text-[var(--text-secondary)]">{antesDespues.antes}</p>
             </div>
             {/* El "después" con acento sutil de fondo (4-6%) */}
-            <div className="rounded-[var(--radius-card)] bg-[color-mix(in_oklab,var(--accent)_6%,transparent)] p-5">
-              <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--accent)]">
+            <Hairline surface="surface" className="p-5">
+              <p className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--accent)]">
+                <CheckCustom />
                 {antesDespues.labelDespues}
               </p>
               <p className="mt-2 text-[15px] font-medium leading-snug text-[var(--text-primary)]">
                 {antesDespues.despues}
               </p>
-            </div>
+            </Hairline>
           </motion.div>
         )}
       </motion.div>
@@ -152,8 +153,8 @@ function PasoConFoto({ foto, alt, indice }: { foto: string; alt: string; indice:
       >
         <motion.span
           className="absolute inset-0 rounded-full bg-[var(--accent)]"
-          initial={{ scale: 0 }}
-          whileInView={{ scale: 1 }}
+          initial={{ scale: 0.4, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
           viewport={{ once: true, amount: 0.8 }}
           transition={{ duration: reduce ? 0 : 0.3, ease: 'easeOut', delay: reduce ? 0 : 0.25 + indice * 0.06 }}
         />

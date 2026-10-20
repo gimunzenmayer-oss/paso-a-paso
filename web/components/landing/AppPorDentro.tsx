@@ -2,7 +2,7 @@
 
 // KIT DE LANDING — §5 LA APP POR DENTRO (blueprint: 55 §5)
 // Carrusel de frames de teléfono 9:19.5 con scroll-snap + dots sincronizados
-// (IntersectionObserver) + mask-fade lateral (el corte nunca es seco) + CTA
+// (según la posición del scroll) + mask-fade lateral (el corte nunca es seco) + CTA
 // mid-page con el MISMO verbo del hero (19). Sin screenshot → frame PLACEHOLDER
 // gris con el nombre de la pantalla futura (pendiente en ESTADO.md). Los
 // screenshots reales los toma la IA al cerrar la app (paso obligatorio de 19 §5).
@@ -51,25 +51,22 @@ export function AppPorDentro({
   const frameRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activo, setActivo] = useState(0);
 
-  // Dots sincronizados con el frame más visible — obligatorios SIEMPRE (19 §5)
-  useEffect(() => {
+  // Dots sincronizados con el frame centrado — obligatorios SIEMPRE (19 §5).
+  // Cada frame mide 250px + 20px de separación, así que el índice sale de la posición.
+  const PASO = 270;
+  const alDesplazar = (): void => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            const idx = frameRefs.current.indexOf(e.target as HTMLDivElement);
-            if (idx >= 0) setActivo(idx);
-          }
-        }
-      },
-      { root: scroller, threshold: 0.6 }
-    );
-    for (const f of frameRefs.current) {
-      if (f) io.observe(f);
-    }
-    return () => io.disconnect();
+    setActivo(Math.min(frames.length - 1, Math.max(0, Math.round(scroller.scrollLeft / PASO))));
+  };
+
+  // En escritorio arranca en el frame del medio: la pista se ve llena, sin hueco a la izquierda.
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller || window.innerWidth < 768) return;
+    const medio = Math.floor(frames.length / 2);
+    scroller.scrollLeft = medio * PASO;
+    setActivo(medio);
   }, [frames.length]);
 
   const irA = (i: number): void => {
@@ -94,6 +91,7 @@ export function AppPorDentro({
         <motion.div variants={item} className="mt-10">
           <div
             ref={scrollerRef}
+            onScroll={alDesplazar}
             className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-[max(20px,calc(50%-125px))] pb-2 [scrollbar-width:none] [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [&::-webkit-scrollbar]:hidden"
           >
             {frames.map((f, i) => (
@@ -140,7 +138,7 @@ export function AppPorDentro({
                 onClick={() => irA(i)}
                 aria-label={`Ir a: ${f.label}`}
                 aria-current={activo === i ? 'true' : undefined}
-                className="flex size-11 items-center justify-center [touch-action:manipulation]"
+                className="flex size-11 items-center justify-center transition-transform duration-100 active:scale-90 [touch-action:manipulation]"
               >
                 <span
                   className={`size-2 rounded-full transition-colors duration-200 ${

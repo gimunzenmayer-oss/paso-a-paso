@@ -111,7 +111,7 @@ export function CtaFinal({
             variants={item}
             className="mt-10 max-w-[520px] border-l-2 pl-4 text-left text-[15px] italic leading-[1.6]"
             style={{
-              borderColor: 'var(--accent)',
+              borderColor: 'var(--accent-on-dark)',
               color: 'color-mix(in oklab, var(--bg) 80%, transparent)',
             }}
           >

@@ -92,7 +92,7 @@ export function Hero({
           className="mx-auto flex max-w-[820px] flex-col items-center pt-10 text-center md:pt-16"
         >
           {/* H1: bold completo por defecto; el acento lo pone el [acento] del copy */}
-          <h1 className="text-balance text-[40px] font-bold leading-[1.08] tracking-[-0.01em] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[60px]">
+          <h1 className="text-balance text-[36px] font-bold leading-[1.08] tracking-[-0.01em] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[60px]">
             <MarkedCopy text={h1Marked} />
           </h1>
 
