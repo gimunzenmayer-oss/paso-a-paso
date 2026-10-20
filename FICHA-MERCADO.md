@@ -28,3 +28,7 @@ Abril (mes de concienciación del autismo) y vuelta al cole son picos probables 
 
 ## Hueco de mercado (la oportunidad)
 No se encontró ninguna app de pago en español que junte rutinas + diario de crisis + informe para la terapeuta. Quejas comunes de la competencia: precio alto o paso a suscripción cara, fallos y cierres, configuración larga.
+
+## Actualización 2026-10-20 (voz del cliente)
+- ⚠️ Competidor en español: app "Nello" (App Store España) ofrece registro de crisis / diario del autismo (apps.apple.com/es/app/nello-autismo-y-conducta/id6784738384). Kits imprimibles de "registro de crisis" en Etsy y Hotmart. El hueco ya no es "nadie hace diario": es "nadie junta rutinas + calma en el momento + diario/informe".
+- Desconfianza a apps de pago en grupos de FB ("BASTA DE APPS QUE SE APROVECHAN…") → la privacidad es argumento de venta.

@@ -24,6 +24,12 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Precio: $7.99/mes · anual $59.90 mostrado como $4.99/mes ("ahorras 5 meses"). Bajo la mediana inglesa (~$9.99), por encima del pago único de Hotmart porque es app viva y no PDF. Sin costo de IA → margen alto.
 - Suelo 3 (publicidad) pendiente: este precio es de canal orgánico/afiliados; revisar antes de pagar anuncios.
 
+## Avatar y venta
+- FICHA-AVATAR.md: borrador 2026-10-20, pendiente de aprobación · FICHA-MODELO.md y FICHA-ARTE.md creadas
+- Big Idea: anticipar antes + calmar durante + contar después, en un solo lugar (FICHA-MODELO.md)
+- Mecanismo: nombre pendiente de elección de la usuaria
+- Landing: Next.js en web/ (kit canónico tematizado); la PWA existente en app/ se servirá en /app sin cambios
+
 ## Secuencia maestra de construcción (NO saltar)
 - Estado real: se construyó primero la APP INTERNA (antes de instalar el SO). Falta: landing, onboarding, paywall, login/auth, servicios externos, backoffice.
 - Landing: pendiente · Onboarding: pendiente · Paywall: pendiente · Login/Auth: pendiente
@@ -31,6 +37,7 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Servicios externos: bloqueados
 
 ## Decisiones técnicas
+- Framework de venta: Next.js 16 en web/ (landing, onboarding, paywall, login, rutas para webhook de Hotmart). La app interna sigue en app/ como PWA sin build y se copia a web/public/app al compilar. Decidido 2026-10-20.
 - Stack actual: HTML + JS sin framework, sin paso de build, PWA con service worker (sw.js v7), datos en IndexedDB del teléfono (local-first).
 - PIN: huella PBKDF2 150k; diario cifrado AES-GCM con sal propia.
 - Fotos: Unsplash (créditos en Ajustes). ARASAAC NO se usa (licencia no comercial); fuente de pictos intercambiable.
