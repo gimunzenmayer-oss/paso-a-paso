@@ -53,7 +53,7 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - [ ] Política de privacidad: qué datos se recogen y a quién se envían
 
 ## Pendientes de la página de ventas
-- ⚠️ Datos de la responsable (nombre, país, correo de soporte real) → web/lib/marca.ts. Hoy dice "pendiente".
+- ✓ Datos de la responsable: HadaApps · Chile · hadaapps@gmail.com (web/lib/marca.ts, 2026-10-20).
 - ⚠️ Hotmart: configurar garantía de 30 días (debe superar la prueba de 7). La página promete 30.
 - /onboarding redirige por ahora a la app de ejemplo (/app). Se reemplaza en la etapa de Onboarding.
 - Sin testimonios (regla día 1): se agregan con ≥3 reales.
