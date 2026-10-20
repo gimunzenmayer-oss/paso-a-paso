@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Paso a Paso</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Rutinas visuales, comunicación y calma para familias de niños y niñas autistas.">
+<meta name="theme-color" content="#4F7A64">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icono.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- ===== MARCO COMÚN (modo adulto): barra arriba, contenido, menú abajo ===== -->
+<div id="app">
+  <header class="barra">
+    <button id="btn-atras" class="icono" aria-label="Atrás" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <h1 id="titulo">Paso a Paso</h1>
+    <button id="btn-ajustes" class="icono" aria-label="Ajustes">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M21.2 12h-2.6M5.4 12H2.8M18.5 5.5l-1.8 1.8M7.3 16.7l-1.8 1.8M18.5 18.5l-1.8-1.8M7.3 7.3L5.5 5.5"/></svg>
+    </button>
+  </header>
+
+  <main id="contenido" tabindex="-1"></main>
+
+  <nav class="menu" aria-label="Menú principal">
+    <button data-ir="inicio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Inicio</span></button>
+    <button data-ir="preparar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg><span>Preparar</span></button>
+    <button data-ir="diario"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h11a1 1 0 011 1v15H7a2 2 0 01-2-2V5a1 1 0 011-1z"/><path d="M9 8h6M9 12h6"/></svg><span>Diario</span></button>
+    <button data-ir="guia"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M14.8 9.2l-1.8 3.8-3.8 1.8 1.8-3.8z"/></svg><span>Guía</span></button>
+    <button data-ir="mas"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg><span>Más</span></button>
+  </nav>
+</div>
+
+<!-- ===== MODO NIÑO: pantalla completa, sin menú ===== -->
+<div id="nino" hidden>
+  <div id="nino-contenido"></div>
+  <button id="casa-nino" aria-label="Volver a mi inicio">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>
+  </button>
+  <button id="candado" aria-label="Salir del modo niño (adulto): mantener pulsado">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+    <span class="anillo" aria-hidden="true"></span>
+  </button>
+</div>
+
+<!-- ===== Teclado del PIN del adulto ===== -->
+<div id="pin" hidden role="dialog" aria-modal="true" aria-labelledby="pin-t">
+  <div class="pin-caja">
+    <h2 id="pin-t">PIN del adulto</h2>
+    <div class="pin-puntos" role="status"></div>
+    <p class="pin-msg" aria-live="polite"></p>
+    <div class="pin-teclas">
+      <button data-n="1">1</button><button data-n="2">2</button><button data-n="3">3</button>
+      <button data-n="4">4</button><button data-n="5">5</button><button data-n="6">6</button>
+      <button data-n="7">7</button><button data-n="8">8</button><button data-n="9">9</button>
+      <button data-accion="cancelar" class="txt">Cancelar</button><button data-n="0">0</button><button data-accion="borrar" class="txt" aria-label="Borrar">⌫</button>
+    </div>
+  </div>
+</div>
+
+<div id="aviso" role="status" aria-live="polite"></div>
+
+<!-- Los "ladrillos" de la app, en orden -->
+<script src="js/datos.js"></script>
+<script src="js/cifrado.js"></script>
+<script src="js/voz.js"></script>
+<script src="js/app.js"></script>
+<script src="js/agenda.js"></script>
+<script src="js/tablero.js"></script>
+<script src="js/guia-datos.js"></script>
+<script src="js/guia.js"></script>
+<script src="js/nino.js"></script>
+<script src="js/temporizador.js"></script>
+<script src="js/calma.js"></script>
+<script src="js/historias.js"></script>
+<script src="js/diario.js"></script>
+<script src="js/logros.js"></script>
+<script src="js/informe.js"></script>
+<script>PP.iniciar();</script>
+</body>
+</html>
