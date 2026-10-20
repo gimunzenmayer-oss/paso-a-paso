@@ -31,6 +31,8 @@ export interface HeroProps {
   socialProof?: ReactNode;
   /** Screenshot real o mini-demo honesto. Sin visual → placeholder honesto (55 §1.3). */
   visual?: ReactNode;
+  /** true si el visual ya trae su propio marco (p. ej. un teléfono): evita card dentro de card. */
+  visualSinMarco?: boolean;
   /** Sugerencia CONCRETA de qué imagen poner en el placeholder — nunca "imagen aquí". */
   visualPlaceholderSugerencia?: string;
   id?: string;
@@ -47,6 +49,7 @@ export function Hero({
   ctaHref,
   socialProof,
   visual,
+  visualSinMarco = false,
   visualPlaceholderSugerencia = 'captura de la pantalla principal con datos reales',
   id = 'hero',
 }: HeroProps) {
@@ -108,7 +111,9 @@ export function Hero({
 
           {/* Visual del producto: asoma en el primer viewport e invita al scroll */}
           <div className="mt-10 w-full max-w-[720px]">
-            {visual ? (
+            {visual && visualSinMarco ? (
+              visual
+            ) : visual ? (
               <div className="overflow-hidden rounded-[var(--radius-card)] border border-[color-mix(in_oklab,var(--accent)_18%,transparent)] shadow-[var(--shadow-2)]">
                 {visual}
               </div>

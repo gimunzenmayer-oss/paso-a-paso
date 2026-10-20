@@ -8,7 +8,8 @@
 // la card recomendada (el uso canónico de la técnica) · checkmarks custom.
 // El destino de los CTAs sigue al MODELO de 02C (checkout vs /onboarding).
 
-import { motion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useInView, useReducedMotion } from 'motion/react';
 import { Star } from 'lucide-react';
 import { CheckCustom, CtaButton, Hairline, Kicker, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
 import { MarkedCopy, warnCopy, warnRango } from './MarkedCopy';
@@ -36,6 +37,8 @@ export interface OfertaProps {
   anual: PlanOferta & {
     /** "Se cobra $X/año" — OBLIGATORIO: el total nunca se esconde (52 §2). */
     totalAnual: string;
+    /** Microlínea de tranquilidad bajo el CTA (solo lo que es cierto). */
+    bajoCta?: string;
     /** Ahorro en meses ("2 meses gratis") — el elemento más ruidoso tras el CTA. */
     ahorro: string;
     badge?: string;
@@ -60,12 +63,12 @@ function TrialBadge({ dias }: { dias: number }) {
   );
 }
 
-function Precio({ plan }: { plan: PlanOferta }) {
+function Precio({ plan, contar = false }: { plan: PlanOferta; contar?: boolean }) {
   return (
     <div>
       <p className="flex items-baseline gap-1">
         <span className="text-[36px] font-bold leading-none tabular-nums text-[var(--text-primary)] [font-family:var(--font-display)]">
-          {plan.precioMes}
+          {contar ? <ContadorPrecio valor={plan.precioMes} /> : plan.precioMes}
         </span>
         <span className="text-[14px] text-[var(--text-secondary)]">{plan.sufijo ?? '/mes'}</span>
       </p>
@@ -158,7 +161,7 @@ export function Oferta({
                   {trialDias !== undefined && <TrialBadge dias={trialDias} />}
                 </div>
                 <div className="mt-4">
-                  <Precio plan={anual} />
+                  <Precio plan={anual} contar />
                   {/* El total anual SIEMPRE visible — regla de oro de 02C */}
                   <p className="mt-1 text-[12px] text-[var(--text-secondary)]">{anual.totalAnual}</p>
                   <p className="mt-2 text-[15px] font-semibold text-[var(--accent)]">{anual.ahorro}</p>
@@ -168,6 +171,9 @@ export function Oferta({
                   <CtaButton href={anual.ctaHref} fullMobile>
                     {anual.ctaLabel}
                   </CtaButton>
+                  {anual.bajoCta && (
+                    <p className="mt-2 text-center text-[13px] text-[var(--text-secondary)]">{anual.bajoCta}</p>
+                  )}
                 </div>
               </div>
             </Hairline>
@@ -198,4 +204,32 @@ export function Oferta({
       </motion.div>
     </SectionShell>
   );
+}
+
+/* Conteo del número héroe (baseline de movimiento): sube de 0 al precio la primera
+   vez que se ve. El servidor pinta el precio final (sin saltos al hidratar) y con
+   movimiento reducido se queda fijo. */
+function ContadorPrecio({ valor }: { valor: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const enVista = useInView(ref, { once: true, amount: 0.6 });
+  const reduce = useReducedMotion();
+  const [texto, setTexto] = useState(valor);
+  useEffect(() => {
+    const m = /^(\D*)([\d.]+)(.*)$/.exec(valor);
+    if (!m || reduce || !enVista) return;
+    const [, pre, num, post] = m;
+    const final = parseFloat(num);
+    const decimales = (num.split('.')[1] ?? '').length;
+    const inicio = performance.now();
+    let id = 0;
+    const paso = (t: number) => {
+      const k = Math.min(1, (t - inicio) / 700);
+      const suave = 1 - Math.pow(1 - k, 3);
+      setTexto(pre + (final * suave).toFixed(decimales) + post);
+      if (k < 1) id = requestAnimationFrame(paso);
+    };
+    id = requestAnimationFrame(paso);
+    return () => cancelAnimationFrame(id);
+  }, [enVista, reduce, valor]);
+  return <span ref={ref}>{texto}</span>;
 }

@@ -20,7 +20,7 @@ Elegida: #11 recortada a 10 palabras (empate con #10 → gana la más útil: cub
 
 ## 1. Hero
 - H1: Días predecibles y, en la crisis, [acento]sabrás qué hacer[/acento] (9)
-- Sub: El [b]Método Antes, Durante y Después[/b], en tu celular y en español. (12)
+- Sub: El [b]Método Antes, Durante y Después[/b]. Tu primera rutina, [b]lista en 2 minutos[/b]. (13) ← objeción #1 "no tengo tiempo" (revisor)
 - CTA: Probar gratis con mi peque
 - Prueba social día 1: "Prueba 7 días sin pagar · 30 días de garantía"
 
@@ -34,7 +34,7 @@ Elegida: #11 recortada a 10 palabras (empate con #10 → gana la más útil: cub
 ## 3. Agitación
 - Cada semana se van [b]horas[/b] en material que se pierde o se rompe. (12)
 - Y la culpa queda dando vueltas: [b]"así vivo desde hace años"[/b]. (11)
-- Más páginas de internet no ayudan: [acento]te lían más[/acento]. (9)
+- Más páginas de internet no ayudan: [acento]te confunden más[/acento]. (9) ("lían" es de España; se usa neutro)
 - Contraste: Hoy → "Mañanas que empiezan en crisis y noches de culpa." / Si nada cambia → "El mismo día de la marmota, con menos fuerzas."
 
 ## 4. Solución
@@ -61,15 +61,15 @@ Título: Así se ve [acento]su día[/acento] en tu celular
   - Paso a Paso con el Método Antes, Durante y Después (12 meses) — $96 (12 × $7.99)
   - Guía "Ahora mismo": qué hacer en 12 momentos difíciles — $10 (guías equivalentes en Hotmart: ~$10) ← objeción "no sé qué hacer"
   - Rutinas e historias listas: mañana, colegio, noche, médico, pelo, cumpleaños — $10 (packs para plastificar: $7-10) ← objeción "no tengo tiempo"
-  - Total tachado: $116 · Nota: Hoy: $4.99/mes (se cobra $59.90/año)
+  - Total tachado: $116 (sin nota: la card anual ya dice el precio)
   - ⚠️ Desviación: el stack es ~2× el precio anual, no 5-10×. Se prefiere honestidad a inflar valores.
-- Anual: $4.99/mes · "Se cobra $59.90 al año" · "4 meses gratis" (12 − 59.90/7.99 = 4.5 → se redondea hacia abajo) · "menos de $0.17 al día" · CTA "Empezar mis 7 días gratis"
+- Anual: $4.99 USD/mes · "Se cobra US$59.90 al año" · "Ahorras 4 meses" · bajo el CTA: "Hoy no pagas nada · 30 días de garantía" (12 − 59.90/7.99 = 4.5 → se redondea hacia abajo) · "menos de $0.17 al día" · CTA "Empezar mis 7 días gratis"
 - Mensual: $7.99 · CTA "Elegir mensual"
 - Features (≤12 palabras): Rutinas con fotos reales que puedes cambiar · Kit de calma con música suave · Diario con clave y su informe imprimible · Guía para los momentos difíciles · (mensual) Cancelas cuando quieras
 
 ## 7. Garantía
 - Nombre: la Garantía del Día Tranquilo
-- Condición: Si en 30 días Paso a Paso no te ayuda a tener [b]un día más predecible[/b], escribes un correo y te devolvemos todo. Sin preguntas. (25)
+- Condición: Si en 30 días Paso a Paso no te ayuda a tener [b]un día más predecible[/b], escribes a nuestro correo de soporte y te devolvemos todo. Sin preguntas. (27)
 - Piso legal: Respaldada por la garantía de Hotmart. ⚠️ REQUIERE configurar 30 días en Hotmart (la garantía debe durar más que la prueba de 7).
 
 ## 8. FAQ (objeciones de la ficha, en orden de fuerza)
@@ -88,3 +88,6 @@ Título: Así se ve [acento]su día[/acento] en tu celular
 
 ## 10. Footer
 Privacidad · Términos · Reembolsos · Aviso: no reemplaza a profesionales · contacto (PENDIENTE: correo real de soporte)
+
+## Cambios tras revisor-visual ronda 1 (2026-10-20)
+Tira de pasos con foto + check que se llena en Solución; conteo del precio anual; CTA final en acento claro; footer 2×2; dots 44px; hero con captura del tablero sin card-en-card; planes con ?plan=; moneda USD.

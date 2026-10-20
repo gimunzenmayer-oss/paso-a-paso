@@ -37,11 +37,11 @@ export function FooterLegal({ appName, logo, enlaces, soporteEmail, anio }: Foot
             {appName}
           </p>
           <nav aria-label="Enlaces legales">
-            <ul className="flex flex-wrap items-center gap-x-1 gap-y-0">
+            <ul className="grid grid-cols-2 gap-x-4 sm:flex sm:flex-wrap sm:items-center sm:gap-x-1">
               {enlaces.map((e, i) => (
                 <li key={e.href} className="flex items-center">
                   {i > 0 && (
-                    <span aria-hidden="true" className="px-1 text-[var(--text-tertiary)]">
+                    <span aria-hidden="true" className="hidden px-1 text-[var(--text-tertiary)] sm:inline">
                       ·
                     </span>
                   )}

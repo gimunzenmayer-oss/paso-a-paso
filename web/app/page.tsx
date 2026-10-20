@@ -37,11 +37,11 @@ function VisualHero() {
   return (
     <div className="flex justify-center bg-[radial-gradient(ellipse_at_50%_30%,color-mix(in_oklab,var(--accent)_16%,transparent),transparent_70%)] px-4 py-8">
       <div className="relative aspect-[9/19.5] w-[220px] max-w-full overflow-hidden rounded-[30px] border-[5px] border-[var(--text-primary)] bg-[var(--surface)] shadow-[var(--shadow-2)]">
-        {/* Captura real de la app (rutina de la mañana, paso "Despertar") */}
+        {/* Captura real de la app (tablero para hablar) */}
         <Image
           priority
-          src="/capturas/rutina.jpg"
-          alt="Paso de la rutina de la mañana: foto de un niño despertando, botón ¡Hecho! y lo que viene después"
+          src="/capturas/tablero.jpg"
+          alt="Tablero para hablar: botones con fotos como Quiero agua, Quiero comer y Quiero un abrazo"
           width={375}
           height={812}
           sizes="220px"
@@ -59,12 +59,14 @@ export default function PaginaDeVentas() {
       <Hero
         appName="Paso a Paso"
         logo={<Logo />}
-        h1Marked="Días predecibles y, en la crisis, [acento]sabrás qué hacer[/acento]"
-        subtitleMarked="El [b]Método Antes, Durante y Después[/b], en tu celular y en español."
+        // Espacios que no se cortan: "en la crisis" queda en un solo renglón (sin "y, en la" suelto).
+        h1Marked={'Días predecibles y, en\u00a0la\u00a0crisis, [acento]sabrás qué hacer[/acento]'}
+        subtitleMarked={'El [b]Método Antes, Durante y Después[/b]. Tu primera rutina, [b]lista\u00a0en\u00a02\u00a0minutos[/b].'}
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
         socialProof={<span>Prueba 7 días sin pagar · 30 días de garantía</span>}
         visual={<VisualHero />}
+        visualSinMarco
       />
 
       <Problema
@@ -82,7 +84,7 @@ export default function PaginaDeVentas() {
         frases={[
           'Cada semana se van [b]horas[/b] en material que se pierde o se rompe.',
           'Y la culpa queda dando vueltas: [b]"así vivo desde hace años"[/b].',
-          'Más páginas de internet no ayudan: [acento]te lían más[/acento].',
+          'Más páginas de internet no ayudan: [acento]te confunden más[/acento].',
         ]}
         contraste={{
           labelHoy: 'Hoy',
@@ -97,9 +99,9 @@ export default function PaginaDeVentas() {
         mecanismo="el Método Antes, Durante y Después"
         bigIdeaMarked="No te falta paciencia: te falta tener a mano [b]qué viene y qué hacer[/b]."
         pasos={[
-          { titulo: 'Antes · Anticipas', detalle: 'Rutinas e historias con fotos reales, listas para usar.' },
-          { titulo: 'Durante · Calmas', detalle: 'Respirar, contar y música suave en un toque.' },
-          { titulo: 'Después · Cuentas', detalle: 'Anotas en segundos y llevas el informe a la terapeuta.' },
+          { titulo: 'Antes · Anticipas', foto: '/fotos/despertar.jpg', fotoAlt: 'Niño estirándose al despertar', detalle: 'Rutinas e historias con fotos reales, listas para usar.' },
+          { titulo: 'Durante · Calmas', foto: '/fotos/tranquilo.jpg', fotoAlt: 'Niño tranquilo', detalle: 'Respirar, contar y música suave en un toque.' },
+          { titulo: 'Después · Cuentas', foto: '/fotos/mama.jpg', fotoAlt: 'Mamá', detalle: 'Anotas en segundos y llevas el informe a la terapeuta.' },
         ]}
         antesDespues={{
           labelAntes: 'Antes',
@@ -132,17 +134,18 @@ export default function PaginaDeVentas() {
             { resultado: 'Rutinas e historias listas: mañana, colegio, noche, médico y más', valor: '$10' },
           ],
           totalTachado: '$116',
-          nota: 'Hoy: $4.99/mes (se cobra $59.90 al año)',
         }}
         anual={{
           nombre: 'Anual',
           badge: 'MEJOR VALOR',
           precioMes: '$4.99',
-          totalAnual: 'Se cobra $59.90 al año',
-          ahorro: '4 meses gratis',
+          sufijo: 'USD/mes',
+          totalAnual: 'Se cobra US$59.90 al año',
+          ahorro: 'Ahorras 4 meses',
+          bajoCta: 'Hoy no pagas nada · 30 días de garantía',
           descomposicionDia: 'menos de $0.17 al día',
           ctaLabel: 'Empezar mis 7 días gratis',
-          ctaHref: CTA_HREF,
+          ctaHref: `${CTA_HREF}?plan=anual`,
           features: [
             'Rutinas con fotos reales que puedes cambiar',
             'Kit de calma con música suave',
@@ -153,8 +156,9 @@ export default function PaginaDeVentas() {
         mensual={{
           nombre: 'Mensual',
           precioMes: '$7.99',
+          sufijo: 'USD/mes',
           ctaLabel: 'Elegir mensual',
-          ctaHref: CTA_HREF,
+          ctaHref: `${CTA_HREF}?plan=mensual`,
           features: [
             'Rutinas con fotos reales que puedes cambiar',
             'Kit de calma con música suave',
@@ -166,7 +170,7 @@ export default function PaginaDeVentas() {
 
       <Garantia
         nombre="La Garantía del Día Tranquilo"
-        condicionMarked="Si en 30 días Paso a Paso no te ayuda a tener [b]un día más predecible[/b], escribes un correo y te devolvemos todo. Sin preguntas."
+        condicionMarked="Si en 30 días Paso a Paso no te ayuda a tener [b]un día más predecible[/b], escribes a nuestro correo de soporte y te devolvemos todo. Sin preguntas."
         pisoLegal="Respaldada por la garantía de Hotmart"
       />
 

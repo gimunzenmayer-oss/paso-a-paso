@@ -68,13 +68,15 @@ export function truncarMarcado(texto: string, maxPalabras: number): string {
         salida += parte;
         continue;
       }
-      if (palabras >= maxPalabras) {
+      // La puntuación suelta (un "." tras [/b]) no es una palabra: se conserva sin contar.
+      const esPalabra = /[\p{L}\p{N}]/u.test(parte);
+      if (esPalabra && palabras >= maxPalabras) {
         let cierre = '';
         for (let i = abiertos.length - 1; i >= 0; i--) cierre += `[/${abiertos[i]}]`;
         return `${salida.trimEnd()}${cierre}…`;
       }
       salida += parte;
-      palabras += 1;
+      if (esPalabra) palabras += 1;
     }
   }
   return salida;

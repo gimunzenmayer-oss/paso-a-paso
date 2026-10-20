@@ -7,13 +7,17 @@
 // (tupla en el tipo: ni 2 ni 4) + antes/después opcional. Pasos entran
 // escalonados (whileInView + stagger, reduced-motion respetado).
 
-import { motion } from 'motion/react';
+import Image from 'next/image';
+import { motion, useReducedMotion } from 'motion/react';
 import { Accent, Hairline, Kicker, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
 import { MarkedCopy, warnCopy } from './MarkedCopy';
 
 export interface PasoMecanismo {
   /** Título del paso — 16px/600. */
   titulo: string;
+  /** Foto real opcional: el paso se dibuja como tarjeta de la tira de pasos (dispositivo de la marca). */
+  foto?: string;
+  fotoAlt?: string;
   /** UNA línea (warn a las 14 palabras). */
   detalle: string;
 }
@@ -86,12 +90,16 @@ export function Solucion({
         <ol className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
           {pasos.map((p, i) => (
             <motion.li key={i} variants={item} className="flex items-start gap-4 md:flex-col">
-              <span
-                aria-hidden="true"
-                className="flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-button)] border border-[color-mix(in_oklab,var(--accent)_22%,transparent)] bg-[var(--chip-bg)] text-[17px] font-bold tabular-nums text-[var(--accent)]"
-              >
-                {String(i + 1).padStart(2, '0')}
-              </span>
+              {p.foto ? (
+                <PasoConFoto foto={p.foto} alt={p.fotoAlt ?? p.titulo} indice={i} />
+              ) : (
+                <span
+                  aria-hidden="true"
+                  className="flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-button)] border border-[color-mix(in_oklab,var(--accent)_22%,transparent)] bg-[var(--chip-bg)] text-[17px] font-bold tabular-nums text-[var(--accent)]"
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+              )}
               <div className="pt-1 md:pt-0">
                 <h3 className="text-[16px] font-semibold text-[var(--text-primary)]">{p.titulo}</h3>
                 <p className="mt-1 text-[15px] leading-snug text-[var(--text-secondary)]">{p.detalle}</p>
@@ -121,5 +129,38 @@ export function Solucion({
         )}
       </motion.div>
     </SectionShell>
+  );
+}
+
+/* Tarjeta de la tira de pasos: foto real + check salvia que se llena al entrar
+   en pantalla (firma de la marca: 300ms ease-out, 60ms entre pasos). Con
+   movimiento reducido el check aparece ya lleno. */
+function PasoConFoto({ foto, alt, indice }: { foto: string; alt: string; indice: number }) {
+  const reduce = useReducedMotion();
+  return (
+    <span className="relative block size-[72px] shrink-0 md:size-[88px]">
+      <Image
+        src={foto}
+        alt={alt}
+        width={176}
+        height={176}
+        className="size-full rounded-[var(--radius-button)] border-2 border-[color-mix(in_oklab,var(--accent)_35%,transparent)] bg-[var(--surface-2)] object-cover"
+      />
+      <span
+        aria-hidden="true"
+        className="absolute -right-2 -bottom-2 flex size-7 items-center justify-center rounded-full border-2 border-[var(--accent)] bg-[var(--surface)]"
+      >
+        <motion.span
+          className="absolute inset-0 rounded-full bg-[var(--accent)]"
+          initial={{ scale: 0 }}
+          whileInView={{ scale: 1 }}
+          viewport={{ once: true, amount: 0.8 }}
+          transition={{ duration: reduce ? 0 : 0.3, ease: 'easeOut', delay: reduce ? 0 : 0.25 + indice * 0.06 }}
+        />
+        <svg viewBox="0 0 24 24" className="relative size-4" fill="none" stroke="var(--surface)" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M5 12.5l4.5 4.5L19 7.5" />
+        </svg>
+      </span>
+    </span>
   );
 }

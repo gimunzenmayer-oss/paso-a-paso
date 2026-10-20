@@ -84,7 +84,12 @@ export function CtaFinal({
           <MarkedCopy text={futurePacingMarked} />
         </motion.p>
 
-        <motion.div variants={item} className="mt-8 w-full sm:w-auto">
+        <motion.div
+          variants={item}
+          className="mt-8 w-full sm:w-auto"
+          // Sobre el fondo oscuro: botón en acento claro con texto oscuro (≥4.5:1).
+          style={{ ['--accent' as string]: 'var(--accent-on-dark)', ['--bg' as string]: 'var(--text-primary)' }}
+        >
           {/* Acento pleno sobre fondo invertido = el máximo contraste de la página */}
           <CtaButton href={ctaHref} alto={56}>
             {ctaLabel}

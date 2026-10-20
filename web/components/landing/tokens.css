@@ -18,7 +18,7 @@
 
 :root {
   /* ── SUPERFICIES (3 niveles: base / elevada / hundida) ── */
-  --bg: #f2f4ef;              /* ← reemplazar con FICHA-ARTE — fondo base (jamás #FFF/#000 puros) */
+  --bg: #eef2eb;              /* ← reemplazar con FICHA-ARTE — fondo base (jamás #FFF/#000 puros) */
   --surface: #fbfcf9;         /* ← reemplazar con FICHA-ARTE — secciones elevadas y cards */
   --surface-2: #e6ece5;       /* ← reemplazar con FICHA-ARTE — hundido: wells, frames placeholder */
 
