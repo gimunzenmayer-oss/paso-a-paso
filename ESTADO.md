@@ -1,7 +1,7 @@
 # ESTADO — Paso a Paso
 Última actualización: 2026-10-20 | Sesión actual: 1 (Flujo C: mejorar app existente)
 
-⏸️ CHECKPOINT — Última acción completada: investigación de mercado + FICHA-MERCADO + propuesta de precio / Siguiente acción exacta: OK de precio → FICHA-AVATAR y FICHA-MODELO → página de ventas
+⏸️ CHECKPOINT — Última acción completada: página de ventas construida + legales + auditoría / Siguiente acción exacta: aplicar revisión del revisor-visual → publicar vista previa → pedir datos de la responsable
 
 ## Qué es esta app (3 líneas máximo)
 PWA para madres/padres de niños autistas de 2 a 12 años (ejemplo: Mateo, 6). Dos zonas: "Espacio de Mateo" (niño, bloqueado con PIN) y zona de la familia (agenda visual, tablero de comunicación, temporizador, kit de calma con música, historias sociales, diario de crisis cifrado, logros, informe para profesionales, guía).
@@ -32,7 +32,7 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 
 ## Secuencia maestra de construcción (NO saltar)
 - Estado real: se construyó primero la APP INTERNA (antes de instalar el SO). Falta: landing, onboarding, paywall, login/auth, servicios externos, backoffice.
-- Landing: pendiente · Onboarding: pendiente · Paywall: pendiente · Login/Auth: pendiente
+- Landing: construida en web/ (2026-10-20), en revisión · Onboarding: pendiente · Paywall: pendiente · Login/Auth: pendiente
 - App interna: construida (prototipo, sin auditar contra el SO)
 - Servicios externos: bloqueados
 
@@ -51,6 +51,13 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - [ ] Login con límite de intentos fallidos
 - [ ] Aviso de pago verificado como venido de la pasarela
 - [ ] Política de privacidad: qué datos se recogen y a quién se envían
+
+## Pendientes de la página de ventas
+- ⚠️ Datos de la responsable (nombre, país, correo de soporte real) → web/lib/marca.ts. Hoy dice "pendiente".
+- ⚠️ Hotmart: configurar garantía de 30 días (debe superar la prueba de 7). La página promete 30.
+- /onboarding redirige por ahora a la app de ejemplo (/app). Se reemplaza en la etapa de Onboarding.
+- Sin testimonios (regla día 1): se agregan con ≥3 reales.
+- audit-conversion: falsos positivos documentados (lee comentarios y clases como copy, "animate" como voseo, no ve hairline/mesh en estilos en línea del kit). Real corregido: PS de 35 → 29 palabras.
 
 ## Pendientes heredados
 - Más secciones de la Guía para Familias; modo "frase" del tablero (ofrecido, sin respuesta).
