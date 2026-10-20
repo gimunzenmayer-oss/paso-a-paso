@@ -62,3 +62,11 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 
 ## Pendientes heredados
 - Más secciones de la Guía para Familias; modo "frase" del tablero (ofrecido, sin respuesta).
+
+## Publicación (2026-10-20)
+- Pre-vuelo: tsc limpio · build OK (6 páginas estáticas) · npm audit 0 vulnerabilidades · .env* en .gitignore · sin claves en el código ni variables NEXT_PUBLIC_. La app hoy no tiene servidor ni base de datos: no hay RLS ni IDOR que revisar todavía.
+- Cuentas: GitHub gimunzenmayer-oss (sin repos) · Vercel plan Hobby (gratis, sin proyectos) · Supabase sin proyectos.
+- Bloqueo: este espacio no puede crear repos en GitHub por su cuenta → la dueña crea el repo privado vacío "paso-a-paso"; después se sube el código y se conecta a Vercel.
+- Supabase: no se crea aún. No hay login ni pagos construidos (onboarding → paywall → login van antes). Se crea en la etapa de Login.
+- ⚠️ Vercel Hobby no permite uso comercial: pasar a Pro (US$20/mes) antes de la primera venta.
+- La primera publicación es la página de ventas + app de ejemplo. Aún NO cobra: falta onboarding, paywall, login, webhook de Hotmart y correos (Resend). Gate de seguridad pendiente.
