@@ -25,9 +25,9 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Suelo 3 (publicidad) pendiente: este precio es de canal orgánico/afiliados; revisar antes de pagar anuncios.
 
 ## Avatar y venta
-- FICHA-AVATAR.md: borrador 2026-10-20, pendiente de aprobación · FICHA-MODELO.md y FICHA-ARTE.md creadas
+- FICHA-AVATAR.md: aprobada 2026-10-20 · FICHA-MODELO.md y FICHA-ARTE.md creadas
 - Big Idea: anticipar antes + calmar durante + contar después, en un solo lugar (FICHA-MODELO.md)
-- Mecanismo: nombre pendiente de elección de la usuaria
+- Mecanismo: "el Método Antes, Durante y Después" (elegido por la usuaria 2026-10-20)
 - Landing: Next.js en web/ (kit canónico tematizado); la PWA existente en app/ se servirá en /app sin cambios
 
 ## Secuencia maestra de construcción (NO saltar)
