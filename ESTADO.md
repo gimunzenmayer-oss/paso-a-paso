@@ -1,7 +1,7 @@
 # ESTADO — Paso a Paso
 Última actualización: 2026-10-20 | Sesión actual: 1 (Flujo C: mejorar app existente)
 
-⏸️ CHECKPOINT — Última acción completada: SO v6.10.0 instalado, usuaria eligió opción 3 / Siguiente acción exacta: C1 (qué le molesta más) + C2 investigación de mercado
+⏸️ CHECKPOINT — Última acción completada: usuaria confirma que la app interna está lista (artifact 7ccb2bb3 = misma versión) / Siguiente acción exacta: cerrar investigación de mercado → fichas (avatar, mercado, modelo) → precio y monetización → landing
 
 ## Qué es esta app (3 líneas máximo)
 PWA para madres/padres de niños autistas de 2 a 12 años (ejemplo: Mateo, 6). Dos zonas: "Espacio de Mateo" (niño, bloqueado con PIN) y zona de la familia (agenda visual, tablero de comunicación, temporizador, kit de calma con música, historias sociales, diario de crisis cifrado, logros, informe para profesionales, guía).
