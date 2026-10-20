@@ -32,7 +32,7 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 
 ## Secuencia maestra de construcción (NO saltar)
 - Estado real: se construyó primero la APP INTERNA (antes de instalar el SO). Falta: landing, onboarding, paywall, login/auth, servicios externos, backoffice.
-- Landing: construida en web/ (2026-10-20), en revisión · Onboarding: pendiente · Paywall: pendiente · Login/Auth: pendiente
+- Landing: LISTA (revisor ronda 3: 38/40 · craft 17/20 · copy 19/20, 2026-10-20). Vista previa: https://claude.ai/artifact/CAzcMzcHhx2RqdVfoJefce · Onboarding: pendiente · Paywall: pendiente · Login/Auth: pendiente
 - App interna: construida (prototipo, sin auditar contra el SO)
 - Servicios externos: bloqueados
 
@@ -57,6 +57,7 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - ⚠️ Hotmart: configurar garantía de 30 días (debe superar la prueba de 7). La página promete 30.
 - /onboarding redirige por ahora a la app de ejemplo (/app). Se reemplaza en la etapa de Onboarding.
 - Sin testimonios (regla día 1): se agregan con ≥3 reales.
+- Pulido menor del revisor (N1–N8, no bloquea): carrusel a 1440, puntos del footer, captura del hero 6+1, ceros con barra en precios chicos, pasos del método a 1 línea, 1ª línea del stack, barra fija sobre el CTA del carrusel. Ver docs/revisiones/landing-veredicto.md.
 - audit-conversion: falsos positivos documentados (lee comentarios y clases como copy, "animate" como voseo, no ve hairline/mesh en estilos en línea del kit). Real corregido: PS de 35 → 29 palabras.
 
 ## Pendientes heredados

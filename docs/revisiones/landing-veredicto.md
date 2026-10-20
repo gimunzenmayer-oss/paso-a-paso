@@ -75,3 +75,56 @@ M. **[BAJO] Footer.** Quitar `px-1` del enlace o poner `-mx-1` en el `<ul>` (hoy
 Correo, nombre y país de soporte en `web/lib/marca.ts` (y "nuestro correo de soporte" en la garantía) · testimonios (prohibido inventarlos) · /onboarding como redirección temporal a la app · "Entrar" cuando exista el login · **configurar 30 días de garantía en Hotmart** antes de publicar (la página promete 30).
 
 Proyección: con A-D arreglados, usabilidad 36-37 y craft 16-17. Con E-J, copy 19.
+
+---
+
+## Ronda 3
+Fecha: 2026-10-20 · Revisor: revisor-visual (independiente)
+Screenshots: docs/revisiones/landing-375.png (base del puntaje), landing-360.png, landing-1440.png + recortes s-1440-oferta/app y s-360-oferta/app (reduced motion, estado final)
+Código: web/app/page.tsx, web/components/landing/*.tsx, web/lib/marca.ts
+
+**Usabilidad: 38/40 · Craft: 17/20 · Copy: 19/20 · Fidelidad: N-A**
+**Veredicto: LISTA** (pasa los tres cortes: ≥36, ≥16, ≥16). Antes de publicar falta lo que depende de la dueña (ver abajo).
+
+No cuento como defectos: el botón "N" del modo dev, la barra sticky sobre el hero ni la sticky con el label comercial en s-360-app (en la captura la oferta ya se había visto).
+
+### Estado de los defectos de la ronda 2
+| # | Defecto | Estado |
+|---|---|---|
+| A | CTA anual partido a 360 | ARREGLADO: una línea y centrado a 360 y a 375 (px-5 sm:px-8, whitespace-nowrap) |
+| B | Rectángulo de brillo con borde duro en el hero | ARREGLADO: radial closest-side, sin bordes a 375 ni a 1440 |
+| C | El visual del hero no vende la promesa | ARREGLADO: el hero usa rutina.jpg (paso con foto + "¡Hecho!") y tablero.jpg pasa al frame 2 con "Pide lo que necesita con fotos" |
+| D | Desalineaciones a 1440 | ARREGLADO: el CTA anual va a ancho completo (prop `full`), el carrusel arranca en el frame del medio sin hueco y el dot se calcula con onScroll. Aparece un detalle nuevo (ver N1) |
+| E | Precio repetido | ARREGLADO ($0.17 solo en el título de la oferta; luego una vez en el FAQ de precio, que es correcto) |
+| F | Ancla del stack sin cierre | ARREGLADO ("Tú pagas US$59.90 al año. Los primeros 7 días, nada.") |
+| G | Garantía en 4 líneas, y sin nombre bajo el CTA | ARREGLADO: 3 líneas a 375, y "Hoy no pagas nada · Garantía del Día Tranquilo" |
+| H | FAQ sin la objeción de precio | ARREGLADO ("¿Vale lo que cuesta?", 6 preguntas) |
+| I | H1 con renglón débil | ARREGLADO: 3 líneas parejas a 360 y a 375 |
+| J | Antes y después casi iguales | ARREGLADO: la card "después" va en surface, con hairline y check, y se distingue |
+| K | "te confunden más" en acento | ARREGLADO (ahora en [b]) |
+| L | Feedback de toque | ARREGLADO: el FAQ tiene active:bg, los dots active:scale-90 y el check arranca en scale 0.4 |
+| M | Footer | PARCIAL: el corrimiento de 4px está arreglado y el PS usa accent-on-dark. A 1440 los "·" siguen bajos y con más aire a la izquierda que a la derecha (ver N2) |
+
+### Usabilidad /40
+1 Estado 4 [código+render]: el dot sigue la posición del scroll y la sticky tiene dos estados · 2 Lenguaje 4 [render] · 3 Control 4 [código] · 4 Consistencia **3** [render]: a 1440 las columnas cambian de eje entre secciones (Problema en una columna centrada de 620, Solución en una de 780 alineada a la izquierda); la sticky mide 48 y el resto 52 · 5 Prevención 4 [código] · 6 Reconocer 4 [render]: el stack cierra con "Tú pagas" · 7 Flexibilidad 4 [código] · 8 Estético **3** [render]: detalles de lupa (N1-N4) · 9 Errores 4 [código] · 10 Ayuda 4 [render]: el FAQ trae la objeción de precio.
+
+### Craft /20
+Jerarquía 3 (orden claro, pero más de 3 tamaños de texto) · Profundidad 3 (base, elevado y hundido bien; el stack de valor no lleva sombra y las cards de plan sí) · Identidad **4** (el paso con foto y "¡Hecho!" está en el hero, la tira de pasos con check en Solución y las fotos son reales: no se puede intercambiar con otra app) · Movimiento **4** (stagger, conteo del precio, check que se llena, sticky que sube, altura del FAQ, feedback de toque, reduced-motion) · Encaje óptico 3 (375 limpio; quedan detalles a 1440 y en la captura del hero).
+Anclas binarias: énfasis del titular ✓ · hairline + chips SVG ✓ · secciones distinguibles ✓.
+
+### Copy /20 (idea 4 · especificidad 4 · emoción 4 · oferta 4 · acción 3) = 19
+Presupuesto: solo falla 1 sección (los pasos del mecanismo ocupan 2 líneas a 375); el resto pasa.
+Acción 3: el CTA del hero ("Probar gratis con mi peque") no dice cuántos días de prueba, y la oferta usa otro verbo ("Empezar mis 7 días gratis").
+
+### Defectos que quedan (todos BAJO; no bloquean)
+N1. **Carrusel a 1440: separaciones desparejas y teléfono descentrado.** El label "¿Cómo me siento?" cuando no salen las palabras mide unos 285px y ensancha su columna. Por eso hay unos 20px entre los frames 2 y 3 y unos 54px entre el 3 y el 4, y el teléfono del medio queda unos 17px a la izquierda del eje del título y del CTA. Arreglo en `AppPorDentro.tsx`: poner `w-[250px]` en el wrapper `shrink-0 snap-center` y `text-balance` en el label, que pasa a 2 líneas.
+N2. **Puntos del footer a 1440.** Cambiar el "·" de texto por `<span aria-hidden className="mx-2 inline-block size-[3px] rounded-full bg-[var(--text-tertiary)] self-center" />` y quitar `sm:gap-x-1`, para que el aire quede igual a los dos lados.
+N3. **Captura del hero:** la fila de 7 miniaturas se parte en 6+1 y la mochila queda sola en la segunda fila. Volver a capturar rutina.jpg con una rutina de 6 pasos, o con un ancho donde quepan los 7.
+N4. **Ceros tachados de Atkinson** en las cifras chicas ("$1Ø", "US$59.9Ø", "3Ø días"): en precios se ven técnicos. Poner `[font-family:var(--font-display)]` en los valores del stack, en "Se cobra…" y en "Tú pagas…" (o activar en la fuente la variante de cero sin barra, si la tiene).
+N5. **Pasos del mecanismo en 2 líneas a 375** (presupuesto de copy). Acortar: "Rutinas e historias con fotos, listas." · "Respirar, contar y música, en un toque." · "Anotas y llevas el informe a terapia."
+N6. La primera línea del stack ocupa 3 renglones a 375 y "meses)" queda sola. Cambiarla por "Paso a Paso con el Método, 12 meses".
+N7. A 360, bajo el CTA anual, el "·" queda al final del primer renglón. Cambiar el separador por un salto de línea en móvil (`<br className="sm:hidden"/>`) o usar nbsp antes del "·".
+N8. La sticky sigue visible cuando el CTA de "La app por dentro" está en pantalla, y quedan dos botones iguales uno encima del otro. Agregarle un id al bloque de ese CTA y observarlo también en StickyCtaMobile.
+
+### Pendiente de la dueña (no cuenta como defecto)
+Testimonios (prohibido inventarlos) · /onboarding como redirección temporal · "Entrar" cuando exista el login · **configurar 30 días de garantía en Hotmart antes de publicar** (la página promete 30; si no, hay que cambiar el copy). Los datos de la dueña (HadaApps, Chile, hadaapps@gmail.com) ya están puestos y se ven en el footer.
