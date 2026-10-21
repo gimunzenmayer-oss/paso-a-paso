@@ -5,23 +5,30 @@
 // pantalla, foco al título al cambiar de página, reducir movimiento = solo fundido.
 //
 // Personaliza con lo que dejó el onboarding en ESTE teléfono (pp_onboarding vía
-// almacen.ts): nombre, momento y crisis. Si no hay nada, usa los textos genéricos
-// ("tu peque"); nunca un error. No escribe en pp_onboarding.
+// almacen.ts): nombre, momento y crisis ("tu peque" si saltó el nombre). Si no hay
+// onboarding válido (sin momento no se armó ningún plan), lleva a /onboarding: el
+// paywall nunca afirma un plan que no existe. No escribe en pp_onboarding.
+//
+// Historial: cada página es una entrada del navegador (?p=2, ?p=3 con
+// history.pushState, que Next integra con su router). El atrás del sistema y el
+// botón "Atrás" de la cabecera vuelven a la página anterior, no fuera del paywall.
 //
 // Checkout: NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL / _ANUAL (se fijan al compilar)
 // pasan por urlCheckout. Si alguno falta o no es un link https de Hotmart, la
 // página 3 muestra el estado honesto (botón deshabilitado), nunca un enlace roto.
 
-import { useCallback, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
+import { useRouter } from 'next/navigation';
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, type Variants } from 'motion/react';
 import { urlCheckout, type Plan } from '@/lib/embudo/checkout';
 import { contarRespuestas, fechaCobro } from '@/lib/embudo/prueba';
+import { rutinaDe } from '@/lib/embudo/rutinas';
 import { useProgreso } from './almacen';
 import { CabeceraPaywall } from './CabeceraPaywall';
 import { PaywallResumen } from './PaywallResumen';
 import { PaywallPrueba } from './PaywallPrueba';
 import { PaywallPrecio } from './PaywallPrecio';
-import { variablesDe } from './textos';
+import { PAYWALL_PRUEBA, TOTAL_PAGINAS_PAYWALL, variablesDe } from './textos';
 
 const BASES: Record<Plan, string | undefined> = {
   mensual: process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL,
@@ -56,42 +63,100 @@ function planDeUrl(): Plan | null {
   return q === 'anual' || q === 'mensual' ? q : null;
 }
 
+/* La página abierta vive en la URL (?p=2, ?p=3; sin ?p = la 1). Cambia con
+   pushState (ir) y con el atrás/adelante del navegador (popstate). */
+const PARAM_PAGINA = 'p';
+const oyentesPagina = new Set<() => void>();
+
+function suscribirPagina(avisar: () => void): () => void {
+  oyentesPagina.add(avisar);
+  window.addEventListener('popstate', avisar);
+  return () => {
+    oyentesPagina.delete(avisar);
+    window.removeEventListener('popstate', avisar);
+  };
+}
+
+/** 0..2 según ?p=; cualquier otro valor es la página 1. */
+function paginaDeUrl(): number {
+  const n = Number(new URLSearchParams(window.location.search).get(PARAM_PAGINA));
+  return Number.isInteger(n) && n >= 2 && n <= TOTAL_PAGINAS_PAYWALL ? n - 1 : 0;
+}
+
+/** Marca de las entradas que agregó el paywall: desde ellas, "Atrás" es history.back(). */
+function entradaPropia(): boolean {
+  const estado: unknown = window.history.state;
+  return typeof estado === 'object' && estado !== null && 'paywall' in estado;
+}
+
+/** Nueva entrada del historial con la página n (conserva ?plan= y lo demás). */
+function empujarPagina(n: number): void {
+  const url = new URL(window.location.href);
+  if (n === 0) url.searchParams.delete(PARAM_PAGINA);
+  else url.searchParams.set(PARAM_PAGINA, String(n + 1));
+  window.history.pushState({ paywall: n }, '', url);
+  for (const avisar of oyentesPagina) avisar();
+}
+
 export function Paywall() {
   const progreso = useProgreso();
   const fecha = useSyncExternalStore(sinSuscripcion, fechaDeHoy, () => null);
   const origen = useSyncExternalStore(sinSuscripcion, origenGuardado, () => null);
   const planUrl = useSyncExternalStore(sinSuscripcion, planDeUrl, () => null);
+  const pagina = useSyncExternalStore(suscribirPagina, paginaDeUrl, () => 0);
   const reduce = useReducedMotion() === true;
-  const [pagina, setPagina] = useState(0);
-  // true después de la primera navegación: desde ahí el foco va al título de cada página.
+  const router = useRouter();
+  // Al cambiar de página: hacia dónde se movió (anima la entrada desde ese lado) y,
+  // desde la primera navegación, el foco va al título de cada página.
+  const [anterior, setAnterior] = useState(pagina);
+  const [direccion, setDireccion] = useState<1 | -1>(1);
   const [navegado, setNavegado] = useState(false);
+  if (anterior !== pagina) {
+    setAnterior(pagina);
+    setDireccion(pagina > anterior ? 1 : -1);
+    setNavegado(true);
+  }
   const [planElegido, setPlanElegido] = useState<Plan | null>(null);
 
-  const ir = useCallback((n: number) => {
-    setNavegado(true);
-    setPagina(n);
-    window.scrollTo({ top: 0 });
+  const ir = useCallback((n: number) => empujarPagina(n), []);
+  // "Atrás" de la cabecera = el atrás del navegador, si la entrada es nuestra. Si se
+  // llegó directo a ?p=3 (enlace o pestaña nueva), atrás sería salir: se abre la anterior.
+  const atras = useCallback(() => {
+    if (entradaPropia()) window.history.back();
+    else empujarPagina(Math.max(0, paginaDeUrl() - 1));
   }, []);
 
-  const respuestas = progreso?.respuestas ?? {};
-  const n = contarRespuestas(respuestas);
-  // "Hecho con tus {N} respuestas" y "Tu plan ya está en este teléfono" solo son ciertas si hubo onboarding.
-  const conPlan = respuestas.momento !== undefined && n >= 2;
-  const v = { ...variablesDe(respuestas), N: String(n), fecha_cobro: fecha ?? '' };
-  const hrefVolver = progreso ? '/onboarding' : '/';
-  const plan: Plan = planElegido ?? planUrl ?? progreso?.plan ?? 'anual';
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [pagina]);
 
-  // Solo se avanza (no hay "atrás" entre páginas en la copy): la entrada viene siempre de la derecha.
+  // Sin momento no hay plan que resumir ni precio que justificar: a armarlo primero.
+  const sinPlan = progreso === null || (progreso !== undefined && progreso.respuestas.momento === undefined);
+  useEffect(() => {
+    if (sinPlan) router.replace('/onboarding');
+  }, [sinPlan, router]);
+
+  const respuestas = progreso?.respuestas ?? {};
+  const plan: Plan = planElegido ?? planUrl ?? progreso?.plan ?? 'anual';
+  const v = {
+    ...variablesDe(respuestas),
+    N: String(contarRespuestas(respuestas)),
+    fecha_cobro: fecha ?? '',
+    monto: PAYWALL_PRUEBA.monto[plan],
+  };
+  const hrefVolver = '/onboarding';
+
+  // La página entra desde el lado hacia el que se avanza (derecha) o se vuelve (izquierda).
   const variantes: Variants = {
-    entra: { opacity: 0, x: reduce ? 0 : 40 },
+    entra: (d: 1 | -1) => ({ opacity: 0, x: reduce ? 0 : 40 * d }),
     centro: { opacity: 1, x: 0, transition: { duration: reduce ? 0.2 : 0.3, ease: [0.16, 1, 0.3, 1] } },
-    sale: { opacity: 0, x: reduce ? 0 : -24, transition: { duration: 0.2, ease: 'easeIn' } },
+    sale: (d: 1 | -1) => ({ opacity: 0, x: reduce ? 0 : -24 * d, transition: { duration: 0.2, ease: 'easeIn' } }),
   };
 
   let pantalla = null;
-  if (progreso !== undefined && fecha !== null) {
+  if (progreso && !sinPlan && fecha !== null) {
     if (pagina === 0) {
-      pantalla = <PaywallResumen v={v} conPlan={conPlan} hrefVolver={hrefVolver} enfocar={navegado} onSeguir={() => ir(1)} />;
+      pantalla = <PaywallResumen v={v} pasos={rutinaDe(respuestas.momento).pasos} hrefVolver={hrefVolver} enfocar={navegado} onSeguir={() => ir(1)} />;
     } else if (pagina === 1) {
       pantalla = <PaywallPrueba v={v} hrefVolver={hrefVolver} enfocar={navegado} onSeguir={() => ir(2)} />;
     } else {
@@ -114,12 +179,13 @@ export function Paywall() {
         {/* overflow-x-clip: la entrada de cada página (x: 40px) no abre scroll horizontal. clip, no
             hidden: no crea un contenedor de scroll, así la cabecera y el pie siguen pegados (sticky). */}
         <div className="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col overflow-x-clip px-5">
-          <CabeceraPaywall pagina={pagina + 1} hrefVolver={hrefVolver} />
+          <CabeceraPaywall pagina={pagina + 1} hrefVolver={hrefVolver} onAtras={pagina > 0 ? atras : undefined} />
           <main className="flex flex-1 flex-col pt-6">
-            <AnimatePresence mode="wait" initial={false}>
+            <AnimatePresence mode="wait" initial={false} custom={direccion}>
               {pantalla && (
                 <motion.div
                   key={pagina}
+                  custom={direccion}
                   variants={variantes}
                   initial="entra"
                   animate="centro"

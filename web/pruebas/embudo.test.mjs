@@ -82,3 +82,15 @@ test('paywall: cuenta solo las preguntas respondidas', () => {
   assert.equal(contarRespuestas({ nombre: 'Mateo', edad: '5-7', momento: 'dormir', crisis: ['llora', 'piso'] }), 4);
   assert.equal(contarRespuestas({ nombre: 'Mateo', edad: '2-4', momento: 'comidas', crisis: [] }), 3);
 });
+
+test('paywall: {N} cuenta solo respuestas vigentes (crisis con ids viejos no cuenta)', async () => {
+  const { contarRespuestas } = await import('../lib/embudo/prueba.ts');
+  assert.equal(contarRespuestas({}), 0);
+  assert.equal(contarRespuestas({ nombre: 'Mateo', edad: '5-7', momento: 'dormir', crisis: ['piso', 'llora'] }), 4);
+  // Saltada (sin crisis o lista vacía): no cuenta.
+  assert.equal(contarRespuestas({ edad: '5-7', momento: 'dormir', crisis: [] }), 2);
+  // Solo ids que ya no son opciones ('golpea', 'cambia'): no cuenta.
+  assert.equal(contarRespuestas({ edad: '5-7', momento: 'dormir', crisis: ['golpea', 'cambia'] }), 2);
+  // Mezcla: cuenta, porque queda una opción vigente.
+  assert.equal(contarRespuestas({ edad: '5-7', momento: 'dormir', crisis: ['cambia', 'llora'] }), 3);
+});

@@ -1,6 +1,6 @@
 // Copy del onboarding y del paywall: LITERAL de docs/copy/embudo.md §1 y §2 (no se reescribe aquí).
 // [acento]…[/acento] y [b]…[/b] se pintan con parseMarkedCopy del kit de landing.
-// Variables: {nombre}, {momento}, {crisis}, {n_pasos}, {paso_1}, {n}, {N}, {fecha_cobro}.
+// Variables: {nombre}, {momento}, {crisis}, {n_pasos}, {paso_1}, {n}, {N}, {fecha_cobro}, {monto}.
 
 import type { Edad, Momento, Respuestas } from '@/lib/embudo/estado';
 import { rutinaDe } from '@/lib/embudo/rutinas';
@@ -119,6 +119,8 @@ export const TOTAL_PAGINAS_PAYWALL = 3;
 export const PAYWALL_COMUN = {
   cerrar: 'Cerrar y volver al plan',
   indicador: 'Página {n} de 3',
+  /** Páginas 2 y 3: vuelve a la página anterior (igual que el atrás del navegador). */
+  atras: 'Atrás',
 };
 
 export const PAYWALL_RESUMEN = {
@@ -139,9 +141,11 @@ export const PAYWALL_PRUEBA = {
   linea: [
     { cuando: 'Hoy', titulo: 'Acceso completo', texto: 'Su rutina, el kit de calma y la guía' },
     { cuando: 'Día 5', titulo: 'Te avisamos por correo', texto: '2 días antes de cualquier cobro' },
-    { cuando: 'Día 7 · {fecha_cobro}', titulo: 'Empieza el cobro', texto: 'Solo si sigues. Cancela antes y no pagas nada' },
+    { cuando: 'Día 7 · {fecha_cobro}', titulo: 'Empieza el cobro: {monto}', texto: 'Solo si sigues. Cancela antes y no pagas nada' },
   ],
   debajo: 'Y después, 30 días de la [b]Garantía del Día Tranquilo[/b].',
+  /** {monto} del Día 7 según el plan elegido (precios de §2.3). */
+  monto: { anual: 'US$59.90 al año', mensual: 'US$7.99 al mes' },
   boton: 'Ver precios',
   salida: 'Ahora no',
 };
@@ -149,6 +153,9 @@ export const PAYWALL_PRUEBA = {
 export const PAYWALL_PRECIO = {
   titulo: 'Días más [acento]predecibles[/acento] para {nombre}, desde hoy',
   subtitulo: 'Empiezas gratis. Eliges cómo seguir después.',
+  /** Qué incluye el plan (nombres de la app y de la landing §6). */
+  incluyeTitulo: 'Incluye:',
+  incluye: ['Su rutina con fotos', 'Kit de calma', 'Guía «Ahora mismo»', 'Diario e informe'],
   anual: {
     etiqueta: 'Mejor precio',
     nombre: 'Anual',
@@ -163,14 +170,14 @@ export const PAYWALL_PRECIO = {
     sufijo: '/mes',
     detalle: 'Se cobra cada mes · cancelas cuando quieras',
   },
-  ayuda: 'En Hotmart, completa tus datos y elige "Quiero un periodo gratis".',
-  boton: 'Ir a Hotmart y activar mi prueba',
+  ayuda: 'En Hotmart, completa tus datos y elige «Quiero un periodo gratis».',
+  /** El mismo CTA de la oferta de la landing (§6). */
+  boton: 'Empezar mis 7 días gratis',
   abriendo: 'Abriendo Hotmart…',
-  confianza: [
-    'Hoy no pagas nada · primer cobro el {fecha_cobro}',
-    'Cancelas en Hotmart cuando quieras',
-    '30 días de Garantía del Día Tranquilo',
-  ],
+  /** Justo bajo el botón: la garantía con su condición (landing §7). */
+  garantia:
+    '[b]Garantía del Día Tranquilo[/b]: si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo.',
+  confianza: ['Hoy no pagas nada · primer cobro el {fecha_cobro}', 'Cancelas en Hotmart cuando quieras'],
   pie: 'Pago seguro con Hotmart · tarjeta o medios locales',
   salida: 'Ahora no',
   yaPagaste: '¿Ya pagaste? Entra aquí',
@@ -215,17 +222,18 @@ export function variablesDe(r: Respuestas): Variables {
   };
 }
 
-/** Variables que solo usa el paywall: {N} respuestas y {fecha_cobro} (día 7 de la prueba). */
+/** Variables que solo usa el paywall: {N} respuestas, {fecha_cobro} (día 7 de la prueba) y {monto} (el cobro del plan elegido). */
 export interface VariablesPaywall {
   n?: string;
   N?: string;
   fecha_cobro?: string;
+  monto?: string;
 }
 
 /** Reemplaza {variable} en un texto del copy. El nombre ya viene sin corchetes ni etiquetas. */
 export function llenar(texto: string, v: Partial<Variables> & VariablesPaywall): string {
   return texto.replace(
-    /\{(nombre|momento|crisis|n_pasos|paso_1|n|N|fecha_cobro)\}/g,
+    /\{(nombre|momento|crisis|n_pasos|paso_1|n|N|fecha_cobro|monto)\}/g,
     (todo, clave: keyof Variables | keyof VariablesPaywall) => v[clave] ?? todo
   );
 }

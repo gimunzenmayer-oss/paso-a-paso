@@ -10,7 +10,7 @@
     "predev": "node copiar-app.mjs",
     "prebuild": "node copiar-app.mjs",
     "typecheck": "next typegen && tsc --noEmit",
-    "test": "node --test \"pruebas/*.test.mjs\""
+    "test": "node --import ./pruebas/alias.mjs --test \"pruebas/*.test.mjs\""
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

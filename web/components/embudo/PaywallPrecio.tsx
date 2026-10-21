@@ -1,9 +1,12 @@
 'use client';
 
-// 2.3 Página 3 del paywall: precio (50 C1-C5). Anual recomendado y marcado de
-// inicio; el total anual siempre visible; el mensual es un precio real. El botón
-// va pegado abajo (PieFijo) para que el CTA esté en el primer pliegue a 375px, y
-// la verdad del puente (3 líneas con check) queda justo debajo.
+// 2.3 Página 3 del paywall: precio (50 C1-C5). Qué incluye el plan arriba de los
+// precios. Anual recomendado y marcado de inicio; el total anual siempre visible;
+// el mensual es un precio real. La tarjeta elegida es la más elevada (superficie,
+// borde de acento y sombra tintada); la otra queda plana. El botón va pegado
+// abajo (PieFijo) para que el CTA esté en el primer pliegue a 375px, con la
+// garantía y su condición justo debajo, y después la instrucción para Hotmart.
+// La verdad del puente (2 líneas con check) sigue fuera del pie.
 //
 // Checkout honesto: si faltan los links de Hotmart (o no son válidos) el botón
 // queda deshabilitado con el texto del estado honesto de la copy. Nunca un enlace
@@ -15,8 +18,9 @@
 
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { motion } from 'motion/react';
-import { ShieldCheck } from 'lucide-react';
+import { CircleAlert, LoaderCircle, ShieldCheck } from 'lucide-react';
 import { CheckCustom } from '@/components/landing/ui';
+import { MarkedCopy } from '@/components/landing/MarkedCopy';
 import type { Plan } from '@/lib/embudo/checkout';
 import { enviarEvento } from '@/lib/eventos-cliente';
 import { Ayuda, BotonPrincipal, EnlacePrincipal, EnlaceTexto, PieFijo, Titulo } from './ui';
@@ -32,6 +36,9 @@ let vistoContado = false;
 
 const ID_AYUDA = 'ayuda-checkout';
 const ID_NOTA = 'nota-sin-checkout';
+const ID_INCLUYE = 'incluye-plan';
+/** Color de error de FICHA-ARTE (el mismo del error del nombre en Pregunta.tsx). */
+const COLOR_ERROR = 'text-[#9A4A3E]';
 
 function TarjetaPlan({
   plan,
@@ -48,37 +55,39 @@ function TarjetaPlan({
   return (
     <label
       className={`relative block cursor-pointer rounded-[var(--radius-card)] [touch-action:manipulation] transition-[border-color,background-color,box-shadow] duration-200 has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-[var(--accent)] ${
-        // El borde de 2px de la elegida se compensa con 1px menos de relleno: el contenido no salta al cambiar.
+        // La elegida "sube": superficie, borde de acento y sombra tintada. La otra queda
+        // plana, a medio camino entre la superficie y el fondo, sin sombra. El borde de
+        // 2px de la elegida se compensa con 1px menos de relleno: el contenido no salta.
         elegido
-          ? 'border-2 border-[var(--accent)] bg-[color-mix(in_oklab,var(--accent)_7%,var(--surface))] p-[15px] shadow-[0_10px_30px_color-mix(in_oklab,var(--accent)_14%,transparent)]'
-          : 'border border-[color-mix(in_oklab,var(--text-tertiary)_30%,transparent)] bg-[var(--surface)] p-4 shadow-[var(--shadow-1)]'
+          ? `border-2 border-[var(--accent)] bg-[var(--surface)] px-[15px] pb-[15px] shadow-[0_14px_32px_-10px_color-mix(in_oklab,var(--accent)_45%,transparent)] ${anual ? 'pt-[27px]' : 'pt-[15px]'}`
+          : `border border-[color-mix(in_oklab,var(--text-tertiary)_30%,transparent)] bg-[color-mix(in_oklab,var(--surface)_50%,var(--bg))] px-4 pb-4 ${anual ? 'pt-7' : 'pt-4'}`
       } ${anual ? 'mt-3' : ''}`}
     >
       <input type="radio" name="plan" value={plan} checked={elegido} onChange={() => onElegir(plan)} className="sr-only" />
       {anual && (
-        <span className="absolute -top-[11px] left-4 rounded-[8px] bg-[var(--accent)] px-2.5 py-1 text-[12px] font-bold tracking-[0.04em] text-[var(--bg)]">
+        <span className="absolute -top-3 left-4 rounded-[8px] bg-[var(--accent)] px-2.5 py-1 text-[13px] leading-4 font-bold tracking-[0.04em] text-[var(--bg)]">
           {PAYWALL_PRECIO.anual.etiqueta}
         </span>
       )}
       <span className="flex items-start justify-between gap-3">
         <span className="flex min-w-0 flex-col">
-          <span className="text-[17px] font-semibold text-[var(--text-primary)]">{t.nombre}</span>
+          <span className="text-[18px] font-semibold text-[var(--text-primary)]">{t.nombre}</span>
           <span className="mt-1 flex items-baseline gap-0.5">
             <span className="text-[32px] leading-none font-bold text-[var(--text-primary)] tabular-nums [font-family:var(--font-display)]">
               {t.precio}
             </span>
-            <span className="text-[15px] text-[var(--text-secondary)]">{t.sufijo}</span>
+            <span className="text-[16px] text-[var(--text-secondary)]">{t.sufijo}</span>
           </span>
-          <span className="mt-2 text-[15px] leading-snug text-[var(--text-secondary)]">
+          <span className="mt-2 text-[16px] leading-snug text-[var(--text-secondary)]">
             {cobro}
             {ahorro && (
               <>
                 {' · '}
-                <span className={anual ? 'font-bold text-[var(--accent)]' : ''}>{ahorro}</span>
+                <span className={`whitespace-nowrap ${anual ? 'font-bold text-[var(--accent)]' : ''}`}>{ahorro}</span>
               </>
             )}
           </span>
-          {anual && <span className="mt-1 text-[14px] text-[var(--text-secondary)]">{PAYWALL_PRECIO.anual.nota}</span>}
+          {anual && <span className="mt-1 text-[16px] text-[var(--text-secondary)]">{PAYWALL_PRECIO.anual.nota}</span>}
         </span>
         <span
           aria-hidden="true"
@@ -183,6 +192,21 @@ export function PaywallPrecio({
       <Titulo texto={llenar(PAYWALL_PRECIO.titulo, v)} enfocar={enfocar} />
       <Ayuda>{PAYWALL_PRECIO.subtitulo}</Ayuda>
 
+      {/* Una sola línea corrida (2 a 375px): las tarjetas y el CTA siguen en el primer pliegue. */}
+      <div className="mt-4 text-[16px] leading-snug text-[var(--text-secondary)]">
+        <span id={ID_INCLUYE} className="font-bold text-[var(--text-primary)]">
+          {PAYWALL_PRECIO.incluyeTitulo}
+        </span>{' '}
+        <ul aria-labelledby={ID_INCLUYE} className="inline">
+          {PAYWALL_PRECIO.incluye.map((item, i) => (
+            <li key={item} className="inline">
+              {i > 0 && <span aria-hidden="true"> · </span>}
+              <span className="whitespace-nowrap">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <fieldset ref={ofertaRef} aria-labelledby="titulo-paso" className="mt-5 flex flex-col gap-3">
         <TarjetaPlan plan="anual" elegido={plan === 'anual'} onElegir={onElegir} />
         <TarjetaPlan plan="mensual" elegido={plan === 'mensual'} onElegir={onElegir} />
@@ -191,14 +215,32 @@ export function PaywallPrecio({
       <PieFijo>
         {checkout ? (
           <>
-            <p id={ID_AYUDA} className="mb-2 text-center text-[15px] leading-snug text-[var(--text-secondary)]">
-              {PAYWALL_PRECIO.ayuda}
-            </p>
             <EnlacePrincipal href={checkout[plan]} onClick={abrir} ariaDescribedBy={ID_AYUDA} ariaBusy={abriendo}>
-              {abriendo ? PAYWALL_PRECIO.abriendo : PAYWALL_PRECIO.boton}
+              {abriendo ? (
+                <span className="inline-flex items-center gap-2">
+                  <LoaderCircle size={18} strokeWidth={2.5} aria-hidden="true" className="shrink-0 motion-safe:animate-spin" />
+                  {PAYWALL_PRECIO.abriendo}
+                </span>
+              ) : (
+                PAYWALL_PRECIO.boton
+              )}
             </EnlacePrincipal>
-            <p aria-live="polite" className="text-center text-[15px] leading-snug font-semibold text-[var(--text-primary)]">
-              {fallo ? PAYWALL_PRECIO.errorAbrir : ''}
+            <p aria-live="polite" className={`flex items-start justify-center gap-2 text-center text-[16px] leading-snug ${COLOR_ERROR} ${fallo ? 'mt-2' : ''}`}>
+              {fallo && (
+                <>
+                  <CircleAlert size={18} strokeWidth={2} aria-hidden="true" className="mt-0.5 shrink-0" />
+                  <span>{PAYWALL_PRECIO.errorAbrir}</span>
+                </>
+              )}
+            </p>
+            <p className="mt-2 flex items-start gap-2 text-[16px] leading-snug text-[var(--text-primary)]">
+              <ShieldCheck size={20} strokeWidth={2} color="var(--accent)" aria-hidden="true" className="mt-px shrink-0" />
+              <span>
+                <MarkedCopy text={PAYWALL_PRECIO.garantia} />
+              </span>
+            </p>
+            <p id={ID_AYUDA} className="mt-1 text-center text-[16px] leading-snug text-[var(--text-secondary)]">
+              {PAYWALL_PRECIO.ayuda}
             </p>
           </>
         ) : (
@@ -206,7 +248,7 @@ export function PaywallPrecio({
             <BotonPrincipal disabled ariaDescribedBy={ID_NOTA}>
               {PAYWALL_SIN_CHECKOUT.boton}
             </BotonPrincipal>
-            <p id={ID_NOTA} className="mt-2 text-center text-[15px] leading-snug text-[var(--text-secondary)]">
+            <p id={ID_NOTA} className="mt-2 text-center text-[16px] leading-snug text-[var(--text-secondary)]">
               {PAYWALL_SIN_CHECKOUT.nota}
             </p>
           </>
@@ -217,14 +259,14 @@ export function PaywallPrecio({
         <>
           <ul className="mt-3 flex flex-col gap-2.5">
             {PAYWALL_PRECIO.confianza.map((linea) => (
-              <li key={linea} className="flex items-start gap-3 text-[15px] leading-snug text-[var(--text-primary)]">
+              <li key={linea} className="flex items-start gap-3 text-[16px] leading-snug text-[var(--text-primary)]">
                 <CheckCustom />
                 <span>{llenar(linea, v)}</span>
               </li>
             ))}
           </ul>
-          <p className="mt-5 flex items-center justify-center gap-2 text-[14px] text-[var(--text-secondary)]">
-            <ShieldCheck size={16} strokeWidth={2} aria-hidden="true" />
+          <p className="mt-5 flex items-start justify-center gap-2 text-center text-[16px] leading-snug text-[var(--text-secondary)]">
+            <ShieldCheck size={18} strokeWidth={2} aria-hidden="true" className="mt-0.5 shrink-0" />
             {PAYWALL_PRECIO.pie}
           </p>
           <div className="mt-3 flex flex-col">
@@ -235,7 +277,7 @@ export function PaywallPrecio({
       ) : (
         <div className="mt-3 flex flex-col">
           <EnlaceTexto href="/app/index.html">{PAYWALL_SIN_CHECKOUT.app}</EnlaceTexto>
-          <p className="mt-2 text-center text-[15px] leading-snug text-[var(--text-secondary)]">
+          <p className="mt-2 text-center text-[16px] leading-snug text-[var(--text-secondary)]">
             {PAYWALL_SIN_CHECKOUT.contacto}{' '}
             <a
               href={`mailto:${PAYWALL_SIN_CHECKOUT.correo}`}

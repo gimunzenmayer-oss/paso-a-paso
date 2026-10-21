@@ -14,6 +14,7 @@ Voz: español latino neutro, tuteo, cálido, sin culpa, sin "berrinche", sin "tr
   - `{crisis}`: texto corto de la pregunta 4.
   - `{n_pasos}`: pasos de su rutina.
   - `{N}`: preguntas respondidas.
+  - `{monto}`: lo que se cobra el día 7 según el plan elegido: "US$59.90 al año" o "US$7.99 al mes" (precios de §2.3). (pendiente de aprobar)
   - `{fecha_fin}`: hasta cuándo dura el acceso.
   - `{s}`: segundos.
   - `{min}`: minutos.
@@ -130,6 +131,8 @@ Dura de 4 a 6 segundos. Cada línea recibe su check, una tras otra.
 Elementos comunes a las 3 páginas:
 - Cerrar (✕, aria-label): Cerrar y volver al plan
 - Indicador (aria-label): Página {n} de 3
+- Botón en las páginas 2 y 3 (vuelve a la anterior, igual que el atrás del teléfono): ‹ Atrás (pendiente de aprobar)
+- Sin onboarding en este teléfono no hay plan que resumir: `/paywall` lleva a `/onboarding`.
 
 ### 2.1 Página 1: resumen
 - Título: El plan de {nombre} para [acento]{momento}[/acento] está listo
@@ -147,7 +150,7 @@ Elementos comunes a las 3 páginas:
 - Línea de tiempo:
   - **Hoy**: Acceso completo · Su rutina, el kit de calma y la guía
   - **Día 5**: Te avisamos por correo · 2 días antes de cualquier cobro
-  - **Día 7 · {fecha_cobro}**: Empieza el cobro · Solo si sigues. Cancela antes y no pagas nada
+  - **Día 7 · {fecha_cobro}**: Empieza el cobro: {monto} (pendiente de aprobar) · Solo si sigues. Cancela antes y no pagas nada
 - Debajo: Y después, 30 días de la [b]Garantía del Día Tranquilo[/b].
 - Botón: Ver precios
 - Salida: Ahora no
@@ -155,6 +158,7 @@ Elementos comunes a las 3 páginas:
 ### 2.3 Página 3: precio
 - Título: Días más [acento]predecibles[/acento] para {nombre}, desde hoy
 - Subtítulo: Empiezas gratis. Eliges cómo seguir después.
+- Incluye (una línea sobre las tarjetas; nombres de la app y de la landing §6): [b]Incluye:[/b] Su rutina con fotos · Kit de calma · Guía «Ahora mismo» · Diario e informe (pendiente de aprobar)
 - Tarjeta Anual (recomendada y marcada de inicio):
   - etiqueta: Mejor precio
   - nombre: Anual
@@ -165,13 +169,13 @@ Elementos comunes a las 3 páginas:
   - nombre: Mensual
   - precio grande: US$7.99/mes
   - detalle: Se cobra cada mes · cancelas cuando quieras
-- Ayuda sobre el botón: En Hotmart, completa tus datos y elige "Quiero un periodo gratis".
-- Botón: Ir a Hotmart y activar mi prueba
+- Botón: Empezar mis 7 días gratis (el CTA de la oferta de la landing §6)
 - Botón, mientras abre: Abriendo Hotmart…
-- 3 líneas de confianza bajo el botón, con check:
+- Justo bajo el botón, la garantía con su condición (landing §7, abreviada para el pie; sin la línea del correo de soporte, que aún no existe): [b]Garantía del Día Tranquilo[/b]: si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo. (pendiente de aprobar)
+- Ayuda debajo: En Hotmart, completa tus datos y elige «Quiero un periodo gratis».
+- 2 líneas de confianza, con check:
   1. Hoy no pagas nada · primer cobro el {fecha_cobro}
   2. Cancelas en Hotmart cuando quieras
-  3. 30 días de Garantía del Día Tranquilo
 - Fila final: Pago seguro con Hotmart · tarjeta o medios locales
 - Enlaces:
   - Ahora no
@@ -184,7 +188,7 @@ Se usa mientras no existan los links de Hotmart.
 - Nota bajo el botón: Todavía no abrimos los pagos. Nada se cobra desde aquí.
 - Enlace: Mientras, mira la app de ejemplo (→ `/app`)
 - Contacto: ¿Quieres que te avisemos? Escríbenos a hadaapps@gmail.com
-- Las 3 líneas de confianza se ocultan en este estado: hoy no hay prueba que activar.
+- La garantía, la ayuda de Hotmart y las líneas de confianza se ocultan en este estado: hoy no hay prueba que activar.
 
 #### "¿Seguro?" al salir: no existe
 "Ahora no" vuelve al resultado sin ventanas ni frases de culpa.
