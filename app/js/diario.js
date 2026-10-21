@@ -198,7 +198,10 @@ window.PP = window.PP || {};
         if (b.dataset.editar) PP.ir('diarioNuevo', { id: b.dataset.editar });
         if (b.hasAttribute('data-cerrar')) { PP.cerrarDiario(); PP.repintar(); }
         if (b.hasAttribute('data-guia')) PP.ir('guia', null, { raiz: true });
-        if (b.hasAttribute('data-sin-ejemplos')) { diario = diario.filter(function (x) { return !x.ejemplo; }); guardar(); PP.avisar('Ejemplos borrados'); PP.repintar(); }
+        if (b.hasAttribute('data-sin-ejemplos')) { var antes = diario; diario = diario.filter(function (x) { return !x.ejemplo; });
+          guardar().then(function () { PP.avisar('Ejemplos borrados'); PP.repintar(); })
+            .catch(function () { diario = antes; PP.avisar('No se pudieron borrar. Prueba otra vez.'); });
+        }
       };
     }
   };
@@ -215,18 +218,24 @@ window.PP = window.PP || {};
         var existente = params.id && diario.find(function (x) { return x.id === params.id; });
         params.borrador = existente ? JSON.parse(JSON.stringify(existente))
           : { id: PP.nuevoId(), fecha: local, tipo: '', intensidad: 3, duracion: '5', causas: [], ayudo: [], nota: '' };
+        params.original = JSON.stringify(params.borrador);
       }
       var e = params.borrador;
+      // Primero las 6 opciones más comunes; el resto, con "Ver más" (las ya marcadas siempre se ven)
       var chips = function (lista, campo) {
-        return '<div class="chips" role="group">' + lista.map(function (x) {
+        var abierto = params.verMas && params.verMas[campo];
+        var visibles = lista.filter(function (x, i) { return abierto || i < 6 || e[campo].indexOf(x) >= 0; });
+        var ocultas = lista.length - visibles.length;
+        return '<div class="chips" role="group">' + visibles.map(function (x) {
           var si = e[campo].indexOf(x) >= 0;
           return '<button type="button" class="chip-op' + (si ? ' activo' : '') + '" aria-pressed="' + si + '" data-' + campo + '="' + PP.esc(x) + '">' + PP.esc(x) + '</button>';
-        }).join('') + '</div>';
+        }).join('') + (ocultas ? '<button type="button" class="enlace ver-mas" data-ver-mas="' + campo + '">Ver ' + ocultas + ' más</button>' : '') + '</div>';
       };
       var bueno = e.tipo === 'bueno';
       main.innerHTML =
         '<form class="formulario" id="form-d">' +
-        '<h2 class="seccion-t">¿Qué ha pasado?</h2>' +
+        '<h2 class="seccion-t" id="d-tipo-t">¿Qué ha pasado?</h2>' +
+        '<p class="error-campo" id="d-tipo-error" role="alert"' + (params.faltaTipo && !e.tipo ? '' : ' hidden') + '>Elige qué pasó para poder guardar.</p>' +
         '<div class="rejilla-tipos">' + PP.TIPOS.map(function (t) {
           return '<button type="button" class="tipo-op' + (e.tipo === t.id ? ' activo' : '') + '" aria-pressed="' + (e.tipo === t.id) + '" data-tipo="' + t.id + '"><span aria-hidden="true">' + t.picto + '</span>' + t.texto + '</button>';
         }).join('') + '</div>' +
@@ -244,7 +253,7 @@ window.PP = window.PP || {};
         (e.tipo ? '<label class="campo" for="d-nota">Nota <span class="suave">(opcional)</span><textarea id="d-nota" rows="3" placeholder="' + (bueno ? '¿Qué salió bien?' : 'Dónde estabais, qué pasó antes…') + '">' + PP.esc(e.nota) + '</textarea></label>' +
           '<label class="campo" for="d-fecha">Cuándo<input id="d-fecha" type="datetime-local" value="' + PP.esc(e.fecha.slice(0, 16)) + '"></label>' : '') +
         (params.id ? '<div class="zona-extra" id="zona-borrar"><button type="button" class="btn peligro" data-borrar>Borrar esta nota</button></div>' : '') +
-        '<div class="pie-form"><button type="button" class="btn" data-cancelar>Cancelar</button><button type="submit" class="btn principal"' + (e.tipo ? '' : ' disabled') + '>Guardar</button></div>' +
+        '<div class="pie-form" id="pie-d"><button type="submit" class="btn principal">Guardar</button><button type="button" class="btn" data-cancelar>Cancelar</button></div>' +
         '</form>';
 
       function leer() {
@@ -256,25 +265,55 @@ window.PP = window.PP || {};
       main.onclick = function (ev) {
         var b = ev.target.closest('button'); if (!b || b.type === 'submit') return;
         leer();
-        if (b.dataset.tipo) { e.tipo = b.dataset.tipo; PP.repintar(); }
+        if (b.dataset.tipo) { e.tipo = b.dataset.tipo; params.faltaTipo = false; PP.repintar(); }
+        if (b.dataset.verMas) { params.verMas = params.verMas || {}; params.verMas[b.dataset.verMas] = true; PP.repintar(); }
         ['causas', 'ayudo'].forEach(function (c) {
           var v = b.dataset[c]; if (v == null) return;
           var k = e[c].indexOf(v); if (k >= 0) e[c].splice(k, 1); else e[c].push(v);
           b.classList.toggle('activo', k < 0); b.setAttribute('aria-pressed', k < 0);
         });
-        if (b.hasAttribute('data-cancelar')) PP.atras();
+        // Cancelar: si hay cambios sin guardar, preguntar antes de perderlos
+        if (b.hasAttribute('data-cancelar')) {
+          if (JSON.stringify(e) === params.original) PP.atras();
+          else {
+            $('#pie-d').classList.add('confirmando');
+            $('#pie-d').innerHTML = '<p><strong>¿Salir sin guardar?</strong> Se perderá lo que anotaste.</p><button type="button" class="btn principal" data-seguir>Seguir anotando</button><button type="button" class="btn peligro" data-salir>Salir sin guardar</button>';
+          }
+        }
+        if (b.hasAttribute('data-seguir')) PP.repintar();
+        if (b.hasAttribute('data-salir')) PP.atras();
         if (b.hasAttribute('data-borrar')) $('#zona-borrar').innerHTML = '<p><strong>¿Borrar esta nota?</strong></p><div class="fila"><button type="button" class="btn peligro" data-borrar-si>Sí, borrar</button><button type="button" class="btn" data-borrar-no>No</button></div>';
         if (b.hasAttribute('data-borrar-no')) PP.repintar();
-        if (b.hasAttribute('data-borrar-si')) { diario = diario.filter(function (x) { return x.id !== e.id; }); guardar(); PP.avisar('Nota borrada'); PP.ir('diario', null, { raiz: true }); }
+        if (b.hasAttribute('data-borrar-si')) {
+          var antes = diario;
+          diario = diario.filter(function (x) { return x.id !== e.id; });
+          guardar().then(function () { PP.avisar('Nota borrada'); PP.ir('diario', null, { raiz: true }); })
+            .catch(function () { diario = antes; PP.avisar('No se pudo borrar. Prueba otra vez.'); PP.repintar(); });
+        }
       };
       $('#form-d').onsubmit = function (ev) {
         ev.preventDefault(); leer();
+        if (!e.tipo) {
+          params.faltaTipo = true;
+          $('#d-tipo-error').hidden = false;
+          $('#d-tipo-t').scrollIntoView({ block: 'center' });
+          main.querySelector('.tipo-op').focus({ preventScroll: true });
+          return;
+        }
         if (e.tipo === 'bueno') { e.intensidad = 0; e.duracion = ''; e.causas = []; e.ayudo = []; }
         delete e.ejemplo;
-        var k = diario.findIndex(function (x) { return x.id === e.id; });
-        if (k >= 0) diario[k] = e; else { diario.push(e); if (PP.evento) PP.evento('diario_nota_guardada'); }
-        guardar().then(function () { PP.avisar('Guardado en el diario'); });
-        PP.ir('diario', null, { raiz: true });
+        var antes = diario.slice(), k = diario.findIndex(function (x) { return x.id === e.id; });
+        var nueva = k < 0;
+        if (k >= 0) diario[k] = e; else diario.push(e);
+        // Solo salimos del formulario cuando de verdad quedó guardado
+        guardar().then(function () {
+          if (nueva && PP.evento) PP.evento('diario_nota_guardada');
+          PP.avisar('Guardado en el diario');
+          PP.ir('diario', null, { raiz: true });
+        }).catch(function () {
+          diario = antes;
+          PP.avisar('No se pudo guardar. Revisa que haya espacio en el teléfono y prueba otra vez.');
+        });
       };
     }
   };

@@ -182,12 +182,14 @@ window.PP = window.PP || {};
       var tic = function () {
         var s = segundosDeEspera();
         if (caja.hidden) { clearInterval(reloj); return; }
+        caja.classList.toggle('bloqueado', s > 0);
         if (s <= 0) { clearInterval(reloj); msg.textContent = mensajeNormal; return; }
         msg.textContent = 'Demasiados intentos. Espera ' + (s > 60 ? Math.ceil(s / 60) + ' min' : s + ' s') + ' para probar otra vez.';
       };
       tic(); reloj = setInterval(tic, 1000);
     };
     msg.textContent = mensajeNormal;
+    caja.classList.remove('bloqueado');
     if (segundosDeEspera() > 0) mostrarEspera();
     var dibujar = function () {
       puntos.innerHTML = [0, 1, 2, 3].map(function (i) { return '<span class="' + (i < escrito.length ? 'lleno' : '') + '"></span>'; }).join('');
@@ -241,6 +243,46 @@ window.PP = window.PP || {};
     return (PP.estado.estrellas || []).filter(function (e) { return e.fecha >= desde; });
   };
 
+  // ---------- Que el teléfono no borre los datos ----------
+  // Una web no instalada puede perder sus datos (Safari los borra tras
+  // unos días sin uso). Pedimos almacenamiento permanente e invitamos
+  // a guardar la app en la pantalla de inicio.
+  var avisoInstalar = null; // evento de Chrome/Android para instalar con un toque
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); avisoInstalar = e; if (PP.actual && PP.actual.nombre === 'inicio') PP.repintar(); });
+  function estaInstalada() {
+    return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  }
+  function pedirAlmacenamientoFijo() {
+    if (navigator.storage && navigator.storage.persist) {
+      navigator.storage.persisted().then(function (fijo) { if (!fijo) return navigator.storage.persist(); }).catch(function () { });
+    }
+  }
+  function tarjetaInstalar() {
+    var oculto = false;
+    try { oculto = localStorage.getItem('pp_aviso_instalar') === 'no'; } catch (e) { }
+    if (oculto || estaInstalada()) return '';
+    return '<section class="tarjeta aviso-instalar" aria-labelledby="inst-t">' +
+      '<h3 id="inst-t">Guarda la app en tu pantalla de inicio</h3>' +
+      '<p class="suave">Así se abre como cualquier app y el teléfono no borra tus rutinas ni tu diario.</p>' +
+      '<p class="suave" id="inst-pasos" hidden></p>' +
+      '<div class="fila"><button class="btn principal crece" data-instalar>' + (avisoInstalar ? 'Instalar' : 'Ver cómo') + '</button><button class="btn" data-instalar-no>Ahora no</button></div>' +
+      '</section>';
+  }
+  function instalar(b) {
+    if (avisoInstalar) {
+      avisoInstalar.prompt();
+      avisoInstalar.userChoice.then(function () { avisoInstalar = null; PP.repintar(); });
+      return;
+    }
+    var ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    var pasos = $('#inst-pasos');
+    pasos.textContent = ios
+      ? 'En Safari, toca el botón Compartir (el cuadrado con la flecha hacia arriba) y elige «Agregar a inicio».'
+      : 'Abre el menú del navegador (los tres puntos) y elige «Instalar app» o «Agregar a la pantalla principal».';
+    pasos.hidden = false;
+    b.hidden = true;
+  }
+
   PP.pantallas.inicio = {
     titulo: 'Paso a Paso',
     pintar: function (main) {
@@ -277,6 +319,7 @@ window.PP = window.PP || {};
         '<button class="mod" data-ir-a="preparar"><span class="mod-n">🧩 Preparar herramientas</span><span class="mod-d">Rutinas, tablero, historias…</span></button>' +
         '<button class="mod" data-ir-a="logros"><span class="mod-n">⭐ ' + semana + ' estrella' + (semana === 1 ? '' : 's') + ' esta semana</span><span class="mod-d">Logros y avances</span></button>' +
         '</div></section>' +
+        tarjetaInstalar() +
         '<p class="aviso-legal">Paso a Paso es una herramienta de apoyo para la familia. No sustituye el diagnóstico, la terapia ni el consejo de profesionales. Los datos se guardan solo en este dispositivo.</p>';
 
       main.onclick = function (e) {
@@ -284,6 +327,8 @@ window.PP = window.PP || {};
         if (!b) return;
         if (b.hasAttribute('data-espacio')) PP.abrirEspacio();
         if (b.dataset.empezar) PP.empezarRutina(b.dataset.empezar);
+        if (b.hasAttribute('data-instalar')) instalar(b);
+        if (b.hasAttribute('data-instalar-no')) { try { localStorage.setItem('pp_aviso_instalar', 'no'); } catch (err) { } PP.repintar(); }
         if (b.dataset.irA === 'diarioNuevo') PP.conDiario(function () { PP.ir('diarioNuevo'); });
         else if (b.dataset.irA) PP.ir(b.dataset.irA);
       };
@@ -479,6 +524,7 @@ window.PP = window.PP || {};
       };
       PP.actual = null;
       PP.ir('inicio', null, { raiz: true });
+      pedirAlmacenamientoFijo();
       if (PP.estado.perfil.abrirEnEspacio) PP.abrirEspacio();
     });
 

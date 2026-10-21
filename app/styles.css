@@ -234,7 +234,14 @@ img.foto { object-fit: cover; padding: 0; }
 .pasos-editor input { flex: 1 1 140px; }
 .mini-acciones { display: flex; margin-left: auto; }
 .mini-acciones .icono { width: 48px; height: 48px; }
-.pie-form { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; position: sticky; bottom: calc(var(--menu-alto) + 12px + env(safe-area-inset-bottom, 0px)); background: var(--fondo); padding-block: 8px; }
+.pie-form { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; position: sticky; bottom: calc(var(--menu-alto) + 12px + env(safe-area-inset-bottom, 0px)); background: var(--fondo); padding-block: 8px; }
+.pie-form.confirmando { grid-template-columns: 1fr; }
+.error-campo { color: var(--peligro); font-weight: 700; margin: 0; }
+.enlace.ver-mas { min-height: 44px; padding-inline: 8px; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+#pin.bloqueado button[data-n] { opacity: .4; }
+.aviso-instalar { gap: 10px; }
+.aviso-instalar h3 { margin: 0; }
 .zona-extra, #zona-reset { display: flex; flex-direction: column; gap: 10px; padding-top: 12px; border-top: 1px solid var(--borde); }
 
 /* Panel de pictogramas */
