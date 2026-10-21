@@ -9,8 +9,9 @@
 // primera (TiraDeFotos, la misma del reconocimiento), sobre el plano hundido. La
 // lista usa el mismo check (CheckQueSeLlena): un solo check en todo el embudo.
 // Bajo el subtítulo, sus respuestas en chips (--chip-bg): momento · edad · 1.ª
-// crisis, solo las que respondió (sin respuestas, sin chips): «tus 4 respuestas» se
-// ve, no hay que recordarlo. Título, subtítulo, chips, lista y línea de pérdida entran
+// crisis, solo las que respondió (sin respuestas, sin chips). {N} es el número de
+// esos chips (contarRespuestas = etiquetasDeRespuestas(r).length): «tus 3 respuestas»
+// y 3 chips, el número cuadra con lo que se ve (el nombre no tiene chip ni cuenta). Título, subtítulo, chips, lista y línea de pérdida entran
 // escalonados (entrada(i), 60 ms), como 1.5 y 1.6.
 
 import { motion } from 'motion/react';
@@ -34,7 +35,7 @@ export function PaywallResumen({
 }: {
   /** v.N lleva el mismo número, ya como texto del copy. */
   v: Variables & VariablesPaywall;
-  /** Cuántas preguntas respondió (contarRespuestas). */
+  /** Cuántas respuestas se ven como chips (contarRespuestas = etiquetas.length). */
   respuestas: number;
   /** Los pasos de su rutina (rutinaDe(momento)). */
   pasos: readonly PasoRutina[];

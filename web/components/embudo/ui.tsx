@@ -124,7 +124,7 @@ export function EnlacePrincipal({
   );
 }
 
-/* ── <BotonTexto> — salida secundaria ("Saltar", "Cambiar el momento"): 48px de
+/* ── <BotonTexto> — salida secundaria ("Prefiero no decirlo", "Prefiero saltar esta"): 48px de
    alto para el dedo, texto secundario subrayado. La salida visible ES la técnica (02B regla 7). ── */
 export function BotonTexto({ children, onClick }: { children: ReactNode; onClick: () => void }) {
   return (
@@ -177,10 +177,19 @@ export function BotonAtras({ texto, ...destino }: { texto: string } & ({ onClick
 }
 
 /* ── <PieFijo> — zona del CTA pegada abajo con safe-area (50 A3). Va dentro del
-   flujo (sticky), así el teclado nunca tapa el campo. ── */
-export function PieFijo({ children }: { children: ReactNode }) {
+   flujo (sticky), así el teclado nunca tapa el campo.
+   fondo 'degradado' (por defecto): lo de abajo se desvanece bajo el pie.
+   fondo 'solido': --bg pleno con un hairline arriba, sin degradado. Lo que pasa por
+   debajo se corta con un borde limpio (la señal normal de «hay más»), nunca un
+   fantasma a medias; lo usa el precio del paywall, donde un bloque bajo las
+   tarjetas asomaba borroso o, para evitarlo, dejaba un hueco. ── */
+export function PieFijo({ children, fondo = 'degradado' }: { children: ReactNode; fondo?: 'degradado' | 'solido' }) {
+  const piel =
+    fondo === 'solido'
+      ? 'border-t border-[color-mix(in_oklab,var(--text-tertiary)_22%,transparent)] bg-[var(--bg)] pt-3'
+      : 'bg-[linear-gradient(to_bottom,transparent,var(--bg)_18px)] pt-6';
   return (
-    <div className="sticky bottom-0 z-10 -mx-5 mt-auto bg-[linear-gradient(to_bottom,transparent,var(--bg)_18px)] px-5 pt-6 pb-[max(16px,env(safe-area-inset-bottom))]">
+    <div className={`sticky bottom-0 z-10 -mx-5 mt-auto px-5 pb-[max(16px,env(safe-area-inset-bottom))] ${piel}`}>
       <div className="flex flex-col gap-1">{children}</div>
     </div>
   );
@@ -220,7 +229,7 @@ export function Opcion({
           : 'border border-[color-mix(in_oklab,var(--text-tertiary)_30%,transparent)] bg-[var(--surface)] shadow-[var(--shadow-2)]'
       }`}
     >
-      {paso && <Miniatura paso={paso} tamano={56} enChip />}
+      {paso && <Miniatura paso={paso} tamano={56} marco="chip" />}
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="text-[18px] leading-snug font-semibold text-[var(--text-primary)]">{label}</span>
         {subtexto && <span className="mt-0.5 text-[16px] leading-snug text-pretty text-[var(--text-secondary)]">{subtexto}</span>}
@@ -258,17 +267,25 @@ export function Opcion({
    toma el --surface-2 y no queda un cuadro blanco dentro del marco. Sin foto
    (p. ej. "Ponerse el pijama"): ícono lucide en el mismo marco, nunca emoji.
    tamano 'fluida' = llena el ancho de su celda (tiras en grilla), siempre cuadrada.
-   enChip: va dentro de un chip de Opcion (radio de tarjeta, 9px de borde + relleno):
-   toma el radio concéntrico en vez del de botón. ── */
+   marco: el radio, concéntrico con lo que la contiene. 'boton' (por defecto) = radio de
+   botón (14). 'chip' = dentro de un chip de Opcion (radio de tarjeta, 9px de borde +
+   relleno): 18 − 9 = 9. 'vistaPrevia' = dentro de una tarjeta de la vista previa de 1.1
+   (radio 18 − 8 = 10, relleno 6): 10 − 6 = 4. ── */
 export function Miniatura({
   paso,
   tamano,
-  enChip = false,
+  marco = 'boton',
 }: {
   paso: PasoRutina;
   tamano: 40 | 56 | 72 | 'fluida';
-  enChip?: boolean;
+  marco?: 'boton' | 'chip' | 'vistaPrevia';
 }) {
+  const radio =
+    marco === 'chip'
+      ? 'rounded-[calc(var(--radius-card)-9px)]'
+      : marco === 'vistaPrevia'
+        ? 'rounded-[calc(var(--radius-card)-14px)]'
+        : 'rounded-[var(--radius-button)]';
   const fluida = tamano === 'fluida';
   const lado = fluida ? 'aspect-square w-full' : tamano === 72 ? 'size-[72px]' : tamano === 56 ? 'size-14' : 'size-10';
   const icono = fluida || tamano === 72 ? 30 : tamano === 56 ? 24 : 20;
@@ -276,7 +293,7 @@ export function Miniatura({
   return (
     <span
       aria-hidden="true"
-      className={`${lado} relative inline-flex shrink-0 items-center justify-center overflow-hidden ${enChip ? 'rounded-[calc(var(--radius-card)-9px)]' : 'rounded-[var(--radius-button)]'} bg-[var(--surface-2)] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--text-tertiary)_22%,transparent)]`}
+      className={`${lado} relative inline-flex shrink-0 items-center justify-center overflow-hidden ${radio} bg-[var(--surface-2)] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--text-tertiary)_22%,transparent)]`}
     >
       {paso.foto ? (
         fluida ? (

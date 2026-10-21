@@ -27,6 +27,9 @@ export const NOMBRE = {
   /** {nombre} de la vista previa mientras el campo está vacío (empieza la frase: con mayúscula).
    *  (pendiente de aprobar) · antes: (no había) */
   vistaPreviaSinNombre: 'Tu peque',
+  /** Delante del 2.º y el 3.º paso de la vista previa (más chicos, bajo la 1.ª tarjeta).
+   *  (pendiente de aprobar) · antes: (la vista previa mostraba solo el 1.er paso) */
+  vistaPreviaDespues: 'Después:',
   label: 'Nombre o apodo',
   placeholder: 'Ej. Mateo',
   boton: 'Seguir',
@@ -49,8 +52,9 @@ export const OPCIONES_EDAD: readonly { id: Edad; label: string }[] = [
 export const MOMENTO = {
   titulo: '¿Qué momento del día [acento]cuesta más[/acento]?',
   /** (pendiente de aprobar) · antes: Por ahí empieza su primera rutina, con fotos.
-   *  «de 5 a 7»: las rutinas de rutinas.ts tienen 5, 6 y 7 pasos (lo comprueba embudo.test.mjs). */
-  ayuda: 'Por ahí empieza su primera rutina: de 5 a 7 pasos, con fotos.',
+   *  «de 5 a 7»: las rutinas de rutinas.ts tienen 5, 6 y 7 pasos (lo comprueba embudo.test.mjs).
+   *  El rango va con espacios duros: no se parte en «de 5 a / 7 pasos». */
+  ayuda: 'Por ahí empieza su primera rutina: de\u00a05\u00a0a\u00a07\u00a0pasos, con fotos.',
 };
 export const OPCIONES_MOMENTO: readonly { id: Momento; label: string; subtexto: string; momento: string }[] = [
   { id: 'manana', label: 'La mañana', subtexto: 'Despertar, vestirse y salir de casa', momento: 'la mañana' },
@@ -76,7 +80,8 @@ export const CRISIS = {
 // "Cambia cada vez" se quitó (equivale a "Prefiero saltar esta"). Un id viejo
 // guardado en el teléfono ('golpea', 'cambia') se ignora: ver idsDeCrisis().
 export const OPCIONES_CRISIS: readonly { id: string; label: string; corto: string }[] = [
-  { id: 'llora', label: 'Llora o grita fuerte', corto: 'llora o grita' },
+  // «o\u00a0grita»: la palabra corta no queda sola al final de la línea («llora / o grita» en la carga).
+  { id: 'llora', label: 'Llora o grita fuerte', corto: 'llora o\u00a0grita' },
   { id: 'piso', label: 'Se tira al piso o golpea', corto: 'se tira al piso o golpea' },
   { id: 'esconde', label: 'Se tapa los oídos o se esconde', corto: 'necesita esconderse' },
   { id: 'cierra', label: 'Se queda en silencio y se cierra', corto: 'se cierra' },
@@ -105,11 +110,13 @@ export const COMPROMISO = {
   masPasos: 'Y {n} pasos más:',
   /** El título ya dice cuándo ("Mañana…"): el botón no lo repite. */
   boton: 'Sí, la probamos',
-  cambiar: 'Cambiar el momento',
+  // (pendiente de aprobar) · antes: «Cambiar el momento» bajo el botón, en el pie (quitado: repetía
+  // «Cambiar», junto al chip; una sola salida para una acción).
   /** Chip pegado a la ayuda con el momento que eligió en 1.3 (el label de la opción, en negrita).
    *  (pendiente de aprobar) · antes: (no había) */
   elegiste: 'Elegiste:',
-  /** Al lado del chip: vuelve a 1.3, igual que «Cambiar el momento». (pendiente de aprobar) · antes: (no había) */
+  /** Al lado del chip: vuelve a 1.3. Es la única salida a 1.3 desde el compromiso.
+   *  (pendiente de aprobar) · antes: (no había; estaba solo «Cambiar el momento» en el pie) */
   cambiarCorto: 'Cambiar',
 };
 
@@ -119,8 +126,9 @@ export const CARGANDO = {
   lineas: [
     { etapa: 'Antes', texto: 'Rutina de {momento}: {n_pasos}\u00a0pasos con fotos' },
     { etapa: 'Durante', texto: 'Kit de calma para cuando {crisis}' },
-    { etapa: 'Durante', texto: 'Guía «¿Momento difícil?» a un toque' },
-    { etapa: 'Después', texto: 'Diario para contarle a su terapeuta' },
+    // Espacios duros tras las palabras cortas: ni «a / un toque» ni «a / su terapeuta».
+    { etapa: 'Durante', texto: 'Guía «¿Momento difícil?» a\u00a0un\u00a0toque' },
+    { etapa: 'Después', texto: 'Diario para contarle a\u00a0su\u00a0terapeuta' },
   ],
   /** Pantalla de transición: avanza sola al resultado, así que no da ninguna orden. */
   listo: 'El plan de {nombre} está listo.',
@@ -173,7 +181,8 @@ export const PAYWALL_COMUN = {
 
 export const PAYWALL_RESUMEN = {
   titulo: 'El plan de {nombre} para [acento]{momento}[/acento] está listo',
-  /** Solo con 3 respuestas o más: con menos, el número le resta valor. */
+  /** {N} = los chips de debajo (momento · edad · crisis respondidas): el número cuadra con lo que se ve.
+   *  Solo con las 3: con menos, el número le resta valor. */
   subtitulo: 'Hecho con tus {N} respuestas, con el [b]Método Antes, Durante y Después[/b].',
   subtituloSinNumero: 'Hecho con lo que nos contaste, con el [b]Método Antes, Durante y Después[/b].',
   /** aria-label de los chips con sus respuestas, bajo el subtítulo. (pendiente de aprobar) · antes: (no había) */
@@ -202,7 +211,8 @@ export const PAYWALL_PRUEBA = {
     titulo: 'Empieza el cobro del plan que elijas',
     texto: `${sinCortes(MONTO.mensual)} o ${sinCortes(MONTO.anual)}. Solo si sigues. Cancelas antes desde Hotmart y no pagas nada`,
   },
-  debajo: 'Y después, 30 días de la [b]Garantía del Día Tranquilo[/b]: si no te ayuda, te devolvemos todo.',
+  /** «si\u00a0no\u00a0te\u00a0ayuda» con espacios duros: la condición de la garantía no se parte. */
+  debajo: 'Y después, 30 días de la [b]Garantía del Día Tranquilo[/b]: si\u00a0no\u00a0te\u00a0ayuda, te devolvemos todo.',
   /** {monto} del Día 7 según el plan elegido (precios de §2.3). */
   monto: MONTO,
   /** (pendiente de aprobar) · antes: Ver los planes de {nombre} */

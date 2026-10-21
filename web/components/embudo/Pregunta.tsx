@@ -8,10 +8,13 @@
 // Las opciones entran escalonadas (60 ms, la firma de FICHA-ARTE; con reducir
 // movimiento, solo el fundido). En 1.3 cada opción lleva la foto de su rutina.
 // En 1.1, bajo el campo, el plano hundido (el segundo plano de la pantalla,
-// FICHA-ARTE: hundido #E6ECE5, radio de tarjeta) lleva una vista previa viva de la
-// 1.ª tarjeta de su rutina («Mateo, ahora: Despertar») que cambia con cada letra, y
-// arriba el rótulo con el «por qué». El error REEMPLAZA a ese rótulo: no se reserva
-// alto y el bloque no salta.
+// FICHA-ARTE: hundido #E6ECE5, radio de tarjeta) lleva una vista previa viva de los
+// 3 primeros pasos de su rutina: el 1.º elevado («Mateo, ahora: Despertar», que
+// cambia con cada letra) y el 2.º y el 3.º más chicos y planos («Después: …»): el
+// espacio sobre el CTA muestra la promesa, no aire. Arriba, el rótulo con el «por
+// qué». El error REEMPLAZA a ese rótulo: no se reserva alto y el bloque no salta.
+// Radios concéntricos: plano 18 con 8 de relleno → tarjetas 10; tarjeta con 6 de
+// relleno → foto 4 (Miniatura marco="vistaPrevia").
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
@@ -26,17 +29,20 @@ function nombreLimpio(valor: string): string | undefined {
   return limpio ? conMayuscula(limpio) : undefined;
 }
 
+/** Pasos de su rutina en la vista previa de 1.1: el 1.º elevado, el 2.º y el 3.º más chicos. */
+const PASOS_VISTA_PREVIA = 3;
+
 /* ── 1.1 Nombre del peque ──────────────────────────────────────────────────── */
 export function NombrePeque({
   inicial,
-  primerPaso,
+  pasos,
   enfocar,
   onListo,
   onSaltar,
 }: {
   inicial?: string;
-  /** El 1.º paso de su rutina (la de la mañana si todavía no eligió momento): la vista previa. */
-  primerPaso?: PasoRutina;
+  /** Los pasos de su rutina (la de la mañana si todavía no eligió momento): la vista previa usa los 3 primeros. */
+  pasos: readonly PasoRutina[];
   enfocar: boolean;
   onListo: (nombre: string) => void;
   onSaltar: () => void;
@@ -52,6 +58,7 @@ export function NombrePeque({
     setError(null);
     onListo(limpio);
   };
+  const [primerPaso, ...siguientes] = pasos.slice(0, PASOS_VISTA_PREVIA);
   const vistaPrevia = llenar(NOMBRE.vistaPrevia, {
     nombre: nombreLimpio(valor) ?? NOMBRE.vistaPreviaSinNombre,
     paso_1: primerPaso?.texto ?? '',
@@ -86,22 +93,40 @@ export function NombrePeque({
           error ? 'border-2 border-[var(--error)]' : 'border-[color-mix(in_oklab,var(--text-tertiary)_35%,transparent)]'
         }`}
       />
-      {/* Plano hundido: rótulo (o el error, que lo reemplaza) + la vista previa de su 1.ª tarjeta. */}
-      <motion.div {...entrada(0, 0.1)} className="mt-4 rounded-[var(--radius-card)] bg-[var(--surface-2)] p-4">
+      {/* Plano hundido: rótulo (o el error, que lo reemplaza) + la vista previa de sus 3 primeros pasos.
+          p-2 (8) para que las tarjetas tengan el radio concéntrico (18 − 8 = 10); el rótulo suma px-2:
+          el texto sigue a 16 del borde del plano. */}
+      <motion.div {...entrada(0, 0.1)} className="mt-4 rounded-[var(--radius-card)] bg-[var(--surface-2)] p-2">
         {/* La región del error existe siempre (vacía no ocupa alto) para que el lector lo anuncie. */}
-        <p id="error-nombre" role="alert" className="text-[16px] leading-[1.45] font-semibold text-pretty text-[var(--error)] empty:hidden">
+        <p
+          id="error-nombre"
+          role="alert"
+          className="px-2 pt-2 text-[16px] leading-[1.45] font-semibold text-pretty text-[var(--error)] empty:hidden"
+        >
           {error}
         </p>
-        {!error && <p className="text-[16px] leading-[1.45] text-pretty text-[var(--text-secondary)]">{NOMBRE.porque}</p>}
+        {!error && <p className="px-2 pt-2 text-[16px] leading-[1.45] text-pretty text-[var(--text-secondary)]">{NOMBRE.porque}</p>}
         {primerPaso && (
-          // Decorativa: repite lo que ella escribe (el lector ya lo oye en el campo).
-          <div
-            aria-hidden="true"
-            className="mt-3 flex items-center gap-3 rounded-[var(--radius-card)] bg-[var(--surface)] p-2 pr-3 shadow-[var(--shadow-1)]"
-          >
-            <Miniatura paso={primerPaso} tamano={56} />
-            <p className="min-w-0 flex-1 text-[18px] leading-snug font-semibold break-words [font-family:var(--font-display)]">{vistaPrevia}</p>
-          </div>
+          // Decorativa: repite lo que ella escribe (el lector ya lo oye en el campo) y su rutina por delante.
+          <ol aria-hidden="true" className="mt-3 flex flex-col gap-2">
+            {/* El 1.º, elevado: superficie y sombra, como la tarjeta del paso 1 del resultado. */}
+            <li className="flex items-center gap-3 rounded-[calc(var(--radius-card)-8px)] bg-[var(--surface)] p-1.5 pr-3 shadow-[var(--shadow-2)]">
+              <Miniatura paso={primerPaso} tamano={56} marco="vistaPrevia" />
+              <p className="min-w-0 flex-1 text-[18px] leading-snug font-semibold break-words [font-family:var(--font-display)]">{vistaPrevia}</p>
+            </li>
+            {/* El 2.º y el 3.º, más chicos y planos: lo que viene después. */}
+            {siguientes.map((paso) => (
+              <li
+                key={paso.texto}
+                className="flex items-center gap-3 rounded-[calc(var(--radius-card)-8px)] bg-[color-mix(in_oklab,var(--surface)_55%,var(--surface-2))] p-1.5 pr-3"
+              >
+                <Miniatura paso={paso} tamano={40} marco="vistaPrevia" />
+                <p className="min-w-0 flex-1 text-[16px] leading-snug text-[var(--text-primary)]">
+                  <span className="text-[var(--text-secondary)]">{NOMBRE.vistaPreviaDespues}</span> {paso.texto}
+                </p>
+              </li>
+            ))}
+          </ol>
         )}
       </motion.div>
       <PieFijo>

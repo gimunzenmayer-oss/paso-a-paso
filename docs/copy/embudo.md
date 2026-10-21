@@ -13,7 +13,7 @@ Voz: español latino neutro, tuteo, cálido, sin culpa, sin "berrinche", sin "tr
 - Variables extra (necesarias, con el mismo estilo):
   - `{crisis}`: texto corto de la pregunta 4.
   - `{n_pasos}`: pasos de su rutina.
-  - `{N}`: preguntas respondidas.
+  - `{N}`: respuestas que se ven como chips en el resumen del paywall (momento · edad · crisis respondidas; el nombre no tiene chip y no cuenta): el número cuadra con los chips. (pendiente de aprobar) · antes: preguntas respondidas (contaba el nombre: «tus 4 respuestas» con 3 chips)
   - `{monto}`: lo que se cobra el día 7 según el plan elegido: "US$59.90 al año" o "US$7.99 al mes" (precios de §2.3). (pendiente de aprobar)
   - `{fecha_fin}`: hasta cuándo dura el acceso.
   - `{s}`: segundos.
@@ -45,7 +45,9 @@ La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 (si
 - Error, el campo está vacío y toca Seguir: Escribe su nombre o toca «Prefiero no decirlo».
 - Error, más de 20 letras: Usa un nombre o apodo de hasta 20 letras.
 - Bajo el campo, en el plano hundido (16px), rótulo de la vista previa: Lo usamos para nombrarlo en su rutina. (pendiente de aprobar) · antes: (no había). Si hay error, el error REEMPLAZA a este rótulo (no se reserva alto).
-- Vista previa viva de la 1.ª tarjeta de su rutina (foto del primer paso + texto), dentro del plano hundido; cambia con cada letra: {nombre}, ahora: {paso_1} (pendiente de aprobar) · antes: (no había). Con el campo vacío, {nombre} = Tu peque (pendiente de aprobar).
+- Vista previa viva de los 3 primeros pasos de su rutina, dentro del plano hundido (pendiente de aprobar) · antes: solo la 1.ª tarjeta:
+  - 1.º, tarjeta elevada (foto del primer paso + texto); cambia con cada letra: {nombre}, ahora: {paso_1} (pendiente de aprobar) · antes: (no había). Con el campo vacío, {nombre} = Tu peque (pendiente de aprobar).
+  - 2.º y 3.º, más chicos (foto de 40 + texto de 16px): Después: {paso} (pendiente de aprobar) · antes: (no había)
 
 ### 1.2 Edad
 - Título: ¿Cuántos años tiene [acento]{nombre}[/acento]?
@@ -57,7 +59,7 @@ La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 (si
 
 ### 1.3 Momento más difícil (define la primera rutina)
 - Título: ¿Qué momento del día [acento]cuesta más[/acento]?
-- Ayuda: Por ahí empieza su primera rutina: de 5 a 7 pasos, con fotos. (pendiente de aprobar) · antes: Por ahí empieza su primera rutina, con fotos. (El revisor propuso «…, cada uno con su foto»: no se usa porque «Ponerse el pijama» todavía no tiene foto; ver «fotos nuevas».)
+- Ayuda: Por ahí empieza su primera rutina: de 5 a 7 pasos, con fotos. («de 5 a 7 pasos» con espacios duros: el rango no se parte) (pendiente de aprobar) · antes: Por ahí empieza su primera rutina, con fotos. (El revisor propuso «…, cada uno con su foto»: no se usa porque «Ponerse el pijama» todavía no tiene foto; ver «fotos nuevas».)
 - Opciones (selección única, avanza sola):
 
 | Opción (label) | Subtexto | Rutina en `app/js/datos.js` | `{momento}` | `{n_pasos}` |
@@ -76,7 +78,7 @@ La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 (si
 
 | Opción (label) | `{crisis}` (texto corto) |
 |---|---|
-| Llora o grita fuerte | llora o grita |
+| Llora o grita fuerte | llora o grita («o grita» con espacio duro: no queda «llora / o grita») |
 | Se tira al piso o golpea | se tira al piso o golpea |
 | Se tapa los oídos o se esconde | necesita esconderse |
 | Se queda en silencio y se cierra | se cierra |
@@ -102,8 +104,8 @@ Lleva arriba la tira con las 3 primeras fotos de su rutina y el check verde en l
 - Debajo de la ayuda, en el plano hundido (16px), los pasos que no entran en la tira de 3 fotos: Y {n} pasos más: {paso} · {paso} · … (pendiente de aprobar) · antes: a 13px
 - Botón principal: Sí, la probamos (pendiente de aprobar) · antes: Sí, la probamos mañana
 - Chip pegado a la ayuda con el momento que eligió en 1.3 (el label de la opción, en negrita): Elegiste: {opción} (pendiente de aprobar) · antes: (no había)
-- Al lado del chip: Cambiar (vuelve a 1.3, igual que el enlace del pie) (pendiente de aprobar) · antes: (no había)
-- Enlace secundario: Cambiar el momento (vuelve a 1.3)
+- Al lado del chip: Cambiar (vuelve a 1.3; es la única salida a 1.3) (pendiente de aprobar) · antes: (no había)
+- Pie: solo el botón principal (pendiente de aprobar) · antes: Enlace secundario «Cambiar el momento» (vuelve a 1.3) bajo el botón; hacía lo mismo que «Cambiar» junto al chip
 - Si ya vio el resultado y no cambió el momento, «Sí, la probamos» va directo al resultado (sin la carga).
 - Si `{momento}` es "la mañana", el título cambia a: Mañana temprano probamos [acento]su rutina[/acento] con {nombre} («su rutina» con espacio duro: el acento no se parte) (pendiente de aprobar) · antes: Mañana temprano probamos [acento]su rutina de la mañana[/acento] con {nombre}
 
@@ -113,8 +115,8 @@ Dura de 4 a 6 segundos. Cada línea recibe su check, una tras otra.
 - Cada línea lleva arriba su etapa del Método, en etiqueta: ANTES, DURANTE, DURANTE, DESPUÉS.
 - Línea 1 (Antes): Rutina de {momento}: {n_pasos} pasos con fotos
 - Línea 2 (Durante): Kit de calma para cuando {crisis}
-- Línea 3 (Durante): Guía «¿Momento difícil?» a un toque
-- Línea 4 (Después): Diario para contarle a su terapeuta
+- Línea 3 (Durante): Guía «¿Momento difícil?» a un toque («a un toque» con espacios duros) (pendiente de aprobar: solo los espacios) · antes: con espacios normales («a / un toque»)
+- Línea 4 (Después): Diario para contarle a su terapeuta («a su terapeuta» con espacios duros) (pendiente de aprobar: solo los espacios) · antes: con espacios normales («a / su terapeuta»)
 - Al terminar (aria-live, como pie de la tarjeta de las 4 líneas; pantalla de transición: avanza sola al resultado, sin botón ni órdenes): El plan de {nombre} está listo. (pendiente de aprobar) · antes: El plan de {nombre} está listo. Pruébalo ahora.
 - Línea pendiente: etapa y texto en gris secundario (sin opacidad, AA); solo el círculo vacío queda al 60 %.
 - Al marcarse la línea 1 aparecen 3 fotos de su rutina, una tras otra, en la misma tira de 1.5, 1.6 y el resumen del paywall (plano hundido, check en la 1.ª).
@@ -153,7 +155,7 @@ Elementos comunes a las 3 páginas:
 
 ### 2.1 Página 1: resumen
 - Título: El plan de {nombre} para [acento]{momento}[/acento] está listo
-- Subtítulo, con 3 respuestas o más: Hecho con tus {N} respuestas, con el [b]Método Antes, Durante y Después[/b].
+- Subtítulo, con las 3 respuestas que tienen chip: Hecho con tus {N} respuestas, con el [b]Método Antes, Durante y Después[/b].
 - Subtítulo, con menos de 3: Hecho con lo que nos contaste, con el [b]Método Antes, Durante y Después[/b]. (pendiente de aprobar) · antes: siempre «Hecho con tus {N} respuestas»
 - Bajo el subtítulo, sus respuestas en chips: el label de cada opción que tocó, momento · edad · 1.ª crisis; solo las respondidas (aria-label de la lista: Tus respuestas) (pendiente de aprobar) · antes: (no había)
 - 3 puntos (con sus respuestas; «{n_pasos} pasos» con espacio duro, no se parte):
@@ -171,14 +173,14 @@ Elementos comunes a las 3 páginas:
   - **Día 5**: Te avisamos por correo · 2 días antes de cualquier cobro
   - **Día 7 · {fecha_cobro}**, con un plan ya elegido (?plan=, plan guardado o elegido en la página 3): Empieza el cobro: {monto} (pendiente de aprobar) · Solo si sigues. Cancelas antes desde Hotmart y no pagas nada (pendiente de aprobar) · antes: Solo si sigues. Cancela antes y no pagas nada. ({monto} y {fecha_cobro} nunca se parten entre dos líneas.)
   - **Día 7 · {fecha_cobro}**, sin plan elegido: Empieza el cobro del plan que elijas · US$7.99 al mes o US$59.90 al año. Solo si sigues. Cancelas antes desde Hotmart y no pagas nada (pendiente de aprobar) · antes: Empieza el cobro: US$59.90 al año (el anual por defecto)
-- Debajo (bloque hundido con escudo): Y después, 30 días de la [b]Garantía del Día Tranquilo[/b]: si no te ayuda, te devolvemos todo. (pendiente de aprobar) · antes: Y después, 30 días de la [b]Garantía del Día Tranquilo[/b].
+- Debajo (bloque hundido con escudo): Y después, 30 días de la [b]Garantía del Día Tranquilo[/b]: si no te ayuda, te devolvemos todo. («si no te ayuda» con espacios duros: la condición no se parte) (pendiente de aprobar) · antes: Y después, 30 días de la [b]Garantía del Día Tranquilo[/b].
 - Botón: Quiero ver los planes de {nombre} (pendiente de aprobar) · antes: Ver los planes de {nombre} (y antes: Ver precios)
 - Salida: Ahora no, volver a su rutina (pendiente de aprobar) · antes: Ahora no
 
 ### 2.3 Página 3: precio
 - Título: Días más [acento]predecibles[/acento] para {nombre}, desde hoy
 - Subtítulo: Mañana {nombre} ya sabe qué viene. Empiezas gratis y eliges cómo seguir después. (pendiente de aprobar) · antes: Empiezas gratis. Eliges cómo seguir después.
-- Orden: las 2 tarjetas van justo después del subtítulo (la elegida se ve entera en el primer pliegue, también con el error en el pie); debajo, separado 80px para que caiga entero bajo el pliegue, "Incluye", y después la tira de su rutina. (pendiente de aprobar) · antes (ronda 3): tarjetas → tira (32px) → "Incluye"; la tira asomaba a medias bajo el degradado del pie. Prioridad: la tarjeta elegida entera. · antes: "Incluye" en una línea sobre las tarjetas. Ronda 3: se probó la tira entre el subtítulo y las tarjetas y empujaba la mensual elegida bajo el pie (27px; 59px sin nombre y con el error): se dejó debajo para que la tarjeta elegida quede entera.
+- Orden: las 2 tarjetas van justo después del subtítulo (la elegida se ve entera en el primer pliegue, también con el error en el pie); debajo, a 32px, "Incluye", y después la tira de su rutina. El pie fijo de esta página es sólido (fondo de la página con una línea fina arriba, sin degradado): lo que pasa por debajo se corta con un borde limpio. (pendiente de aprobar) · antes (ronda 4): "Incluye" separado 80px para no asomar bajo el degradado del pie (dejaba un hueco de ~90 pt) · antes (ronda 3): tarjetas → tira (32px) → "Incluye"; la tira asomaba a medias bajo el degradado del pie. Prioridad: la tarjeta elegida entera. · antes: "Incluye" en una línea sobre las tarjetas. Ronda 3: se probó la tira entre el subtítulo y las tarjetas y empujaba la mensual elegida bajo el pie (27px; 59px sin nombre y con el error): se dejó debajo para que la tarjeta elegida quede entera.
 - Junto a una tira de 3 fotos de su rutina: Su rutina de {momento} ya está armada (pendiente de aprobar)
 - Incluye (etiqueta en gris secundario —el acento queda para el CTA, la palabra que vende y el check— y 4 chips con el check del embudo; nombres de la app y de la landing §6): [b]Incluye:[/b] Su rutina con fotos · Kit de calma · Guía «Ahora mismo» · Diario e informe (pendiente de aprobar)
 - Tarjeta Anual (recomendada y marcada de inicio):

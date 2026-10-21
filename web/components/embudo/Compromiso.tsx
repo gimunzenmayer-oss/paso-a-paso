@@ -1,7 +1,7 @@
 'use client';
 
 // 1.6 Compromiso (02B: pre-compromiso "cuando pase X haré Y"). El momento elegido
-// vuelve textual; "Cambiar el momento" regresa a 1.3 sin perder nada.
+// vuelve textual; «Cambiar», junto al chip, regresa a 1.3 sin perder nada.
 // Arriba, la tira con las 3 primeras fotos reales de su rutina: se ve QUÉ va a
 // probar mañana (el dispositivo propio de la marca, FICHA-ARTE), no un ícono
 // genérico. Es la misma TiraDeFotos fluida de 1.5 (plano hundido y check en la
@@ -10,12 +10,14 @@
 // más: …", a 16px como toda ayuda): la rutina entera a la vista, sin un vacío entre
 // la ayuda y el botón. Entrada escalonada a 60 ms (entrada(i)), las fotos una por una.
 // Pegado a la ayuda, un chip con el momento que eligió en 1.3 («Elegiste: La mañana»)
-// y «Cambiar» al lado (el mismo onCambiar que el enlace del pie): se compromete
-// viendo qué eligió. Todo centrado en el alto libre (my-auto), como 1.5.
+// y «Cambiar» al lado: se compromete viendo qué eligió, y cambia desde ahí mismo.
+// Es la única salida a 1.3: el pie lleva SOLO el CTA (antes repetía «Cambiar el
+// momento» bajo el botón, dos enlaces para una acción). Todo centrado en el alto
+// libre (my-auto), como 1.5.
 
 import { motion } from 'motion/react';
 import { pasosConFoto, type PasoRutina } from '@/lib/embudo/rutinas';
-import { Ayuda, BotonPrincipal, BotonTexto, entrada, PieFijo, TiraDeFotos, Titulo } from './ui';
+import { Ayuda, BotonPrincipal, entrada, PieFijo, TiraDeFotos, Titulo } from './ui';
 import { COMPROMISO, llenar, type Variables } from './textos';
 
 const FOTOS_TIRA = 3;
@@ -79,7 +81,6 @@ export function Compromiso({
       </div>
       <PieFijo>
         <BotonPrincipal onClick={onAceptar}>{COMPROMISO.boton}</BotonPrincipal>
-        <BotonTexto onClick={onCambiar}>{COMPROMISO.cambiar}</BotonTexto>
       </PieFijo>
     </div>
   );

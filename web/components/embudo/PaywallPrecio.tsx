@@ -7,10 +7,13 @@
 // FICHA-ARTE) NO va entre el subtítulo y las tarjetas: sus ≈56px empujaban la
 // mensual elegida 27px bajo el pie (59px sin nombre y con el error; medido a
 // 375×812). Ronda 4: justo bajo las tarjetas caía a medias detrás del degradado del
-// pie. Orden: tarjetas → "Incluye" (mt-20, entero bajo el pliegue; 4 chips con el check del embudo, la
+// pie. Orden: tarjetas → "Incluye" (mt-8; 4 chips con el check del embudo, la
 // etiqueta en --text-secondary: el acento queda para el CTA, la palabra que vende y
-// el check) → la tira, que así cae entera bajo el pliegue. La prioridad sigue siendo
-// la tarjeta elegida entera sobre el pie.
+// el check) → la tira. Ronda 5: el pie de ESTA página es sólido (--bg con un hairline
+// arriba, PieFijo fondo="solido"), sin degradado: lo que pasa por debajo se corta con
+// un borde limpio, la señal normal de que hay más, en vez de asomar borroso o de
+// dejar un hueco de ~90 pt para esquivarlo (el mt-20 de la ronda 4). La prioridad
+// sigue siendo la tarjeta elegida entera sobre el pie.
 // Tarjetas, etiqueta, cada chip y la tira entran escalonados (entrada(i), 60 ms).
 // Anual recomendado y marcado de inicio; el total anual siempre
 // visible; el mensual es un precio real. La tarjeta elegida es la más elevada
@@ -217,10 +220,9 @@ export function PaywallPrecio({
       </fieldset>
 
       {/* Qué incluye: chips con el check del embudo (ancla de conversión: chips en toda lista de beneficios).
-          mt-20: con la tarjeta elegida más alta posible (nombre corto, 2 líneas de título) el bloque empieza
-          debajo del pie también cuando el pie es más corto (130px con checkout): nada asoma a medias bajo el
-          degradado, en ningún estado (anual, mensual, error, sin checkout; medido a 375×812). */}
-      <div className="mt-20">
+          mt-8: el pie sólido corta lo que quede debajo con un borde limpio; ya no hace falta un hueco para
+          que nada asome bajo un degradado. */}
+      <div className="mt-8">
         <motion.p
           {...entrada(2)}
           id={ID_INCLUYE}
@@ -242,8 +244,8 @@ export function PaywallPrecio({
         </ul>
       </div>
 
-      {/* Su rutina ya armada: 3 fotos de 40 (decorativas; el texto la nombra). Va DESPUÉS de "Incluye": bajo las
-          tarjetas caía a medias detrás del degradado del pie; así queda entera bajo el pliegue (ver arriba). */}
+      {/* Su rutina ya armada: 3 fotos de 40 (decorativas; el texto la nombra). Va DESPUÉS de "Incluye", como en
+          la ronda 4 (ver arriba). */}
       <motion.div {...entrada(3 + PAYWALL_PRECIO.incluye.length)} className="mt-6 flex items-center gap-3">
         <span aria-hidden="true" className="flex shrink-0 gap-1.5">
           {pasosConFoto(pasos, 3).map((paso) => (
@@ -255,7 +257,7 @@ export function PaywallPrecio({
         </p>
       </motion.div>
 
-      <PieFijo>
+      <PieFijo fondo="solido">
         {checkout ? (
           <>
             <EnlacePrincipal href={checkout[plan]} onClick={abrir} ariaDescribedBy={ID_AYUDA} ariaBusy={abriendo}>

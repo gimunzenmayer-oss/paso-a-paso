@@ -76,7 +76,7 @@ export function Onboarding() {
   const [direccion, setDireccion] = useState<1 | -1>(1);
   // true después de la primera navegación: desde ahí el foco va al título de cada paso.
   const [navegado, setNavegado] = useState(false);
-  // "Cambiar el momento" desde el compromiso: al elegir, vuelve directo al compromiso.
+  // «Cambiar» (junto al chip) desde el compromiso: al elegir, vuelve directo al compromiso.
   const [volverACompromiso, setVolverACompromiso] = useState(false);
   // El momento del último plan que vio en el resultado. Si vuelve al compromiso y no lo
   // cambió, "Sí, la probamos" va directo al resultado: es el mismo plan, no hay nada que armar.
@@ -120,7 +120,7 @@ export function Onboarding() {
 
   // Atrás en todos los pasos menos el primero. Desde "armando el plan" (corta la espera:
   // sus temporizadores se limpian al desmontar) y desde el resultado vuelve al compromiso,
-  // saltando la carga: ahí puede tocar "Cambiar el momento" si la rutina no es la que quería.
+  // saltando la carga: ahí puede tocar «Cambiar» junto al chip si la rutina no es la que quería.
   const atras = p && paso > 0 ? () => ir(paso === RESULTADO || paso === CARGANDO ? COMPROMISO : paso - 1, -1) : undefined;
   // Ya vio el resultado de ESTE momento: no hay plan nuevo que armar.
   const yaVioEstePlan = !!p && p.alcanzado >= RESULTADO && momentoArmado !== null && momentoArmado === p.respuestas.momento;
@@ -144,7 +144,7 @@ export function Onboarding() {
         pantalla = (
           <NombrePeque
             inicial={r.nombre}
-            primerPaso={rutina.pasos[0]}
+            pasos={rutina.pasos}
             enfocar={navegado}
             onListo={(nombre) => {
               conRespuestas((x) => ({ ...x, nombre }));

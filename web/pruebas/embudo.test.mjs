@@ -76,17 +76,19 @@ test('paywall: el cobro es el día 7, en formato humano', () => {
   assert.equal(fechaCobro(new Date(2026, 11, 28)), '4 de enero');
 });
 
-test('paywall: cuenta solo las preguntas respondidas', () => {
+test('paywall: cuenta solo las preguntas respondidas que tienen chip (el nombre no)', () => {
   assert.equal(contarRespuestas({}), 0);
   assert.equal(contarRespuestas({ edad: '5-7', momento: 'manana' }), 2);
-  assert.equal(contarRespuestas({ nombre: 'Mateo', edad: '5-7', momento: 'dormir', crisis: ['llora', 'piso'] }), 4);
-  assert.equal(contarRespuestas({ nombre: 'Mateo', edad: '2-4', momento: 'comidas', crisis: [] }), 3);
+  // 4 preguntas respondidas, 3 chips (momento · edad · crisis): «tus 3 respuestas».
+  assert.equal(contarRespuestas({ nombre: 'Mateo', edad: '5-7', momento: 'dormir', crisis: ['llora', 'piso'] }), 3);
+  assert.equal(contarRespuestas({ nombre: 'Mateo', edad: '2-4', momento: 'comidas', crisis: [] }), 2);
+  assert.equal(contarRespuestas({ nombre: 'Mateo' }), 0);
 });
 
 test('paywall: {N} cuenta solo respuestas vigentes (crisis con ids viejos no cuenta)', async () => {
   const { contarRespuestas } = await import('../lib/embudo/prueba.ts');
   assert.equal(contarRespuestas({}), 0);
-  assert.equal(contarRespuestas({ nombre: 'Mateo', edad: '5-7', momento: 'dormir', crisis: ['piso', 'llora'] }), 4);
+  assert.equal(contarRespuestas({ nombre: 'Mateo', edad: '5-7', momento: 'dormir', crisis: ['piso', 'llora'] }), 3);
   // Saltada (sin crisis o lista vacía): no cuenta.
   assert.equal(contarRespuestas({ edad: '5-7', momento: 'dormir', crisis: [] }), 2);
   // Solo ids que ya no son opciones ('golpea', 'cambia'): no cuenta.
@@ -121,7 +123,8 @@ test('copy 1.3: «de 5 a 7 pasos» es verdad para todas las rutinas', async () =
   const largos = Object.values(RUTINAS).map((r) => r.pasos.length);
   assert.equal(Math.min(...largos), 5);
   assert.equal(Math.max(...largos), 7);
-  assert.ok(MOMENTO.ayuda.includes('de 5 a 7 pasos'));
+  // Con espacios duros: el rango no se parte en «de 5 a / 7 pasos».
+  assert.ok(MOMENTO.ayuda.includes('de\u00a05\u00a0a\u00a07\u00a0pasos'));
 });
 
 test('paywall: chips con sus respuestas (momento · edad · 1.ª crisis), solo las respondidas', async () => {
@@ -141,4 +144,31 @@ test('paywall: un monto o una fecha no se parten (espacios duros)', async () => 
   assert.equal(sinCortes('28 de octubre'), '28 de octubre');
   // Sin plan elegido, el Día 7 nombra los 2 montos, cada uno entero.
   assert.ok(PAYWALL_PRUEBA.cobroSinPlan.texto.startsWith('US$7.99 al mes o US$59.90 al año.'));
+});
+
+test('paywall: {N} de «tus {N} respuestas» es el número de chips visibles, en todos los casos', async () => {
+  const { contarRespuestas } = await import('../lib/embudo/prueba.ts');
+  const { etiquetasDeRespuestas } = await import('../components/embudo/textos.ts');
+  const casos = [
+    {},
+    { nombre: 'Mateo' },
+    { nombre: 'Mateo', edad: '5-7', momento: 'dormir', crisis: ['piso', 'llora'] },
+    { edad: '2-4', momento: 'manana', crisis: ['golpea'] },
+    { momento: 'escuela', crisis: ['cambia', 'cierra'] },
+    { nombre: 'Ana', momento: 'comidas', crisis: [] },
+    { edad: '8-12' },
+  ];
+  for (const r of casos) assert.equal(contarRespuestas(r), etiquetasDeRespuestas(r).length, JSON.stringify(r));
+  // Con las 3 respondidas (y nombre), el subtítulo dice «tus 3 respuestas» y hay 3 chips.
+  assert.equal(contarRespuestas(casos[2]), 3);
+});
+
+test('copy: espacios duros donde el revisor vio cortes (carga y garantía)', async () => {
+  const { CARGANDO, PAYWALL_PRUEBA, OPCIONES_CRISIS } = await import('../components/embudo/textos.ts');
+  const textos = CARGANDO.lineas.map((l) => l.texto);
+  assert.ok(textos.some((t) => t.endsWith('a\u00a0un\u00a0toque')));
+  assert.ok(textos.some((t) => t.endsWith('a\u00a0su\u00a0terapeuta')));
+  // «llora o grita» llega a la línea 2 de la carga por {crisis}.
+  assert.equal(OPCIONES_CRISIS.find((o) => o.id === 'llora').corto, 'llora o\u00a0grita');
+  assert.ok(PAYWALL_PRUEBA.debajo.includes('si\u00a0no\u00a0te\u00a0ayuda'));
 });
