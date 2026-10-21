@@ -228,7 +228,7 @@ window.PP = window.PP || {};
         var ahora = new Date(), local = new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
         var existente = params.id && diario.find(function (x) { return x.id === params.id; });
         params.borrador = existente ? JSON.parse(JSON.stringify(existente))
-          : { id: PP.nuevoId(), fecha: local, tipo: '', intensidad: 3, duracion: '5', causas: [], ayudo: [], nota: '' };
+          : { id: PP.nuevoId(), fecha: local, tipo: '', intensidad: 3, duracion: '', causas: [], ayudo: [], nota: '' };
         params.original = JSON.stringify(params.borrador);
       }
       var e = params.borrador;

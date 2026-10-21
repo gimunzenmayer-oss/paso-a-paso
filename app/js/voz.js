@@ -62,7 +62,9 @@ window.PP = window.PP || {};
       if (voz) { u.voice = voz; u.lang = voz.lang; } else { u.lang = p.acento === 'latino' ? 'es-MX' : 'es-ES'; }
       u.rate = p.velocidad || 0.9;   // un poco más despacio de lo normal
       u.pitch = 1.05;                 // un pelín más cálida
+      if (opciones && opciones.alTerminar) u.onend = u.onerror = opciones.alTerminar;
       speechSynthesis.speak(u);
+      return true;
     } catch (e) { /* si falla la voz, la app sigue igual */ }
   };
 

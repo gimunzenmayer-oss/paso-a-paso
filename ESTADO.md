@@ -112,3 +112,8 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Garantía: la landing promete 30 días. Se mantiene el texto; la dueña debe configurar 30 días de garantía en Hotmart antes de vender.
 - Entrada de pago (onboarding → paywall → cuenta → acceso por Hotmart): se le preguntó a la usuaria si se construye ahora.
 - Funciones nuevas para decidir: notificaciones push; tarjeta «¿Cómo fue esta semana?» tras 7 días sin anotar.
+### Capa 6: auditoría final con el revisor (2026-10-21, en curso)
+- Ronda 2 (tras capas 1-4): Inicio 28/11 · Diario nuevo 27/11 · Informe 27/11 · Modo niño 27/13 → NO LISTA. Se aplicaron sus arreglos concretos.
+- Ronda 3: Inicio 27/11 · Diario nuevo 28/11 · Informe 29/12 · Modo niño 27/13 → NO LISTA (umbral 36/16). Veredictos en auditoria-paso-a-paso/veredictos/ronda3/.
+- Arreglos tras ronda 3: modo niño ignora el segundo toque y abre al terminar de decir el nombre (máx. 1,2 s); la duración del diario ya no se guarda sin elegirla; informe con coma decimal, fechas cortas, encabezados cortos, tope de 5 y barras que se imprimen; "5 Muy fuerte" alineado; sw.js v14.
+- Lo que falta para pasar el umbral es de identidad visual, no de arreglos sueltos: íconos SVG de un solo set en lugar de emojis, fotos literales de una sola serie (o pictos Mulberry/OpenMoji), la "tira de pasos con check" de FICHA-ARTE en Inicio, Mi día e Informe, y la escala tipográfica 36/24/18/13. También: la flecha atrás y el menú no avisan si hay una nota sin guardar.

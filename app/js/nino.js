@@ -24,6 +24,7 @@ window.PP = window.PP || {};
   PP.abrirEspacio = function () {
     var p = PP.estado.perfil;
     var visibles = BOTONES.filter(function (b) { return p.espacio[b.id] !== false; });
+    var abriendo = false;
     PP.entrarModoNino(function (cont) {
       cont.innerHTML =
         '<div class="nino-marco espacio">' +
@@ -37,11 +38,14 @@ window.PP = window.PP || {};
         '</div>';
       cont.onclick = function (e) {
         var t = e.target.closest('[data-abrir]'); if (!t) return;
+        if (abriendo) return; // un segundo toque no abre otra herramienta
+        abriendo = true;
         var b = BOTONES.find(function (x) { return x.id === t.dataset.abrir; });
-        // Refuerzo: el botón se marca y dice su nombre antes de abrir
+        // Refuerzo: el botón se marca y dice su nombre; abre al terminar de hablar (máximo 1,2 s)
         t.classList.add('sonando');
-        if (PP.decir) PP.decir(b.texto);
-        setTimeout(b.abrir, 250);
+        var abierto = false, abrir = function () { if (abierto) return; abierto = true; b.abrir(); };
+        var hablo = PP.decir && PP.decir(b.texto, { alTerminar: abrir });
+        setTimeout(abrir, hablo ? 1200 : 250);
       };
     }, { esInicio: true });
   };

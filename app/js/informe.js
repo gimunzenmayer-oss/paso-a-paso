@@ -15,6 +15,7 @@ window.PP = window.PP || {};
   var INT = ['', 'muy leve', 'leve', 'media', 'fuerte', 'muy fuerte'];
 
   function fecha(f) { return new Date(f.length > 10 ? f : f + 'T12:00').toLocaleDateString('es', { day: 'numeric', month: 'long', year: 'numeric' }); }
+  function fechaCorta(f) { return new Date(f.length > 10 ? f : f + 'T12:00').toLocaleDateString('es', { day: 'numeric', month: 'short' }); }
 
   PP.pantallas.informe = {
     titulo: 'Informe', seccion: 'mas',
@@ -73,25 +74,25 @@ window.PP = window.PP || {};
 
         '<h3>Rutinas</h3>' +
         '<p>Rutinas terminadas enteras: <strong>' + estrellas.length + '</strong>, en <strong>' + Object.keys(diasConRutina).length + '</strong> de ' + params.dias + ' días.</p>' +
-        tabla(Object.keys(porRutina).map(function (k) { return [k, String(porRutina[k])]; }), ['Rutina', 'Veces terminadas']) +
+        tabla(Object.keys(porRutina).map(function (k) { return [k, String(porRutina[k])]; }), ['Rutina', 'Veces']) +
 
         '<h3>Comunicación (tablero)</h3>' +
         tabla(topPalabras.map(function (x) { return [x[0], String(x[1])]; }), ['Lo que más dijo', 'Veces'], 'Todavía no se usó el tablero en este periodo. Cuando ' + PP.esc(p.nombre) + ' toque sus botones, aquí verás lo que más dijo.') +
 
         '<h3>Diario de la familia</h3>' +
-        '<p>Momentos difíciles: <strong>' + dificiles.length + '</strong>' + (dificiles.length ? ' · intensidad media ' + media.toFixed(1) + ' de 5' : '') +
+        '<p>Momentos difíciles: <strong>' + dificiles.length + '</strong>' + (dificiles.length ? ' · intensidad media ' + media.toFixed(1).replace('.', ',') + ' de 5' : '') +
         ' · Buenos momentos anotados: <strong>' + (entradas.length - dificiles.length) + '</strong></p>' +
         tabla(Object.keys(porTipo).map(function (k) { return [k, String(porTipo[k])]; }), ['Tipo', 'Veces']) +
-        tabla(Object.keys(franjas).filter(function (k) { return franjas[k]; }).map(function (k) { return [k, String(franjas[k])]; }), ['Momento del día', 'Momentos difíciles']) +
+        tabla(Object.keys(franjas).filter(function (k) { return franjas[k]; }).map(function (k) { return [k, String(franjas[k])]; }), ['Momento del día', 'Veces']) +
         (params.dias === 7 && PP.barrasDias ? '<h4>Momentos difíciles por día</h4>' + PP.barrasDias(entradas, 7) : '') +
-        '<h4>Posibles desencadenantes</h4>' + PP.barrasRanking(PP.ranking(dificiles, 'causas', 6)) +
-        '<h4>Lo que ayudó</h4>' + PP.barrasRanking(PP.ranking(dificiles, 'ayudo', 6)) +
+        '<h4>Posibles desencadenantes</h4>' + PP.barrasRanking(PP.ranking(dificiles, 'causas', 5)) +
+        '<h4>Lo que ayudó</h4>' + PP.barrasRanking(PP.ranking(dificiles, 'ayudo', 5)) +
         (params.notas ? '<h4>Notas</h4>' + tabla(entradas.map(function (e) {
           return [new Date(e.fecha).toLocaleString('es', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }), PP.tipoDe(e.tipo).texto + (e.intensidad ? ' (' + INT[e.intensidad] + ')' : ''), e.nota || '—'];
         }), ['Cuándo', 'Qué', 'Nota']) : '') +
 
         '<h3>Logros</h3>' +
-        tabla(logros.map(function (l) { return [fecha(l.fecha), l.texto]; }), ['Fecha', 'Logro']) +
+        tabla(logros.map(function (l) { return [fechaCorta(l.fecha), l.texto]; }), ['Fecha', 'Logro']) +
 
         '<h3>Comentarios de la familia</h3>' +
         '<label class="sr" for="inf-com">Comentarios de la familia</label><textarea id="inf-com" class="comentarios" rows="4" placeholder="Escribe aquí lo que quieras contar o preguntar al profesional…">' + PP.esc(params.comentarios || '') + '</textarea>' +

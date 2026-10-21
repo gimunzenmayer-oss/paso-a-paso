@@ -593,7 +593,7 @@ html.calma .picto-espacio { filter: saturate(.45); }
 .tipo-op span { font-size: 1.6rem; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
 .tipo-op.activo { background: var(--salvia-suave); border-color: var(--salvia); box-shadow: 0 0 0 2px var(--salvia); }
 .segmentado.cinco { grid-template-columns: repeat(5, 1fr); }
-.segmentado.cinco span { flex-direction: column; font-weight: 700; line-height: 1.1; padding: 6px 2px; display: flex; justify-content: center; }
+.segmentado.cinco span { flex-direction: column; font-weight: 700; line-height: 1.1; padding: 6px 2px; display: flex; justify-content: flex-start; padding-top: 10px; min-height: 64px; }
 .segmentado.cinco small { font-size: 13px; font-weight: 400; text-align: center; }
 .aviso-legal.fila { display: flex; gap: 10px; align-items: center; }
 
@@ -639,6 +639,7 @@ html.calma .picto-espacio { filter: saturate(.45); }
 
 @media print {
   .barra, .menu, .no-imprimir, #aviso, #nino, #pin { display: none !important; }
+  .ranking, .grafico { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body, #app { background: #fff; color: #000; }
   #contenido { padding: 0; max-width: none; }
   .informe { box-shadow: none; padding: 0; }
