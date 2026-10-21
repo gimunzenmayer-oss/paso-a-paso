@@ -117,3 +117,11 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Ronda 3: Inicio 27/11 · Diario nuevo 28/11 · Informe 29/12 · Modo niño 27/13 → NO LISTA (umbral 36/16). Veredictos en auditoria-paso-a-paso/veredictos/ronda3/.
 - Arreglos tras ronda 3: modo niño ignora el segundo toque y abre al terminar de decir el nombre (máx. 1,2 s); la duración del diario ya no se guarda sin elegirla; informe con coma decimal, fechas cortas, encabezados cortos, tope de 5 y barras que se imprimen; "5 Muy fuerte" alineado; sw.js v14.
 - Lo que falta para pasar el umbral es de identidad visual, no de arreglos sueltos: íconos SVG de un solo set en lugar de emojis, fotos literales de una sola serie (o pictos Mulberry/OpenMoji), la "tira de pasos con check" de FICHA-ARTE en Inicio, Mi día e Informe, y la escala tipográfica 36/24/18/13. También: la flecha atrás y el menú no avisan si hay una nota sin guardar.
+
+## Entrada de pago (aprobada por la dueña 2026-10-21, plan en docs/planes/entrada-de-pago.md)
+- Hecho y verificado (tsc ✓ build ✓ con y sin links de Hotmart · 16 pruebas · Playwright 375px normal y reducido, 0 fallos): textos del embudo, funciones puras, /onboarding, la app arranca con sus datos, /paywall en 3 pasos con botón honesto sin links. Commits 7d48524 → a802d4e (sin push).
+- Revisor visual, 6 rondas: las 7 pantallas LISTA (≥36/40, ≥16/20). Veredictos en auditoria-paso-a-paso/veredictos/ronda6/. Margen opcional: cortes de línea en 1.4, 1.6 y chips «Incluye».
+- Migración 20261021110000_acceso_clientas.sql escrita, NO aplicada: espera permiso de la dueña.
+- Espera decisión de la dueña: «Las comidas» abre la rutina de noche; uso de la pregunta de edad; ~40 textos «(pendiente de aprobar)» en docs/copy/embudo.md.
+- Bloquea vender: correo del Día 5 (prometido en /paywall) sin crear; garantía 30 días sin configurar en Hotmart; links de checkout en Vercel; fotos reales de baño y pijama.
+- Falta: /entrar, /auth/callback, /cuenta (paso 7); /api/acceso y bloqueo en la PWA (paso 8); punta a punta en Vercel (paso 9).
