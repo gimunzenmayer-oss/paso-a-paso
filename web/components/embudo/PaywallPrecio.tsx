@@ -6,10 +6,12 @@
 // el primer pliegue a 375px. La tira con 3 fotos de SU rutina (el dispositivo de
 // FICHA-ARTE) NO va entre el subtítulo y las tarjetas: sus ≈56px empujaban la
 // mensual elegida 27px bajo el pie (59px sin nombre y con el error; medido a
-// 375×812). Va debajo de las tarjetas con mt-8, y después los 4 chips de
-// "Incluye" con el check del embudo; la etiqueta "Incluye:" va en
-// --text-secondary (el acento queda para el CTA, la palabra que vende y el check).
-// Tarjetas, tira, etiqueta y cada chip entran escalonados (entrada(i), 60 ms).
+// 375×812). Ronda 4: justo bajo las tarjetas caía a medias detrás del degradado del
+// pie. Orden: tarjetas → "Incluye" (mt-20, entero bajo el pliegue; 4 chips con el check del embudo, la
+// etiqueta en --text-secondary: el acento queda para el CTA, la palabra que vende y
+// el check) → la tira, que así cae entera bajo el pliegue. La prioridad sigue siendo
+// la tarjeta elegida entera sobre el pie.
+// Tarjetas, etiqueta, cada chip y la tira entran escalonados (entrada(i), 60 ms).
 // Anual recomendado y marcado de inicio; el total anual siempre
 // visible; el mensual es un precio real. La tarjeta elegida es la más elevada
 // (superficie, borde de acento y sombra tintada); la otra queda plana.
@@ -36,7 +38,7 @@ import type { Plan } from '@/lib/embudo/checkout';
 import { pasosConFoto, type PasoRutina } from '@/lib/embudo/rutinas';
 import { enviarEvento } from '@/lib/eventos-cliente';
 import { Ayuda, BotonPrincipal, CheckQueSeLlena, EnlacePrincipal, EnlaceTexto, entrada, Miniatura, PieFijo, Titulo } from './ui';
-import { llenar, PAYWALL_PRECIO, PAYWALL_SIN_CHECKOUT, type Variables, type VariablesPaywall } from './textos';
+import { llenar, PAYWALL_COMUN, PAYWALL_PRECIO, PAYWALL_SIN_CHECKOUT, type Variables, type VariablesPaywall } from './textos';
 
 /** Fracción de las tarjetas que debe verse para contar paywall_visto (36/60: ≥35 %). */
 const UMBRAL_VISTO = 0.35;
@@ -214,23 +216,13 @@ export function PaywallPrecio({
         </motion.div>
       </fieldset>
 
-      {/* Su rutina ya armada: 3 fotos de 40 (decorativas; el texto la nombra). Va DEBAJO de las tarjetas, con
-          mt-8: entre el subtítulo y las tarjetas empujaba la mensual elegida bajo el pie (ver arriba). */}
-      <motion.div {...entrada(2)} className="mt-8 flex items-center gap-3">
-        <span aria-hidden="true" className="flex shrink-0 gap-1.5">
-          {pasosConFoto(pasos, 3).map((paso) => (
-            <Miniatura key={paso.texto} paso={paso} tamano={40} />
-          ))}
-        </span>
-        <p className="min-w-0 text-[16px] leading-snug font-semibold text-pretty text-[var(--text-primary)]">
-          {llenar(PAYWALL_PRECIO.rutinaLista, v)}
-        </p>
-      </motion.div>
-
-      {/* Qué incluye: chips con el check del embudo (ancla de conversión: chips en toda lista de beneficios). */}
-      <div className="mt-4">
+      {/* Qué incluye: chips con el check del embudo (ancla de conversión: chips en toda lista de beneficios).
+          mt-20: con la tarjeta elegida más alta posible (nombre corto, 2 líneas de título) el bloque empieza
+          debajo del pie también cuando el pie es más corto (130px con checkout): nada asoma a medias bajo el
+          degradado, en ningún estado (anual, mensual, error, sin checkout; medido a 375×812). */}
+      <div className="mt-20">
         <motion.p
-          {...entrada(3)}
+          {...entrada(2)}
           id={ID_INCLUYE}
           className="text-[13px] leading-tight font-bold tracking-[0.06em] text-[var(--text-secondary)] uppercase"
         >
@@ -240,7 +232,7 @@ export function PaywallPrecio({
           {PAYWALL_PRECIO.incluye.map((item, i) => (
             <motion.li
               key={item}
-              {...entrada(4 + i)}
+              {...entrada(3 + i)}
               className="inline-flex items-center gap-1.5 rounded-[var(--radius-button)] bg-[var(--chip-bg)] py-1 pr-2.5 pl-1.5 text-[16px] leading-snug text-[var(--text-primary)]"
             >
               <CheckQueSeLlena tamano={16} />
@@ -249,6 +241,19 @@ export function PaywallPrecio({
           ))}
         </ul>
       </div>
+
+      {/* Su rutina ya armada: 3 fotos de 40 (decorativas; el texto la nombra). Va DESPUÉS de "Incluye": bajo las
+          tarjetas caía a medias detrás del degradado del pie; así queda entera bajo el pliegue (ver arriba). */}
+      <motion.div {...entrada(3 + PAYWALL_PRECIO.incluye.length)} className="mt-6 flex items-center gap-3">
+        <span aria-hidden="true" className="flex shrink-0 gap-1.5">
+          {pasosConFoto(pasos, 3).map((paso) => (
+            <Miniatura key={paso.texto} paso={paso} tamano={40} />
+          ))}
+        </span>
+        <p className="min-w-0 text-[16px] leading-snug font-semibold text-pretty text-[var(--text-primary)]">
+          {llenar(PAYWALL_PRECIO.rutinaLista, v)}
+        </p>
+      </motion.div>
 
       <PieFijo>
         {checkout ? (
@@ -305,16 +310,20 @@ export function PaywallPrecio({
             {PAYWALL_PRECIO.confianza.map((linea) => (
               <li key={linea} className="flex items-start gap-3 text-[16px] leading-snug text-[var(--text-primary)]">
                 <CheckQueSeLlena tamano={24} />
-                <span>{llenar(linea, v)}</span>
+                <span className="min-w-0 text-pretty">{llenar(linea, v)}</span>
               </li>
             ))}
           </ul>
-          <p className="mt-5 flex items-start justify-center gap-2 text-center text-[16px] leading-snug text-[var(--text-secondary)]">
-            <Lock size={18} strokeWidth={2} aria-hidden="true" className="mt-0.5 shrink-0" />
-            {PAYWALL_PRECIO.pie}
+          {/* Alineada a la izquierda como las líneas de confianza: el candado en una caja de 24 (el
+              ancho del check) y el texto en la misma columna, aunque baje a 2 líneas. */}
+          <p className="mt-5 flex items-start gap-3 text-[16px] leading-snug text-pretty text-[var(--text-secondary)]">
+            <span aria-hidden="true" className="inline-flex size-6 shrink-0 items-center justify-center">
+              <Lock size={18} strokeWidth={2} />
+            </span>
+            <span className="min-w-0">{PAYWALL_PRECIO.pie}</span>
           </p>
           <div className="mt-3 flex flex-col">
-            <EnlaceTexto href={hrefVolver}>{PAYWALL_PRECIO.salida}</EnlaceTexto>
+            <EnlaceTexto href={hrefVolver}>{PAYWALL_COMUN.salida}</EnlaceTexto>
             <EnlaceTexto href="/entrar">{PAYWALL_PRECIO.yaPagaste}</EnlaceTexto>
           </div>
         </>
@@ -330,7 +339,7 @@ export function PaywallPrecio({
               {PAYWALL_SIN_CHECKOUT.correo}
             </a>
           </p>
-          <EnlaceTexto href={hrefVolver}>{PAYWALL_PRECIO.salida}</EnlaceTexto>
+          <EnlaceTexto href={hrefVolver}>{PAYWALL_COMUN.salida}</EnlaceTexto>
         </div>
       )}
     </div>

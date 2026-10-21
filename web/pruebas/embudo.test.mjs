@@ -114,3 +114,31 @@ test('checkout: sin variables NEXT_PUBLIC_HOTMART_* no hay checkout (el resultad
   const { checkoutDe } = await import('../lib/embudo/checkout.ts');
   assert.equal(checkoutDe('instagram'), null);
 });
+
+test('copy 1.3: «de 5 a 7 pasos» es verdad para todas las rutinas', async () => {
+  const { RUTINAS } = await import('../lib/embudo/rutinas.ts');
+  const { MOMENTO } = await import('../components/embudo/textos.ts');
+  const largos = Object.values(RUTINAS).map((r) => r.pasos.length);
+  assert.equal(Math.min(...largos), 5);
+  assert.equal(Math.max(...largos), 7);
+  assert.ok(MOMENTO.ayuda.includes('de 5 a 7 pasos'));
+});
+
+test('paywall: chips con sus respuestas (momento · edad · 1.ª crisis), solo las respondidas', async () => {
+  const { etiquetasDeRespuestas } = await import('../components/embudo/textos.ts');
+  assert.deepEqual(etiquetasDeRespuestas({ nombre: 'Mateo', edad: '5-7', momento: 'dormir', crisis: ['piso', 'llora'] }), [
+    'Irse a dormir',
+    '5 a 7 años',
+    'Se tira al piso o golpea',
+  ]);
+  // Saltó la crisis (o quedó un id viejo): sin ese chip.
+  assert.deepEqual(etiquetasDeRespuestas({ edad: '2-4', momento: 'manana', crisis: ['golpea'] }), ['La mañana', '2 a 4 años']);
+  assert.deepEqual(etiquetasDeRespuestas({}), []);
+});
+
+test('paywall: un monto o una fecha no se parten (espacios duros)', async () => {
+  const { sinCortes, PAYWALL_PRUEBA } = await import('../components/embudo/textos.ts');
+  assert.equal(sinCortes('28 de octubre'), '28 de octubre');
+  // Sin plan elegido, el Día 7 nombra los 2 montos, cada uno entero.
+  assert.ok(PAYWALL_PRUEBA.cobroSinPlan.texto.startsWith('US$7.99 al mes o US$59.90 al año.'));
+});

@@ -1,7 +1,7 @@
 'use client';
 
 // Cabecera del paywall: una sola fila como la del onboarding [‹ Atrás | indicador
-// de 3 páginas | ✕], todo a 48px (docs/copy/embudo.md §2, elementos comunes). La
+// de 3 páginas + «n de 3» | ✕], todo a 48px (docs/copy/embudo.md §2, elementos comunes). La
 // misma en las 3 páginas, sin logo (el logo llevaba a la landing: un toque sacaba
 // del embudo). "‹ Atrás" en la página 1 es un enlace a /onboarding (vuelve a su
 // resultado); en la 2 y la 3 vuelve a la anterior, igual que el atrás del navegador.
@@ -9,7 +9,8 @@
 // ventanas ni frases de culpa (50 C1, C5).
 
 import { motion } from 'motion/react';
-import { ChevronLeft, X } from 'lucide-react';
+import { X } from 'lucide-react';
+import { BotonAtras } from './ui';
 import { llenar, PAYWALL_COMUN, TOTAL_PAGINAS_PAYWALL } from './textos';
 
 const TOQUE =
@@ -27,23 +28,12 @@ export function CabeceraPaywall({
   onAtras?: () => void;
 }) {
   const etiqueta = llenar(PAYWALL_COMUN.indicador, { n: String(pagina) });
-  const claseAtras = `${TOQUE} gap-0.5 pr-3 pl-1 text-[16px] font-semibold`;
-  const contenidoAtras = (
-    <>
-      <ChevronLeft size={24} strokeWidth={2} aria-hidden="true" />
-      {PAYWALL_COMUN.atras}
-    </>
-  );
   return (
     <header className="sticky top-0 z-20 -mx-5 flex items-center gap-2 bg-[var(--bg)] px-3 pt-[max(8px,env(safe-area-inset-top))] pb-2">
       {onAtras ? (
-        <button type="button" onClick={onAtras} className={claseAtras}>
-          {contenidoAtras}
-        </button>
+        <BotonAtras texto={PAYWALL_COMUN.atras} onClick={onAtras} />
       ) : (
-        <a href={hrefVolver} className={claseAtras}>
-          {contenidoAtras}
-        </a>
+        <BotonAtras texto={PAYWALL_COMUN.atras} href={hrefVolver} />
       )}
       <div
         role="progressbar"
@@ -65,6 +55,11 @@ export function CabeceraPaywall({
           </span>
         ))}
       </div>
+      {/* «n de 3» a la vista (la barra de segmentos sola no dice cuántas quedan). El lector de
+          pantalla ya lo oye en el aria-label de la barra: aquí no se repite. */}
+      <span aria-hidden="true" className="shrink-0 text-[13px] leading-none font-semibold whitespace-nowrap text-[var(--text-secondary)] tabular-nums">
+        {llenar(PAYWALL_COMUN.indicadorVisible, { n: String(pagina) })}
+      </span>
       <a href={hrefVolver} aria-label={PAYWALL_COMUN.cerrar} className={`${TOQUE} w-12`}>
         <X size={22} strokeWidth={2} aria-hidden="true" />
       </a>

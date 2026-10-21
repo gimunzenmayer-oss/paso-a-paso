@@ -1,13 +1,15 @@
 'use client';
 
-// Cabecera del onboarding: una sola fila [atrás | barra | ✕], sin logo (el ✕ ya
-// lleva al inicio; dos salidas iguales confunden). Barra fina (50 A2: línea de
+// Cabecera del onboarding: una sola fila [‹ Atrás | barra | ✕], sin logo (el ✕ ya
+// lleva al inicio; dos salidas iguales confunden). «‹ Atrás» es el mismo BotonAtras
+// de la cabecera del paywall: un solo atrás en todo el recorrido. Barra fina (50 A2: línea de
 // 3px, acento sobre neutro, pill) que arranca en 10 % (progreso regalado) y nunca
 // retrocede: el ancho sale del paso más lejano alcanzado, no del abierto.
 
 import Link from 'next/link';
 import { motion } from 'motion/react';
-import { ChevronLeft, X } from 'lucide-react';
+import { X } from 'lucide-react';
+import { BotonAtras } from './ui';
 import { COMUN, llenar, TOTAL_PASOS } from './textos';
 
 const BOTON_ICONO =
@@ -23,7 +25,7 @@ export function BarraProgreso({
   porcentaje: number;
   /** 1..6 para el aria-label "Paso {n} de 6". */
   pasoVisible: number;
-  /** Sin función = sin botón (primer paso y cargando). */
+  /** Sin función = sin botón (primer paso). */
   onAtras?: () => void;
   onCerrar: () => void;
 }) {
@@ -33,9 +35,7 @@ export function BarraProgreso({
     // atrás, un espaciador de 4px + el gap de 4px la hacen arrancar en 20px, como el título.
     <header className="sticky top-0 z-20 -mx-5 flex items-center gap-1 bg-[var(--bg)] px-3 pt-[max(8px,env(safe-area-inset-top))] pb-2">
       {onAtras ? (
-        <button type="button" aria-label={COMUN.atras} onClick={onAtras} className={BOTON_ICONO}>
-          <ChevronLeft size={24} strokeWidth={2} aria-hidden="true" />
-        </button>
+        <BotonAtras texto={COMUN.atras} onClick={onAtras} />
       ) : (
         <span aria-hidden="true" className="w-1 shrink-0" />
       )}

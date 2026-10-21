@@ -7,24 +7,36 @@
 //   (sin elección muestra una pista amable en vez de bloquear, 50 A3).
 // Las opciones entran escalonadas (60 ms, la firma de FICHA-ARTE; con reducir
 // movimiento, solo el fundido). En 1.3 cada opción lleva la foto de su rutina.
-// En 1.1, bajo el campo, el «por qué» de la pregunta en el plano hundido (el
-// segundo plano de la pantalla, FICHA-ARTE: hundido #E6ECE5, radio de tarjeta).
+// En 1.1, bajo el campo, el plano hundido (el segundo plano de la pantalla,
+// FICHA-ARTE: hundido #E6ECE5, radio de tarjeta) lleva una vista previa viva de la
+// 1.ª tarjeta de su rutina («Mateo, ahora: Despertar») que cambia con cada letra, y
+// arriba el rótulo con el «por qué». El error REEMPLAZA a ese rótulo: no se reserva
+// alto y el bloque no salta.
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { limpiarNombre } from '@/lib/embudo/estado';
 import type { PasoRutina } from '@/lib/embudo/rutinas';
-import { Ayuda, BotonPrincipal, BotonTexto, entrada, Opcion, PieFijo, Titulo } from './ui';
-import { conMayuscula, MAX_LETRAS_NOMBRE, NOMBRE } from './textos';
+import { Ayuda, BotonPrincipal, BotonTexto, entrada, Miniatura, Opcion, PieFijo, Titulo } from './ui';
+import { conMayuscula, llenar, MAX_LETRAS_NOMBRE, NOMBRE } from './textos';
+
+/** El nombre tal como se guardará (sin corchetes: va dentro del copy marcado), o undefined si no hay. */
+function nombreLimpio(valor: string): string | undefined {
+  const limpio = limpiarNombre(valor.replace(/[[\]{}]/g, ''));
+  return limpio ? conMayuscula(limpio) : undefined;
+}
 
 /* ── 1.1 Nombre del peque ──────────────────────────────────────────────────── */
 export function NombrePeque({
   inicial,
+  primerPaso,
   enfocar,
   onListo,
   onSaltar,
 }: {
   inicial?: string;
+  /** El 1.º paso de su rutina (la de la mañana si todavía no eligió momento): la vista previa. */
+  primerPaso?: PasoRutina;
   enfocar: boolean;
   onListo: (nombre: string) => void;
   onSaltar: () => void;
@@ -34,13 +46,16 @@ export function NombrePeque({
 
   const enviar = (e: FormEvent) => {
     e.preventDefault();
-    // Sin corchetes: el nombre se mete dentro del copy marcado ([acento]…).
-    const limpio = limpiarNombre(valor.replace(/[[\]{}]/g, ''));
+    const limpio = nombreLimpio(valor);
     if (!limpio) return setError(NOMBRE.errorVacio);
     if (Array.from(limpio).length > MAX_LETRAS_NOMBRE) return setError(NOMBRE.errorLargo);
     setError(null);
-    onListo(conMayuscula(limpio));
+    onListo(limpio);
   };
+  const vistaPrevia = llenar(NOMBRE.vistaPrevia, {
+    nombre: nombreLimpio(valor) ?? NOMBRE.vistaPreviaSinNombre,
+    paso_1: primerPaso?.texto ?? '',
+  });
 
   return (
     <form onSubmit={enviar} noValidate className="flex flex-1 flex-col">
@@ -71,15 +86,24 @@ export function NombrePeque({
           error ? 'border-2 border-[var(--error)]' : 'border-[color-mix(in_oklab,var(--text-tertiary)_35%,transparent)]'
         }`}
       />
-      <p id="error-nombre" role="alert" className="mt-2 min-h-6 text-[16px] leading-snug font-semibold text-[var(--error)]">
-        {error}
-      </p>
-      <motion.p
-        {...entrada(0, 0.1)}
-        className="mt-2 rounded-[var(--radius-card)] bg-[var(--surface-2)] p-4 text-[16px] leading-[1.45] text-pretty text-[var(--text-secondary)]"
-      >
-        {NOMBRE.porque}
-      </motion.p>
+      {/* Plano hundido: rótulo (o el error, que lo reemplaza) + la vista previa de su 1.ª tarjeta. */}
+      <motion.div {...entrada(0, 0.1)} className="mt-4 rounded-[var(--radius-card)] bg-[var(--surface-2)] p-4">
+        {/* La región del error existe siempre (vacía no ocupa alto) para que el lector lo anuncie. */}
+        <p id="error-nombre" role="alert" className="text-[16px] leading-[1.45] font-semibold text-pretty text-[var(--error)] empty:hidden">
+          {error}
+        </p>
+        {!error && <p className="text-[16px] leading-[1.45] text-pretty text-[var(--text-secondary)]">{NOMBRE.porque}</p>}
+        {primerPaso && (
+          // Decorativa: repite lo que ella escribe (el lector ya lo oye en el campo).
+          <div
+            aria-hidden="true"
+            className="mt-3 flex items-center gap-3 rounded-[var(--radius-card)] bg-[var(--surface)] p-2 pr-3 shadow-[var(--shadow-1)]"
+          >
+            <Miniatura paso={primerPaso} tamano={56} />
+            <p className="min-w-0 flex-1 text-[18px] leading-snug font-semibold break-words [font-family:var(--font-display)]">{vistaPrevia}</p>
+          </div>
+        )}
+      </motion.div>
       <PieFijo>
         <BotonPrincipal type="submit">{NOMBRE.boton}</BotonPrincipal>
         <BotonTexto onClick={onSaltar}>{NOMBRE.saltar}</BotonTexto>

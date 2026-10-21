@@ -29,7 +29,7 @@ import { CabeceraPaywall } from './CabeceraPaywall';
 import { PaywallResumen } from './PaywallResumen';
 import { PaywallPrueba } from './PaywallPrueba';
 import { PaywallPrecio } from './PaywallPrecio';
-import { PAYWALL_PRUEBA, TOTAL_PAGINAS_PAYWALL, variablesDe } from './textos';
+import { etiquetasDeRespuestas, PAYWALL_PRUEBA, sinCortes, TOTAL_PAGINAS_PAYWALL, variablesDe } from './textos';
 
 /* Lecturas del teléfono que no cambian mientras la página está abierta. En el
    servidor (y al hidratar) valen null: la página se pinta cuando ya se conocen. */
@@ -127,12 +127,16 @@ export function Paywall() {
 
   const respuestas = progreso?.respuestas ?? {};
   const nRespuestas = contarRespuestas(respuestas);
-  const plan: Plan = planElegido ?? planUrl ?? progreso?.plan ?? 'anual';
+  // El plan que ella eligió (en la página 3, con ?plan= o guardado desde la landing). Sin
+  // ninguno, la página 3 marca el anual de inicio, pero la 2 no le atribuye un monto que no eligió.
+  const planConocido: Plan | null = planElegido ?? planUrl ?? progreso?.plan ?? null;
+  const plan: Plan = planConocido ?? 'anual';
   const v = {
     ...variablesDe(respuestas),
     N: String(nRespuestas),
-    fecha_cobro: fecha ?? '',
-    monto: PAYWALL_PRUEBA.monto[plan],
+    // La fecha y el monto nunca se parten entre dos líneas ("28 de / octubre").
+    fecha_cobro: sinCortes(fecha ?? ''),
+    monto: planConocido ? sinCortes(PAYWALL_PRUEBA.monto[planConocido]) : undefined,
   };
   const hrefVolver = '/onboarding';
 
@@ -148,7 +152,15 @@ export function Paywall() {
   if (progreso && !sinPlan && fecha !== null) {
     if (pagina === 0) {
       pantalla = (
-        <PaywallResumen v={v} pasos={pasos} respuestas={nRespuestas} hrefVolver={hrefVolver} enfocar={navegado} onSeguir={() => ir(1)} />
+        <PaywallResumen
+          v={v}
+          pasos={pasos}
+          respuestas={nRespuestas}
+          etiquetas={etiquetasDeRespuestas(respuestas)}
+          hrefVolver={hrefVolver}
+          enfocar={navegado}
+          onSeguir={() => ir(1)}
+        />
       );
     } else if (pagina === 1) {
       pantalla = <PaywallPrueba v={v} pasos={pasos} hrefVolver={hrefVolver} enfocar={navegado} onSeguir={() => ir(2)} />;

@@ -9,7 +9,9 @@
 // propio de la marca, como la 1 y la 3. El Día 5 es un aviso, no un
 // acceso: su nodo y su tramo van en la 2.ª nota de FICHA-ARTE (niebla, "después").
 // Nodo con borde = el día del cobro, con su fecha exacta y el monto del plan
-// elegido ({monto}, que nunca se parte entre líneas). Cada tramo del riel y el texto de su hito entran al mismo
+// elegido ({monto}, que nunca se parte entre líneas). Si todavía no eligió plan (sin
+// ?plan= ni plan guardado), el Día 7 dice «Empieza el cobro del plan que elijas» con
+// los 2 montos: no le atribuye un precio que ella no eligió. Cada tramo del riel y el texto de su hito entran al mismo
 // ritmo (0.15 + i·0.3 s); con "reducir movimiento" aparecen ya dibujados
 // (MotionConfig del paywall). El espacio entre hitos (pb-7) va en el texto, no en
 // el <li>: así el riel, que se estira a la altura del <li>, llega al nodo siguiente.
@@ -20,7 +22,7 @@ import { Hairline } from '@/components/landing/ui';
 import { MarkedCopy } from '@/components/landing/MarkedCopy';
 import { pasosConFoto, type PasoRutina } from '@/lib/embudo/rutinas';
 import { BotonPrincipal, CheckQueSeLlena, EnlaceTexto, entrada, Miniatura, PieFijo, Titulo } from './ui';
-import { llenar, PAYWALL_PRUEBA, type Variables, type VariablesPaywall } from './textos';
+import { llenar, PAYWALL_COMUN, PAYWALL_PRUEBA, type Variables, type VariablesPaywall } from './textos';
 
 /** Ritmo del riel: cada hito entra 0.3 s después del anterior. */
 const ritmo = (i: number) => 0.15 + i * 0.3;
@@ -64,6 +66,8 @@ export function PaywallPrueba({
             const cobro = i === ultimo;
             // El Día 5 (aviso) y su tramo hasta el cobro van en la 2.ª nota.
             const aviso = i === ultimo - 1;
+            // Día 7 sin plan elegido (v.monto vacío): el cobro "del plan que elijas", con los 2 montos.
+            const { titulo, texto } = cobro && v.monto === undefined ? PAYWALL_PRUEBA.cobroSinPlan : hito;
             return (
               <li key={hito.cuando} className="relative flex gap-4">
                 {/* Riel: nodo + tramo hasta el siguiente hito. */}
@@ -96,9 +100,9 @@ export function PaywallPrueba({
                 >
                   <p className={`text-[16px] font-bold ${aviso ? 'text-[var(--accent-2)]' : 'text-[var(--accent)]'}`}>{llenar(hito.cuando, v)}</p>
                   <p className="mt-0.5 text-[18px] leading-snug font-semibold text-pretty text-[var(--text-primary)]">
-                    {conMontoEntero(hito.titulo, v)}
+                    {conMontoEntero(titulo, v)}
                   </p>
-                  <p className="mt-0.5 text-[16px] leading-snug text-pretty text-[var(--text-secondary)]">{llenar(hito.texto, v)}</p>
+                  <p className="mt-0.5 text-[16px] leading-snug text-pretty text-[var(--text-secondary)]">{llenar(texto, v)}</p>
                   {/* Hoy: las fotos de su rutina, una tras otra (decorativas: el título ya la nombra). */}
                   {hoy && (
                     <span aria-hidden="true" className="mt-3 flex gap-1.5">
@@ -128,7 +132,7 @@ export function PaywallPrueba({
 
       <PieFijo>
         <BotonPrincipal onClick={onSeguir}>{llenar(PAYWALL_PRUEBA.boton, v)}</BotonPrincipal>
-        <EnlaceTexto href={hrefVolver}>{PAYWALL_PRUEBA.salida}</EnlaceTexto>
+        <EnlaceTexto href={hrefVolver}>{PAYWALL_COMUN.salida}</EnlaceTexto>
       </PieFijo>
     </div>
   );

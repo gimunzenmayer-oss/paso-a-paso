@@ -8,7 +8,7 @@
 import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { Check, Shirt } from 'lucide-react';
+import { Check, ChevronLeft, Shirt } from 'lucide-react';
 import { MarkedCopy } from '@/components/landing/MarkedCopy';
 import { pasosConFoto, type PasoRutina } from '@/lib/embudo/rutinas';
 
@@ -148,6 +148,31 @@ export function EnlaceTexto({ href, children }: { href: string; children: ReactN
     >
       {children}
     </a>
+  );
+}
+
+/* ── <BotonAtras> — EL atrás del embudo: «‹ Atrás» (chevron + texto de 16px semibold,
+   48px de alto) en la cabecera del onboarding y en la del paywall. Un solo dibujo en
+   todo el recorrido. Con onClick es un botón; con href (página 1 del paywall), un
+   enlace a otra página. ── */
+const CLASE_ATRAS =
+  'inline-flex h-12 shrink-0 items-center justify-center gap-0.5 rounded-full pr-3 pl-1 text-[16px] font-semibold text-[var(--text-secondary)] transition-colors duration-150 hover:bg-[color-mix(in_oklab,var(--text-tertiary)_12%,transparent)] [touch-action:manipulation]';
+
+export function BotonAtras({ texto, ...destino }: { texto: string } & ({ onClick: () => void } | { href: string })) {
+  const contenido = (
+    <>
+      <ChevronLeft size={24} strokeWidth={2} aria-hidden="true" />
+      {texto}
+    </>
+  );
+  return 'href' in destino ? (
+    <a href={destino.href} className={CLASE_ATRAS}>
+      {contenido}
+    </a>
+  ) : (
+    <button type="button" onClick={destino.onClick} className={CLASE_ATRAS}>
+      {contenido}
+    </button>
   );
 }
 

@@ -11,7 +11,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, type Variants } from 'motion/react';
-import type { Respuestas } from '@/lib/embudo/estado';
+import type { Momento, Respuestas } from '@/lib/embudo/estado';
 import { checkoutDe, type Plan } from '@/lib/embudo/checkout';
 import { pasoQueRepresenta, rutinaDe } from '@/lib/embudo/rutinas';
 import { enviarEvento } from '@/lib/eventos-cliente';
@@ -78,6 +78,13 @@ export function Onboarding() {
   const [navegado, setNavegado] = useState(false);
   // "Cambiar el momento" desde el compromiso: al elegir, vuelve directo al compromiso.
   const [volverACompromiso, setVolverACompromiso] = useState(false);
+  // El momento del último plan que vio en el resultado. Si vuelve al compromiso y no lo
+  // cambió, "Sí, la probamos" va directo al resultado: es el mismo plan, no hay nada que armar.
+  // null = todavía no llegó al resultado (o aún no se leyó el teléfono).
+  const [momentoArmado, setMomentoArmado] = useState<Momento | null>(null);
+  if (momentoArmado === null && progreso && progreso.alcanzado >= RESULTADO && progreso.respuestas.momento) {
+    setMomentoArmado(progreso.respuestas.momento);
+  }
 
   // Al entrar: crea el estado si no había, guarda ?plan= de la URL y cuenta el inicio.
   const entrada = useRef(false);
@@ -100,18 +107,23 @@ export function Onboarding() {
   }, []);
 
   const planListo = useCallback(() => {
-    if ((leerProgreso()?.alcanzado ?? 0) < RESULTADO) enviarEvento('onboarding_completado');
+    const actual = leerProgreso();
+    // Ya salió de "armando el plan" (atrás durante la carga o la salida animada): no la arrastra al resultado.
+    if (actual && actual.paso !== CARGANDO) return;
+    if ((actual?.alcanzado ?? 0) < RESULTADO) enviarEvento('onboarding_completado');
+    setMomentoArmado(actual?.respuestas.momento ?? null);
     ir(RESULTADO);
   }, [ir]);
 
   const p = progreso ?? null;
   const paso = p?.paso ?? 0;
 
-  // Atrás en todos los pasos menos el primero y "armando el plan" (dura unos segundos y
-  // avanza solo). Desde el resultado vuelve al compromiso, saltando la carga: ahí puede
-  // tocar "Cambiar el momento" si la rutina que ve no es la que quería.
-  const atras =
-    p && paso > 0 && paso !== CARGANDO ? () => ir(paso === RESULTADO ? COMPROMISO : paso - 1, -1) : undefined;
+  // Atrás en todos los pasos menos el primero. Desde "armando el plan" (corta la espera:
+  // sus temporizadores se limpian al desmontar) y desde el resultado vuelve al compromiso,
+  // saltando la carga: ahí puede tocar "Cambiar el momento" si la rutina no es la que quería.
+  const atras = p && paso > 0 ? () => ir(paso === RESULTADO || paso === CARGANDO ? COMPROMISO : paso - 1, -1) : undefined;
+  // Ya vio el resultado de ESTE momento: no hay plan nuevo que armar.
+  const yaVioEstePlan = !!p && p.alcanzado >= RESULTADO && momentoArmado !== null && momentoArmado === p.respuestas.momento;
   const cerrar = () => {
     if (p && paso < RESULTADO) enviarEvento('onboarding_abandonado', { paso: Math.min(paso + 1, TOTAL_PASOS) });
   };
@@ -132,6 +144,7 @@ export function Onboarding() {
         pantalla = (
           <NombrePeque
             inicial={r.nombre}
+            primerPaso={rutina.pasos[0]}
             enfocar={navegado}
             onListo={(nombre) => {
               conRespuestas((x) => ({ ...x, nombre }));
@@ -234,11 +247,13 @@ export function Onboarding() {
           <Compromiso
             v={v}
             pasos={rutina.pasos}
+            momentoElegido={OPCIONES_MOMENTO.find((o) => o.id === (r.momento ?? 'manana'))?.label ?? ''}
             esManana={(r.momento ?? 'manana') === 'manana'}
             enfocar={navegado}
             onAceptar={() => {
               pasoCompletado(6);
-              ir(CARGANDO);
+              // Mismo momento que el plan que ya vio: directo al resultado, sin la carga.
+              ir(yaVioEstePlan ? RESULTADO : CARGANDO);
             }}
             onCambiar={() => {
               setVolverACompromiso(true);
@@ -248,8 +263,18 @@ export function Onboarding() {
         );
         break;
       case CARGANDO:
-        // Ya llegó al resultado antes (p. ej. volvió por "Cambiar el momento"): no espera otra vez.
-        pantalla = <Cargando v={v} pasos={rutina.pasos} rapido={p.alcanzado >= RESULTADO} enfocar={navegado} onListo={planListo} />;
+        // rapido: ya llegó a un resultado antes y cambió el momento (la misma secuencia, a 350 ms).
+        // inmediato: ya vio ESTE plan (p. ej. recargó la página en la carga): pasa al resultado apenas monta.
+        pantalla = (
+          <Cargando
+            v={v}
+            pasos={rutina.pasos}
+            rapido={p.alcanzado >= RESULTADO}
+            inmediato={yaVioEstePlan}
+            enfocar={navegado}
+            onListo={planListo}
+          />
+        );
         break;
       default:
         pantalla = (
