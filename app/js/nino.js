@@ -38,7 +38,10 @@ window.PP = window.PP || {};
       cont.onclick = function (e) {
         var t = e.target.closest('[data-abrir]'); if (!t) return;
         var b = BOTONES.find(function (x) { return x.id === t.dataset.abrir; });
-        b.abrir();
+        // Refuerzo: el botón se marca y dice su nombre antes de abrir
+        t.classList.add('sonando');
+        if (PP.decir) PP.decir(b.texto);
+        setTimeout(b.abrir, 250);
       };
     }, { esInicio: true });
   };

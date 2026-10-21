@@ -84,7 +84,7 @@ window.PP = window.PP || {};
         '</div>' +
         '<label class="campo" for="ru-hora">Hora habitual<input id="ru-hora" type="time" value="' + PP.esc(b.hora) + '"></label>' +
         '<h2 class="seccion-t">Pasos <span class="suave">(' + b.pasos.length + ')</span></h2>' +
-        (b.pasos.length ? '' : '<p class="suave">Todavía no hay pasos. Añade el primero.</p>') +
+        (b.pasos.length ? '' : '<p class="suave">Todavía no hay pasos. Agrega el primero.</p>') +
         '<ol class="pasos-editor">' + b.pasos.map(function (p, i) {
           return '<li>' +
             '<span class="orden num" aria-hidden="true">' + (i + 1) + '</span>' +
@@ -99,7 +99,7 @@ window.PP = window.PP || {};
             '<button type="button" class="icono" data-quitar="' + i + '" aria-label="Quitar paso ' + (i + 1) + '">✕</button>' +
             '</span></li>';
         }).join('') + '</ol>' +
-        '<button type="button" class="btn grande ancho" data-elegir="nuevo">+ Añadir un paso</button>' +
+        '<button type="button" class="btn grande ancho" data-elegir="nuevo">+ Agregar un paso</button>' +
         '<div class="pie-form">' +
         '  <button type="button" class="btn" data-cancelar>Cancelar</button>' +
         '  <button type="submit" class="btn principal">Guardar rutina</button>' +
@@ -152,7 +152,7 @@ window.PP = window.PP || {};
         e.preventDefault();
         b.nombre = b.nombre.trim();
         if (!b.nombre) { PP.avisar('Ponle un nombre a la rutina.'); $('#ru-nombre').focus(); return; }
-        if (!b.pasos.length) { PP.avisar('Añade al menos un paso.'); return; }
+        if (!b.pasos.length) { PP.avisar('Agrega al menos un paso.'); return; }
         b.pasos.forEach(function (p, i) { p.texto = (p.texto || '').trim() || 'Paso ' + (i + 1); });
         var i = PP.estado.rutinas.findIndex(function (r) { return r.id === b.id; });
         if (i >= 0) PP.estado.rutinas[i] = b; else PP.estado.rutinas.push(b);

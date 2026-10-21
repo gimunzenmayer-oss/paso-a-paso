@@ -273,7 +273,7 @@ window.PP = window.PP || {};
       '<h3 id="inst-t">Guarda la app en tu pantalla de inicio</h3>' +
       '<p class="suave">Así se abre como cualquier app y el teléfono no borra tus rutinas ni tu diario.</p>' +
       '<p class="suave" id="inst-pasos" hidden></p>' +
-      '<div class="fila"><button class="btn principal crece" data-instalar>' + (avisoInstalar ? 'Instalar' : 'Ver cómo') + '</button><button class="btn" data-instalar-no>Ahora no</button></div>' +
+      '<div class="fila"><button class="btn crece" data-instalar>' + (avisoInstalar ? 'Instalar' : 'Ver cómo') + '</button><button class="btn" data-instalar-no>Ahora no</button></div>' +
       '</section>';
   }
   function instalar(b) {
@@ -309,7 +309,7 @@ window.PP = window.PP || {};
         '<section class="tarjeta puerta-nino" aria-labelledby="esp-t">' +
         '  <div class="fila"><span class="picto-m" aria-hidden="true">🧒</span><div class="crece"><h3 id="esp-t">Espacio de ' + nombre + '</h3>' +
         '  <p class="suave">Sus herramientas en grande. Para salir, mantén presionado el candado.</p></div></div>' +
-        '  <button class="btn principal grande ancho" data-espacio>Abrir el espacio de ' + nombre + '</button>' +
+        '  <button class="btn grande ancho" data-espacio>Abrir el espacio de ' + nombre + '</button>' +
         '</section>' +
         // 2) La rutina de ahora
         (r ? '<section class="tarjeta destacada" aria-labelledby="ahora-t">' +
@@ -318,7 +318,7 @@ window.PP = window.PP || {};
           '    <div class="crece"><h3 id="ahora-t">' + PP.esc(r.nombre) + '</h3>' +
           '    <p class="suave">' + prog.hechos.length + ' de ' + r.pasos.length + ' pasos hechos hoy</p></div></div>' +
           '  <div class="barra-prog" role="progressbar" aria-label="Progreso de hoy" aria-valuemin="0" aria-valuemax="' + r.pasos.length + '" aria-valuenow="' + prog.hechos.length + '"><span style="width:' + (100 * prog.hechos.length / Math.max(1, r.pasos.length)) + '%"></span></div>' +
-          '  <button class="btn grande ancho" data-empezar="' + r.id + '">Empezar esta rutina con ' + nombre + '</button>' +
+          '  <button class="btn principal grande ancho" data-empezar="' + r.id + '">Empezar esta rutina con ' + nombre + '</button>' +
           '</section>' : '') +
         // 3) Ayudas para el adulto
         '<section class="bloque" aria-labelledby="ayu-t"><h2 id="ayu-t" class="seccion-t">Para ti</h2>' +

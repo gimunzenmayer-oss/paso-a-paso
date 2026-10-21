@@ -48,8 +48,8 @@ window.PP = window.PP || {};
       var logros = PP.estado.logros.filter(function (l) { return l.fecha >= desde; }).sort(function (a, b) { return a.fecha.localeCompare(b.fecha); });
       var ejemplos = entradas.some(function (e) { return e.ejemplo; });
 
-      var tabla = function (filas, cab) {
-        if (!filas.length) return '<p class="suave">Sin datos en este periodo.</p>';
+      var tabla = function (filas, cab, vacio) {
+        if (!filas.length) return '<p class="suave">' + (vacio || 'Sin datos en este periodo.') + '</p>';
         // Si la última columna son números, va alineada a la derecha y con ancho fijo
         var cifra = filas.every(function (f) { return /^\d+$/.test(f[f.length - 1]); });
         return '<table class="tabla' + (cifra ? ' cifra' : '') + '"><thead><tr>' + cab.map(function (c) { return '<th>' + c + '</th>'; }).join('') + '</tr></thead><tbody>' +
@@ -76,7 +76,7 @@ window.PP = window.PP || {};
         tabla(Object.keys(porRutina).map(function (k) { return [k, String(porRutina[k])]; }), ['Rutina', 'Veces terminadas']) +
 
         '<h3>Comunicación (tablero)</h3>' +
-        tabla(topPalabras.map(function (x) { return [x[0], String(x[1])]; }), ['Lo que más dijo', 'Veces']) +
+        tabla(topPalabras.map(function (x) { return [x[0], String(x[1])]; }), ['Lo que más dijo', 'Veces'], 'Todavía no se usó el tablero en este periodo. Cuando ' + PP.esc(p.nombre) + ' toque sus botones, aquí verás lo que más dijo.') +
 
         '<h3>Diario de la familia</h3>' +
         '<p>Momentos difíciles: <strong>' + dificiles.length + '</strong>' + (dificiles.length ? ' · intensidad media ' + media.toFixed(1) + ' de 5' : '') +
@@ -104,7 +104,12 @@ window.PP = window.PP || {};
       };
       main.oninput = function (e) { if (e.target.id === 'inf-com') params.comentarios = e.target.value; };
       main.onclick = function (e) {
-        if (e.target.closest('[data-sin-ejemplos]')) { params.comentarios = $('#inf-com').value; PP.borrarEjemplosDiario(); return; }
+        if (e.target.closest('[data-sin-ejemplos]')) {
+          e.target.closest('.aviso-legal').innerHTML = '<span class="crece"><strong>¿Borrar las entradas de ejemplo?</strong> Tus notas reales no se tocan.</span><button class="btn peligro" data-sin-ejemplos-si>Sí, borrar</button><button class="btn" data-sin-ejemplos-no>No</button>';
+          return;
+        }
+        if (e.target.closest('[data-sin-ejemplos-si]')) { params.comentarios = $('#inf-com').value; PP.borrarEjemplosDiario(); return; }
+        if (e.target.closest('[data-sin-ejemplos-no]')) { params.comentarios = $('#inf-com').value; PP.repintar(); return; }
         if (!e.target.closest('[data-imprimir]')) return;
         try { window.print(); } catch (x) { PP.avisar('Usa la opción Imprimir del navegador.'); }
       };

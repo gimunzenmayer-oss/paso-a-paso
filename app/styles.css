@@ -4,9 +4,9 @@
 @font-face { font-family: 'Atkinson Hyperlegible'; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/atkinson-700-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: 'Atkinson Hyperlegible'; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/atkinson-700-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 /* Cifras: los números del texto usan los de Lexend, porque el 0 de Atkinson va tachado y se confunde con Ø */
-@font-face { font-family: 'Cifras'; font-style: normal; font-weight: 500 600; font-display: swap; src: url(fonts/lexend-latin.woff2) format('woff2'); unicode-range: U+0030-0039; }
-@font-face { font-family: 'Lexend'; font-style: normal; font-weight: 500 600; font-display: swap; src: url(fonts/lexend-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-@font-face { font-family: 'Lexend'; font-style: normal; font-weight: 500 600; font-display: swap; src: url(fonts/lexend-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Cifras'; font-style: normal; font-weight: 400 700; font-display: swap; src: url(fonts/lexend-latin.woff2) format('woff2'); unicode-range: U+0030-0039; }
+@font-face { font-family: 'Lexend'; font-style: normal; font-weight: 400 700; font-display: swap; src: url(fonts/lexend-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Lexend'; font-style: normal; font-weight: 400 700; font-display: swap; src: url(fonts/lexend-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 
 /* =========================================================
    styles.css — el aspecto de Paso a Paso
@@ -187,10 +187,10 @@ img.foto { object-fit: cover; padding: 0; }
 
 /* ---------- Inicio ---------- */
 .saludo { color: var(--tinta-suave); }
-.titular { font-size: 1.6rem; }
-.destacada { background: var(--salvia-suave); box-shadow: none; }
+.titular { font-size: 2rem; }
+.destacada { background: var(--salvia-suave); box-shadow: none; border: 1px solid var(--cat-salvia-borde); }
 .destacada h3 { font-size: 1.35rem; }
-.barra-prog { height: 10px; background: var(--superficie); border: 1px solid var(--borde); border-radius: 99px; overflow: hidden; }
+.barra-prog { height: 10px; background: var(--superficie-2); border: 1px solid var(--cat-salvia-borde); border-radius: 99px; overflow: hidden; }
 .barra-prog span { display: block; height: 100%; background: var(--salvia); border-radius: 99px; transition: width .4s; }
 .bloque { display: flex; flex-direction: column; gap: 10px; }
 .rejilla-mod { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
@@ -209,6 +209,7 @@ img.foto { object-fit: cover; padding: 0; }
 .mod-n { font-weight: 700; }
 .mod-d { font-size: .85rem; color: var(--tinta-suave); }
 .mod.pronto { background: transparent; box-shadow: none; }
+.aviso-legal.fila { flex-wrap: wrap; }
 .aviso-legal { font-size: .85rem; color: var(--arena-tinta); background: var(--arena); padding: 14px 16px; border-radius: 14px; }
 
 /* ---------- Listas ---------- */
@@ -451,12 +452,12 @@ img.picto-saac { width: 64px; height: 64px; border-radius: 12px; object-fit: cov
 /* Micrófono del editor: verde si ya hay grabación, rojo suave mientras graba */
 .icono.grabado { background: var(--ok-suave); }
 .icono.grabando { background: var(--peligro); color: var(--superficie); }
-.campo select, .campo input[type=range] { min-height: var(--toque); border-radius: 12px; border: 1.5px solid var(--borde); background: var(--superficie); font-weight: 400; padding: 0 10px; width: 100%; }
+.campo select, .campo input[type=range] { min-height: var(--toque); border-radius: 14px; border: 1.5px solid var(--borde); background: var(--superficie); font-weight: 400; padding: 0 10px; width: 100%; }
 .campo input[type=range] { accent-color: var(--salvia); padding: 0; border: 0; background: transparent; }
 img.picto-xs, img.picto-s, img.picto-m, img.picto-xl, img.picto { background: var(--arena); }
 
 @media (max-width: 380px) {
-  .acciones, .pie-form { grid-template-columns: 1fr; }
+  .acciones { grid-template-columns: 1fr; }
   .dos { grid-template-columns: 1fr; }
 }
 
@@ -477,7 +478,7 @@ img.picto-xs, img.picto-s, img.picto-m, img.picto-xl, img.picto { background: va
 .campo-leyenda { display: block; }
 
 /* Inicio de la familia: la puerta al espacio del niño */
-.puerta-nino { background: var(--cat-arena); box-shadow: none; border: 2px solid var(--cat-arena-borde); display: flex; flex-direction: column; gap: 14px; }
+.puerta-nino { background: var(--cat-arena); box-shadow: none; border: 1px solid var(--cat-arena-borde); display: flex; flex-direction: column; gap: 14px; }
 .puerta-nino h3 { font-size: 1.3rem; }
 .puerta-nino .picto-m { background: var(--superficie); }
 .lista-interruptores { padding: 4px 16px; }
@@ -588,12 +589,12 @@ html.calma .picto-espacio { filter: saturate(.45); }
 .r-num { text-align: right; font-weight: 700; }
 .enlace { border: 0; background: none; padding: 0; color: var(--niebla); text-decoration: underline; font: inherit; min-height: 0; }
 .rejilla-tipos { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
-.tipo-op { min-height: 76px; display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 16px; border: 1.5px solid var(--borde); background: var(--superficie); text-align: left; font-weight: 700; }
+.tipo-op { min-height: 76px; display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 14px; border: 1.5px solid var(--borde); background: var(--superficie); text-align: left; font-weight: 700; }
 .tipo-op span { font-size: 1.6rem; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
 .tipo-op.activo { background: var(--salvia-suave); border-color: var(--salvia); box-shadow: 0 0 0 2px var(--salvia); }
 .segmentado.cinco { grid-template-columns: repeat(5, 1fr); }
 .segmentado.cinco span { flex-direction: column; font-weight: 700; line-height: 1.1; padding: 6px 2px; display: flex; justify-content: center; }
-.segmentado.cinco small { font-size: .68rem; font-weight: 400; text-align: center; }
+.segmentado.cinco small { font-size: 13px; font-weight: 400; text-align: center; }
 .aviso-legal.fila { display: flex; gap: 10px; align-items: center; }
 
 /* Mis estrellas */
@@ -608,7 +609,7 @@ html.calma .picto-espacio { filter: saturate(.45); }
 .informe { background: var(--superficie); border-radius: var(--radio); padding: 20px; box-shadow: var(--sombra); display: flex; flex-direction: column; gap: 10px; }
 .informe h2 { font-size: 1.3rem; }
 .informe h3 { font-size: 1.1rem; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--borde); }
-.informe h4 { font-size: 1rem; margin: 6px 0 0; }
+.informe h4 { font-family: var(--letra-titulo); font-weight: 600; font-size: 1rem; margin: 6px 0 0; }
 .tabla { width: 100%; border-collapse: collapse; font-size: .92rem; }
 .tabla th, .tabla td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--borde); vertical-align: top; }
 .tabla.cifra { table-layout: fixed; }
@@ -618,10 +619,15 @@ html.calma .picto-espacio { filter: saturate(.45); }
 .pie-informe { font-size: .8rem; color: var(--tinta-suave); }
 
 /* Movimiento: respuesta al toque y entrada escalonada (lo apagan "Modo calma" y "reducir movimiento") */
-:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .boton-espacio, .menu button) {
+:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .boton-espacio, .menu button, .segmentado span, .pista) {
   transition: transform .12s ease-out, background-color .2s, border-color .2s, box-shadow .2s;
 }
-:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .boton-espacio, .menu button):active:not(:disabled) { transform: scale(.97); }
+:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .boton-espacio, .menu button, .segmentado span, .pista):active:not(:disabled) { transform: scale(.97); }
+.detalles > summary { min-height: var(--toque); display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--salvia); cursor: pointer; list-style: none; }
+.detalles > summary::-webkit-details-marker { display: none; }
+.detalles > summary::before { content: "+"; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--cat-salvia-borde); }
+.detalles[open] > summary::before { content: "−"; }
+.detalles { display: flex; flex-direction: column; gap: 16px; }
 @keyframes entrar { from { opacity: 0; transform: translateY(8px); } }
 .entrando > * { animation: entrar .32s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--i, 0) * 60ms); }
 .rejilla-espacio > * { animation: entrar .32s cubic-bezier(.2, .7, .2, 1) both; }

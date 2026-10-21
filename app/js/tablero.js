@@ -101,7 +101,7 @@ window.PP = window.PP || {};
             '<button type="button" class="icono" data-quitar="' + i + '" aria-label="Quitar botón ' + (i + 1) + '">✕</button>' +
             '</span></li>';
         }).join('') + '</ol>' +
-        '<button type="button" class="btn grande ancho" data-elegir="nuevo">+ Añadir un botón</button>' +
+        '<button type="button" class="btn grande ancho" data-elegir="nuevo">+ Agregar un botón</button>' +
         '<div class="pie-form"><button type="button" class="btn" data-cancelar>Cancelar</button>' +
         '<button type="submit" class="btn principal">Guardar</button></div>' +
         (params.nueva || esFijos ? '' : '<div class="zona-extra" id="zona-extra"><button type="button" class="btn peligro" data-eliminar>Eliminar categoría</button></div>') +
@@ -152,7 +152,7 @@ window.PP = window.PP || {};
         }
         c.botones = c.botones.filter(function (b) { return (b.texto || '').trim(); });
         c.botones.forEach(function (b) { b.texto = b.texto.trim(); });
-        if (!c.botones.length) { PP.avisar('Añade al menos un botón con su frase.'); return; }
+        if (!c.botones.length) { PP.avisar('Agrega al menos un botón con su frase.'); return; }
         if (esFijos) tablero().fijos = c.botones;
         else {
           var i = tablero().categorias.findIndex(function (x) { return x.id === c.id; });

@@ -169,7 +169,7 @@ window.PP = window.PP || {};
             '<input value="' + PP.esc(x.texto) + '" data-texto="' + i + '" aria-label="Frase del botón ' + (i + 1) + '">' +
             '<span class="mini-acciones"><button type="button" class="icono" data-quitar="' + i + '" aria-label="Quitar">✕</button></span></li>';
         }).join('') + '</ul>' +
-        '<button class="btn ancho" data-anadir>+ Añadir algo que le ayuda</button>' +
+        '<button class="btn ancho" data-anadir>+ Agregar algo que le ayuda</button>' +
         '<h2 class="seccion-t">Música para calmarse</h2>' +
         '<p class="suave">Lluvia, olas del mar, ruido suave, una canción de cuna y campanitas. Los crea el propio teléfono: no hace falta internet ni instalar nada. Prueba cuál le gusta; a muchos niños les ayuda un sonido constante y bajito cuando hay demasiado ruido alrededor.</p>' +
         '<div id="hoja" class="hoja" hidden></div>';

@@ -243,6 +243,10 @@ window.PP = window.PP || {};
         }).join('') + (ocultas ? '<button type="button" class="enlace ver-mas" data-ver-mas="' + campo + '">Ver ' + ocultas + ' más</button>' : '') + '</div>';
       };
       var bueno = e.tipo === 'bueno';
+      // Lo esencial (qué pasó y con qué fuerza) a la vista; el resto, plegado en "Añadir detalles"
+      var abrirDetalles = params.detalles != null ? params.detalles : !!(params.id || e.causas.length || e.ayudo.length || e.nota);
+      var notaYFecha = '<label class="campo" for="d-nota">Nota <span class="suave">(opcional)</span><textarea id="d-nota" rows="3" placeholder="' + (bueno ? '¿Qué salió bien?' : 'Dónde estaban, qué pasó antes…') + '">' + PP.esc(e.nota) + '</textarea></label>' +
+        '<label class="campo" for="d-fecha">Cuándo<input id="d-fecha" type="datetime-local" value="' + PP.esc(e.fecha.slice(0, 16)) + '"></label>';
       main.innerHTML =
         '<form class="formulario" id="form-d">' +
         '<h2 class="seccion-t" id="d-tipo-t">¿Qué pasó?</h2>' +
@@ -255,17 +259,20 @@ window.PP = window.PP || {};
           '<fieldset class="segmentado cinco"><legend class="sr">Intensidad</legend>' + INTENSIDAD.map(function (t, i) {
             return '<label><input type="radio" name="int" value="' + (i + 1) + '"' + (e.intensidad === i + 1 ? ' checked' : '') + '><span>' + (i + 1) + '<small>' + t + '</small></span></label>';
           }).join('') + '</fieldset>' +
+          '' : '') +
+        (e.tipo ? (bueno ? notaYFecha : '<details class="detalles" id="d-det"' + (abrirDetalles ? ' open' : '') + '><summary>Agregar detalles <span class="suave">(opcional)</span></summary>' +
           '<h2 class="seccion-t">¿Cuánto duró?</h2>' +
           '<fieldset class="segmentado"><legend class="sr">Duración</legend>' + DURACION.map(function (d) {
             return '<label><input type="radio" name="dur" value="' + d[0] + '"' + (e.duracion === d[0] ? ' checked' : '') + '><span>' + d[1] + '</span></label>';
           }).join('') + '</fieldset>' +
           '<h2 class="seccion-t">¿Qué crees que lo provocó? <span class="suave">(puedes marcar varias)</span></h2>' + chips(CAUSAS, 'causas') +
-          '<h2 class="seccion-t">¿Qué ayudó?</h2>' + chips(AYUDO, 'ayudo') : '') +
-        (e.tipo ? '<label class="campo" for="d-nota">Nota <span class="suave">(opcional)</span><textarea id="d-nota" rows="3" placeholder="' + (bueno ? '¿Qué salió bien?' : 'Dónde estaban, qué pasó antes…') + '">' + PP.esc(e.nota) + '</textarea></label>' +
-          '<label class="campo" for="d-fecha">Cuándo<input id="d-fecha" type="datetime-local" value="' + PP.esc(e.fecha.slice(0, 16)) + '"></label>' : '') +
+          '<h2 class="seccion-t">¿Qué ayudó?</h2>' + chips(AYUDO, 'ayudo') + notaYFecha + '</details>') : '') +
         (params.id ? '<div class="zona-extra" id="zona-borrar"><button type="button" class="btn peligro" data-borrar>Borrar esta nota</button></div>' : '') +
         '<div class="pie-form" id="pie-d"><button type="submit" class="btn principal">Guardar</button><button type="button" class="btn" data-cancelar>Cancelar</button></div>' +
         '</form>';
+
+      var det = $('#d-det');
+      if (det) det.ontoggle = function () { params.detalles = det.open; };
 
       function leer() {
         var n = $('#d-nota'), f = $('#d-fecha');

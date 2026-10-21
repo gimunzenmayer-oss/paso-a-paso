@@ -21,7 +21,7 @@ window.PP = window.PP || {};
   PP.guia = {
     secciones: [
       { id: 'dificiles', nombre: 'Momentos difíciles', desc: 'Qué hacer antes, durante y después', listo: true },
-      { id: 'pronto2', nombre: 'Próximas secciones', desc: 'Las añadiremos cuando me digas cuáles quieres' }
+      { id: 'pronto2', nombre: 'Próximas secciones', desc: 'Las agregaremos cuando me digas cuáles quieres' }
     ],
 
     fichas: [
@@ -142,7 +142,7 @@ window.PP = window.PP || {};
         evitar: [
           'Decir "no es para tanto" o "no pasa nada": para él sí pasa.',
           'Obligarlo a quedarse "para que se acostumbre".',
-          'Añadir más estímulos (cantar, hablar mucho, poner música).'
+          'Agregar más estímulos (cantar, hablar mucho, poner música).'
         ],
         despues: [
           'Dale un rato de calma en casa, con poca estimulación.',

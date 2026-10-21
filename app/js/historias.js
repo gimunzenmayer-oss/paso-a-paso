@@ -75,7 +75,7 @@ window.PP = window.PP || {};
             '<button type="button" class="icono" data-bajar="' + i + '" aria-label="Bajar"' + (i === h.paginas.length - 1 ? ' disabled' : '') + '>↓</button>' +
             '<button type="button" class="icono" data-quitar="' + i + '" aria-label="Quitar página">✕</button></span></li>';
         }).join('') + '</ol>' +
-        '<button type="button" class="btn ancho" data-anadir>+ Añadir una página</button>' +
+        '<button type="button" class="btn ancho" data-anadir>+ Agregar una página</button>' +
         (params.nueva ? '' : '<div class="zona-extra" id="zona-borrar"><button type="button" class="btn peligro" data-borrar>Borrar esta historia</button></div>') +
         '<div class="pie-form"><button type="button" class="btn" data-cancelar>Cancelar</button><button type="submit" class="btn principal">Guardar</button></div>' +
         '</form><div id="hoja" class="hoja" hidden></div>';
