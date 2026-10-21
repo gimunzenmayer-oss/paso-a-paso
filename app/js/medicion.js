@@ -1,5 +1,5 @@
 /* =========================================================
-   medicion.js — cifras ANÓNIMAS para el panel de la dueña
+   medicion.js — cifras de uso SEUDÓNIMAS para el panel de la dueña
    ---------------------------------------------------------
    Solo se envía QUÉ se usó (por ejemplo "se completó un paso"),
    nunca el contenido: ni nombres, ni fotos, ni el diario.
@@ -42,8 +42,14 @@ window.PP = window.PP || {};
     } catch (e) { return azar(); }
   })();
 
+  // La familia puede apagar las estadísticas en Ajustes; entonces no se envía nada.
+  PP.estadisticasActivas = function () { return guardado('pp_sin_estadisticas') !== '1'; };
+  PP.fijarEstadisticas = function (si) {
+    try { if (si) localStorage.removeItem('pp_sin_estadisticas'); else localStorage.setItem('pp_sin_estadisticas', '1'); } catch (e) { }
+  };
+
   function enviar(url, datos) {
-    if (!activo) return;
+    if (!activo || !PP.estadisticasActivas()) return;
     var cuerpo = JSON.stringify(datos);
     try {
       if (navigator.sendBeacon && navigator.sendBeacon(url, new Blob([cuerpo], { type: 'application/json' }))) return;

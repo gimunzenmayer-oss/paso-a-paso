@@ -23,9 +23,10 @@ export default function Privacidad() {
         <li>Tu correo electrónico y los datos de tu compra, para darte acceso y gestionar la suscripción.</li>
         <li>Datos técnicos mínimos (fecha de acceso, tipo de navegador) para mantener el servicio seguro y funcionando.</li>
         <li>
-          Estadísticas de uso <strong>anónimas</strong>: un número al azar que identifica al teléfono (no a ti ni a tu peque) y qué
-          funciones se usan, por ejemplo “se completó un paso de rutina”. Nunca el contenido: ni nombres, ni fotos, ni el diario.
-          Nos sirven para saber qué mejorar.
+          Estadísticas de uso <strong>seudónimas</strong>: un número al azar que identifica al teléfono (no tu nombre ni el de tu
+          peque), la dirección IP con la que se conecta y qué funciones se usan, por ejemplo “se completó un paso de rutina” o “se
+          anotó algo en el diario”. Nunca el contenido: ni nombres, ni fotos, ni lo que escribes en el diario. Nos sirven para saber
+          qué mejorar, y puedes apagarlas cuando quieras en Ajustes → “Compartir estadísticas de uso”.
         </li>
         <li>Si la app falla, el mensaje técnico del error y la pantalla donde ocurrió, para poder arreglarlo.</li>
       </ul>

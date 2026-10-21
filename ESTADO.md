@@ -1,7 +1,7 @@
 # ESTADO — Paso a Paso
 Última actualización: 2026-10-21 | Sesión actual: 1 (Flujo C: mejorar app existente) | Panel de administración construido, en revisión visual
 
-⏸️ CHECKPOINT — Última acción completada: panel de administración construido y probado (ronda 5 de revisión visual aplicada) / Siguiente acción exacta: pasar la ronda 6 del revisor-visual a Resumen, Clientes, Costos y Verificar (la ronda se cortó por límite de uso) → cerrar el panel → instalar la app de Claude en GitHub → publicar
+⏸️ CHECKPOINT — Última acción completada: auditoría senior, capa 1 (seguridad, modo sin internet, /app) aplicada y verificada / Siguiente acción exacta: capa 2 (errores y estados: diario, guardar datos del teléfono). Reporte completo: /mnt/project-files/auditoria-paso-a-paso/REPORTE-AUDITORIA.md
 
 ## Qué es esta app (3 líneas máximo)
 PWA para madres/padres de niños autistas de 2 a 12 años (ejemplo: Mateo, 6). Dos zonas: "Espacio de Mateo" (niño, bloqueado con PIN) y zona de la familia (agenda visual, tablero de comunicación, temporizador, kit de calma con música, historias sociales, diario de crisis cifrado, logros, informe para profesionales, guía).
@@ -88,3 +88,11 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Mejoras futuras (no se hicieron, cero features nuevas): contador de intentos restantes del código; marcar la fila recién anotada; "pagadores fantasma" (pagan y no usan la app, necesita login de clientas); conciliación con Hotmart; Sentry; editar gasto en anuncios sin reemplazar.
 - Pendientes de la dueña: (1) instalar la app de Claude en GitHub (gimunzenmayer-oss/paso-a-paso) para poder publicar; (2) después del primer despliegue, en Supabase poner la URL del sitio y la redirección /admin/auth/callback; (3) la clave hottok de Hotmart; (4) variables en Vercel: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, INGEST_KEY, HOTMART_HOTTOK y, opcional, NEXT_PUBLIC_SITE_URL; (5) ⚠ Vercel Pro cuesta US$20/mes y hace falta antes de vender; (6) ⚠ el envío de correos de Supabase está limitado a ~2 por hora hasta conectar un correo propio (Resend).
 - 🔒 Gate: panel sin claves secretas en el navegador ✓ · prueba cruzada de permisos ✓ (anónima/normal/admin) · límite de intentos del código (5 en 15 min) ✓ · aviso de Hotmart verificado ✓ (falla cerrado) · política de privacidad ✓. Quedan por revisar antes de vender: prueba cruzada con 2 clientas reales (cuando exista login de clientas) y la ronda 6 del revisor.
+
+## Auditoría senior — arreglos por capa (aprobados por la usuaria 2026-10-21)
+### Capa 1: seguridad, modo sin internet y /app (2026-10-21) ✅
+- Hecho: el modo sin internet ya funciona (sw.js v9: se quitó './' que rompía la instalación; las páginas se piden a la red y, sin conexión, se usa la copia guardada) · fuentes guardadas dentro de la app (app/fonts, licencia SIL OFL), ya no se piden a Google · /app, /app/ y /onboarding llevan a /app/index.html · PIN: tras 5 errores seguidos hay que esperar (30 s, luego el doble, máximo 15 min) · encabezados de seguridad (CSP, HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy con micrófono solo para la app) · páginas de error y 404 en español · interruptor "Compartir estadísticas de uso" en Ajustes y política de privacidad corregida (estadísticas seudónimas) · script `npm run typecheck`.
+- Verificado: typecheck ✓ · lint ✓ (1 aviso en global-error.tsx) · build ✓ · servidor ✓ · SW activo con 78 archivos guardados y recarga sin internet = 200 · 0 peticiones a dominios externos · PIN bloquea al 5.º error, rechaza el PIN correcto durante la espera y lo acepta después · con estadísticas apagadas se envían 0 eventos (encendidas: 2) · capturas 375px en auditoria-paso-a-paso/capturas/L1-*.png.
+- No verificado aquí: /admin con la CSP nueva (sin claves de Supabase en esta prueba da 500, igual que antes). Revisar /admin/entrar en la primera vista previa de Vercel.
+- Para capa 2: el teclado del PIN no se ve apagado durante la espera.
+- Para capa 3: el 0 con barra viene de la fuente Atkinson.

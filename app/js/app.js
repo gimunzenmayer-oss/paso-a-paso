@@ -162,13 +162,33 @@ window.PP = window.PP || {};
 
   // Teclado numérico grande para escribir el PIN del adulto.
   // opciones: titulo, alAcertar(pin), alCancelar()
+  // Tras 5 PIN equivocados seguidos hay que esperar (30 s, luego 1 min, 2 min… hasta 15 min).
+  // Se guarda en el teléfono para que recargar la página no lo salte.
+  function leerFallos() {
+    try { return JSON.parse(localStorage.getItem('pp_pin_fallos')) || { n: 0, hasta: 0 }; } catch (e) { return { n: 0, hasta: 0 }; }
+  }
+  function guardarFallos(f) { try { localStorage.setItem('pp_pin_fallos', JSON.stringify(f)); } catch (e) { } }
+  function segundosDeEspera() { return Math.max(0, Math.ceil((leerFallos().hasta - Date.now()) / 1000)); }
+
   PP.pedirPin = function (opciones) {
-    var caja = $('#pin'), escrito = '', comprobando = false;
+    var caja = $('#pin'), escrito = '', comprobando = false, reloj = null;
     caja.hidden = false;
     $('#pin-t').textContent = opciones.titulo || 'PIN del adulto';
     var puntos = caja.querySelector('.pin-puntos');
     var msg = caja.querySelector('.pin-msg');
-    msg.textContent = PP.estado.perfil.pinDePrueba ? 'PIN de prueba: 1234' : '';
+    var mensajeNormal = PP.estado.perfil.pinDePrueba ? 'PIN de prueba: 1234' : '';
+    var mostrarEspera = function () {
+      clearInterval(reloj);
+      var tic = function () {
+        var s = segundosDeEspera();
+        if (caja.hidden) { clearInterval(reloj); return; }
+        if (s <= 0) { clearInterval(reloj); msg.textContent = mensajeNormal; return; }
+        msg.textContent = 'Demasiados intentos. Espera ' + (s > 60 ? Math.ceil(s / 60) + ' min' : s + ' s') + ' para probar otra vez.';
+      };
+      tic(); reloj = setInterval(tic, 1000);
+    };
+    msg.textContent = mensajeNormal;
+    if (segundosDeEspera() > 0) mostrarEspera();
     var dibujar = function () {
       puntos.innerHTML = [0, 1, 2, 3].map(function (i) { return '<span class="' + (i < escrito.length ? 'lleno' : '') + '"></span>'; }).join('');
       puntos.setAttribute('aria-label', escrito.length + ' de 4 números escritos');
@@ -177,17 +197,23 @@ window.PP = window.PP || {};
     caja.onclick = function (e) {
       var b = e.target.closest('button');
       if (!b || comprobando) return;
+      if (b.dataset.n != null && segundosDeEspera() > 0) { mostrarEspera(); return; }
       if (b.dataset.n != null && escrito.length < 4) escrito += b.dataset.n;
       if (b.dataset.accion === 'borrar') escrito = escrito.slice(0, -1);
-      if (b.dataset.accion === 'cancelar') { caja.hidden = true; if (opciones.alCancelar) opciones.alCancelar(); return; }
+      if (b.dataset.accion === 'cancelar') { clearInterval(reloj); caja.hidden = true; if (opciones.alCancelar) opciones.alCancelar(); return; }
       dibujar();
       if (escrito.length === 4) {
         comprobando = true; msg.textContent = 'Comprobando…';
         var pin = escrito;
         PP.comprobarPin(pin).then(function (bien) {
           comprobando = false;
-          if (bien) { caja.hidden = true; opciones.alAcertar(pin); }
-          else { msg.textContent = 'Ese PIN no es correcto. Prueba otra vez.'; escrito = ''; setTimeout(dibujar, 300); }
+          if (bien) { guardarFallos({ n: 0, hasta: 0 }); clearInterval(reloj); caja.hidden = true; opciones.alAcertar(pin); return; }
+          var f = leerFallos(); f.n += 1;
+          if (f.n >= 5) f.hasta = Date.now() + Math.min(15 * 60, 30 * Math.pow(2, f.n - 5)) * 1000;
+          guardarFallos(f);
+          escrito = ''; setTimeout(dibujar, 300);
+          if (f.hasta > Date.now()) mostrarEspera();
+          else msg.textContent = 'Ese PIN no es correcto. Prueba otra vez.';
         });
       }
     };
@@ -315,7 +341,7 @@ window.PP = window.PP || {};
       main.innerHTML = '<div class="lista">' + filas.map(function (f) {
         return '<button class="fila-lista" data-ir-a="' + f[0] + '"><span class="picto-s" aria-hidden="true">' + f[1] + '</span><span class="crece"><strong>' + f[2] + '</strong><span class="suave">' + f[3] + '</span></span></button>';
       }).join('') + '</div>' +
-        '<p class="aviso-legal">Paso a Paso es una herramienta de apoyo para la familia. No sustituye el diagnóstico, la terapia ni el consejo de profesionales. Sin anuncios y sin enviar datos a internet.</p>';
+        '<p class="aviso-legal">Paso a Paso es una herramienta de apoyo para la familia. No sustituye el diagnóstico, la terapia ni el consejo de profesionales. Sin anuncios. Tus rutinas, fotos y diario no salen de este teléfono.</p>';
       main.onclick = function (e) {
         var b = e.target.closest('button'); if (!b) return;
         if (b.dataset.irA) PP.ir(b.dataset.irA);
@@ -358,6 +384,7 @@ window.PP = window.PP || {};
         '<button class="btn principal grande" type="submit">Guardar ajustes</button>' +
         '<h2 class="seccion-t">Datos</h2>' +
         '<p class="suave">Todo se guarda solo en este dispositivo. El diario se guarda cifrado con tu PIN.</p>' +
+        interruptor('aj-estadisticas', 'Compartir estadísticas de uso', 'Solo qué funciones se usan (por ejemplo, "se completó un paso"), con un número al azar del teléfono. Nunca nombres, fotos ni el diario.', PP.estadisticasActivas ? PP.estadisticasActivas() : true) +
         '<div id="zona-reset"><button type="button" class="btn peligro" id="aj-reset">Volver a los datos de ejemplo</button></div>' +
         '</form>';
 
@@ -393,6 +420,8 @@ window.PP = window.PP || {};
         };
         $('#aj-reset-no').onclick = function () { pintar(); };
       };
+      var est = $('#aj-estadisticas');
+      if (est && PP.fijarEstadisticas) est.onchange = function () { PP.fijarEstadisticas(est.checked); PP.avisar(est.checked ? 'Estadísticas activadas' : 'Ya no se envían estadísticas'); };
       $('#form-ajustes').onsubmit = function (e) {
         e.preventDefault();
         var pin = $('#aj-pin').value.trim();
