@@ -8,15 +8,17 @@ import { rutinaDe } from '@/lib/embudo/rutinas';
 export const TOTAL_PASOS = 6;
 
 export const COMUN = {
-  atras: 'Volver a la pregunta anterior',
+  /** También en el resultado, donde vuelve al compromiso (no a una pregunta). */
+  atras: 'Volver al paso anterior',
   barra: 'Paso {n} de 6',
   cerrar: 'Salir y volver al inicio',
-  logo: 'Paso a Paso, ir al inicio',
 };
 
 export const NOMBRE = {
   titulo: '¿Cómo se llama [acento]tu peque[/acento]?',
   ayuda: 'Solo lo ves tú: se queda en este teléfono.',
+  /** Bajo el campo, en el plano hundido: para qué se pide. */
+  porque: 'Lo usamos para nombrarlo en su rutina.',
   label: 'Nombre o apodo',
   placeholder: 'Ej. Mateo',
   boton: 'Seguir',
@@ -38,7 +40,7 @@ export const OPCIONES_EDAD: readonly { id: Edad; label: string }[] = [
 
 export const MOMENTO = {
   titulo: '¿Qué momento del día [acento]cuesta más[/acento]?',
-  ayuda: 'Por ahí empieza su primera rutina.',
+  ayuda: 'Por ahí empieza su primera rutina, con fotos.',
 };
 export const OPCIONES_MOMENTO: readonly { id: Momento; label: string; subtexto: string; momento: string }[] = [
   { id: 'manana', label: 'La mañana', subtexto: 'Despertar, vestirse y salir de casa', momento: 'la mañana' },
@@ -78,7 +80,7 @@ export const RECONOCIMIENTO = {
   texto:
     'En un minuto nombraste que {momento} cuesta y qué pasa cuando {crisis}. Eso es [b]observar[/b], y es la base del [b]Método Antes, Durante y Después[/b].',
   texto2: 'No es falta de paciencia. Es que {nombre} no sabe qué viene, y tú no tenías a mano qué hacer.',
-  boton: 'Seguir',
+  boton: 'Armar su primera rutina',
 };
 
 export const COMPROMISO = {
@@ -87,7 +89,8 @@ export const COMPROMISO = {
   ayuda: '{n_pasos} pasos con fotos, en este teléfono. Una sola rutina, un día, basta para empezar.',
   /** Debajo de la ayuda: los pasos que no entran en la tira de 3 fotos ({n} = cuántos). */
   masPasos: 'Y {n} pasos más:',
-  boton: 'Sí, la probamos mañana',
+  /** El título ya dice cuándo ("Mañana…"): el botón no lo repite. */
+  boton: 'Sí, la probamos',
   cambiar: 'Cambiar el momento',
 };
 
@@ -100,7 +103,8 @@ export const CARGANDO = {
     { etapa: 'Durante', texto: 'Guía «¿Momento difícil?» a un toque' },
     { etapa: 'Después', texto: 'Diario para contarle a su terapeuta' },
   ],
-  listo: 'El plan de {nombre} está listo. Pruébalo ahora.',
+  /** Pantalla de transición: avanza sola al resultado, así que no da ninguna orden. */
+  listo: 'El plan de {nombre} está listo.',
 };
 
 export const RESULTADO = {
@@ -108,12 +112,14 @@ export const RESULTADO = {
   ayuda: 'Toca «¡Hecho!» en el primer paso, como lo hará {nombre} mañana.',
   hecho: '¡Hecho!',
   hechoAria: 'Marcar «{paso_1}» como hecho',
-  despues: 'Así se ve cada paso cumplido. Sin imprimir nada. Y para cuando {crisis}, el kit de calma ya está en su plan.',
+  despues: 'Así se ve cada paso cumplido, sin imprimir nada. Y cuando {crisis}, el kit de calma ya está en su plan.',
+  /** 2.ª línea (16px, gris): el Después del Método. */
+  diario: 'Lo que pase queda anotado para su terapeuta.',
   progreso: '1 de {n_pasos}',
   cta: 'Quiero el plan de {nombre}',
   /** Bajo el CTA, SOLO con checkout configurado: sin él no hay prueba que activar. */
-  confianza: '7 días gratis · cancelas cuando quieras',
-  app: 'Primero quiero ver la app de ejemplo',
+  confianza: '[b]7 días gratis[/b] · cancelas cuando quieras',
+  app: 'Ver antes la app de ejemplo',
 };
 
 /* ── §2 Paywall en 3 páginas (/paywall) ──────────────────────────────────────── */
@@ -123,34 +129,36 @@ export const TOTAL_PAGINAS_PAYWALL = 3;
 export const PAYWALL_COMUN = {
   cerrar: 'Cerrar y volver al plan',
   indicador: 'Página {n} de 3',
-  /** Páginas 2 y 3: vuelve a la página anterior (igual que el atrás del navegador). */
+  /** En las 3 páginas: en la 1 vuelve a /onboarding (su resultado); en la 2 y la 3, a la página anterior (igual que el atrás del navegador). */
   atras: 'Atrás',
 };
 
 export const PAYWALL_RESUMEN = {
   titulo: 'El plan de {nombre} para [acento]{momento}[/acento] está listo',
+  /** Solo con 3 respuestas o más: con menos, el número le resta valor. */
   subtitulo: 'Hecho con tus {N} respuestas, con el [b]Método Antes, Durante y Después[/b].',
+  subtituloSinNumero: 'Hecho con lo que nos contaste, con el [b]Método Antes, Durante y Después[/b].',
   puntos: [
     '[b]Antes[/b]: su rutina de {momento}, {n_pasos} pasos con fotos',
     '[b]Durante[/b]: kit de calma para cuando {crisis}',
     '[b]Después[/b]: su semana anotada, lista para la terapeuta',
   ],
   perdida: 'Tu plan ya está en este teléfono. [b]Pruébalo gratis 7 días[/b].',
-  boton: 'Ver cómo funciona la prueba',
-  salida: 'Ahora no',
+  boton: 'Ver mis 7 días gratis',
+  salida: 'Ahora no, volver a su rutina',
 };
 
 export const PAYWALL_PRUEBA = {
   titulo: '[acento]7 días[/acento] para probarlo sin pagar',
   linea: [
-    { cuando: 'Hoy', titulo: 'Hoy mismo, su rutina de {momento}', texto: 'Con fotos, el kit de calma y la guía para cuando {crisis}' },
+    { cuando: 'Hoy', titulo: 'Su rutina de {momento}, con fotos', texto: 'El kit de calma y la guía para cuando {crisis}' },
     { cuando: 'Día 5', titulo: 'Te avisamos por correo', texto: '2 días antes de cualquier cobro' },
     { cuando: 'Día 7 · {fecha_cobro}', titulo: 'Empieza el cobro: {monto}', texto: 'Solo si sigues. Cancela antes y no pagas nada' },
   ],
   debajo: 'Y después, 30 días de la [b]Garantía del Día Tranquilo[/b]: si no te ayuda, te devolvemos todo.',
   /** {monto} del Día 7 según el plan elegido (precios de §2.3). */
   monto: { anual: 'US$59.90 al año', mensual: 'US$7.99 al mes' },
-  boton: 'Ver precios',
+  boton: 'Ver los planes de {nombre}',
   salida: 'Ahora no',
 };
 
@@ -182,9 +190,8 @@ export const PAYWALL_PRECIO = {
   abriendo: 'Abriendo Hotmart…',
   /** En el pie fijo, bajo el botón: una sola línea (el error de Hotmart la reemplaza). */
   garantiaCorta: '[b]Garantía del Día Tranquilo[/b] · 30 días',
-  /** En el flujo, justo debajo del pie: la garantía con su condición (landing §7). */
-  garantia:
-    '[b]Garantía del Día Tranquilo[/b]: si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo.',
+  /** En el flujo, justo debajo del pie: la condición de la garantía, sin ícono ni nombre (el pie ya los lleva). */
+  garantia: 'Si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo.',
   confianza: ['Hoy no pagas nada · primer cobro el {fecha_cobro}', 'Cancelas en Hotmart cuando quieras'],
   pie: 'Pago seguro con Hotmart · tarjeta o medios locales',
   salida: 'Ahora no',

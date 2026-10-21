@@ -31,9 +31,10 @@ export function Titulo({ texto, enfocar, id = 'titulo-paso' }: { texto: string; 
   );
 }
 
+/* ── <Ayuda> — el subtítulo del paso. text-wrap: pretty: sin una palabra sola en la última línea. ── */
 export function Ayuda({ children, id }: { children: ReactNode; id?: string }) {
   return (
-    <p id={id} className="mt-3 text-[18px] leading-[1.45] text-[var(--text-secondary)]">
+    <p id={id} className="mt-3 text-[18px] leading-[1.45] text-pretty text-[var(--text-secondary)]">
       {children}
     </p>
   );
@@ -163,7 +164,10 @@ export function PieFijo({ children }: { children: ReactNode }) {
 /* ── <Opcion> — chip de ancho completo, 60px+ (50 A2). Seleccionado: borde
    acento 2px + fondo acento 10% + check que entra con escala. El borde de 2px se
    compensa con 1px menos de relleno: el texto no se corre al elegir. Con `paso`
-   (pregunta 1.3) lleva a la izquierda la foto real de esa rutina. ── */
+   (pregunta 1.3) lleva a la izquierda la foto real de esa rutina; entonces el chip
+   toma el radio de tarjeta (18) y la foto el radio concéntrico (18 − 9 = 9: borde
+   1 + relleno 8, o borde 2 + relleno 7 elegido), así las esquinas siguen el mismo
+   arco. El subtexto usa text-wrap: pretty (sin una palabra sola en la última línea). ── */
 export function Opcion({
   label,
   subtexto,
@@ -185,16 +189,16 @@ export function Opcion({
       onClick={onClick}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.12 }}
-      className={`flex min-h-[60px] w-full items-center gap-3 rounded-[var(--radius-button)] text-left [touch-action:manipulation] transition-[border-color,background-color] duration-150 ${relleno} ${
+      className={`flex min-h-[60px] w-full items-center gap-3 ${paso ? 'rounded-[var(--radius-card)]' : 'rounded-[var(--radius-button)]'} text-left [touch-action:manipulation] transition-[border-color,background-color] duration-150 ${relleno} ${
         seleccionado
           ? 'border-2 border-[var(--accent)] bg-[color-mix(in_oklab,var(--accent)_10%,var(--surface))]'
           : 'border border-[color-mix(in_oklab,var(--text-tertiary)_30%,transparent)] bg-[var(--surface)] shadow-[var(--shadow-2)]'
       }`}
     >
-      {paso && <Miniatura paso={paso} tamano={56} />}
+      {paso && <Miniatura paso={paso} tamano={56} enChip />}
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="text-[18px] leading-snug font-semibold text-[var(--text-primary)]">{label}</span>
-        {subtexto && <span className="mt-0.5 text-[16px] leading-snug text-[var(--text-secondary)]">{subtexto}</span>}
+        {subtexto && <span className="mt-0.5 text-[16px] leading-snug text-pretty text-[var(--text-secondary)]">{subtexto}</span>}
       </span>
       <span
         aria-hidden="true"
@@ -228,8 +232,18 @@ export function Opcion({
    foto de fondo blanco (fondoClaro) se funde con el marco (multiply): el blanco
    toma el --surface-2 y no queda un cuadro blanco dentro del marco. Sin foto
    (p. ej. "Ponerse el pijama"): ícono lucide en el mismo marco, nunca emoji.
-   tamano 'fluida' = llena el ancho de su celda (tiras en grilla), siempre cuadrada. ── */
-export function Miniatura({ paso, tamano }: { paso: PasoRutina; tamano: 40 | 56 | 72 | 'fluida' }) {
+   tamano 'fluida' = llena el ancho de su celda (tiras en grilla), siempre cuadrada.
+   enChip: va dentro de un chip de Opcion (radio de tarjeta, 9px de borde + relleno):
+   toma el radio concéntrico en vez del de botón. ── */
+export function Miniatura({
+  paso,
+  tamano,
+  enChip = false,
+}: {
+  paso: PasoRutina;
+  tamano: 40 | 56 | 72 | 'fluida';
+  enChip?: boolean;
+}) {
   const fluida = tamano === 'fluida';
   const lado = fluida ? 'aspect-square w-full' : tamano === 72 ? 'size-[72px]' : tamano === 56 ? 'size-14' : 'size-10';
   const icono = fluida || tamano === 72 ? 30 : tamano === 56 ? 24 : 20;
@@ -237,7 +251,7 @@ export function Miniatura({ paso, tamano }: { paso: PasoRutina; tamano: 40 | 56 
   return (
     <span
       aria-hidden="true"
-      className={`${lado} relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[var(--radius-button)] bg-[var(--surface-2)] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--text-tertiary)_22%,transparent)]`}
+      className={`${lado} relative inline-flex shrink-0 items-center justify-center overflow-hidden ${enChip ? 'rounded-[calc(var(--radius-card)-9px)]' : 'rounded-[var(--radius-button)]'} bg-[var(--surface-2)] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--text-tertiary)_22%,transparent)]`}
     >
       {paso.foto ? (
         fluida ? (
@@ -255,8 +269,9 @@ export function Miniatura({ paso, tamano }: { paso: PasoRutina; tamano: 40 | 56 
 /* ── <TiraDeFotos> — el dispositivo propio de FICHA-ARTE: las primeras fotos CON
    foto de su rutina sobre el plano hundido, con el check verde en la primera (el
    paso cumplido). Decorativa: los pasos ya se nombran en el texto de al lado.
-   'fluida' reparte el ancho en 3 columnas iguales (resumen del paywall); 72 las
-   alinea a la izquierda (reconocimiento). Las fotos entran una a una (60 ms). ── */
+   'fluida' reparte el ancho en 3 columnas iguales (reconocimiento, compromiso y
+   resumen del paywall: el mismo dispositivo luce igual en todo el recorrido); 72 las
+   alinea a la izquierda. Las fotos entran una a una (60 ms). ── */
 export function TiraDeFotos({
   pasos,
   tamano,

@@ -98,7 +98,13 @@ test('paywall: {N} cuenta solo respuestas vigentes (crisis con ids viejos no cue
 test('rutinas: las tiras usan pasos con foto y 1.3 no repite foto entre opciones', async () => {
   const { pasosConFoto, pasoQueRepresenta, rutinaDe } = await import('../lib/embudo/rutinas.ts');
   const noche = pasosConFoto(rutinaDe('dormir').pasos, 3).map((p) => p.texto);
-  assert.deepEqual(noche, ['Cenar', 'Bañarse', 'Lavarse los dientes']);
+  // Bañarse es un recorte sobre blanco (fondoClaro): la tira prefiere fotos a sangre.
+  assert.deepEqual(noche, ['Cenar', 'Lavarse los dientes', 'Leer un cuento']);
+  const tarde = pasosConFoto(rutinaDe('escuela').pasos, 3).map((p) => p.texto);
+  assert.deepEqual(tarde, ['Quitarse los zapatos', 'Rato tranquilo', 'Jugar en el parque']);
+  // Si no alcanzan las fotos a sangre, entran los recortes antes que el ícono.
+  const dos = pasosConFoto(rutinaDe('escuela').pasos, 5).map((p) => p.texto);
+  assert.deepEqual(dos, ['Quitarse los zapatos', 'Lavarse las manos', 'Merendar', 'Rato tranquilo', 'Jugar en el parque']);
   const fotos = ['manana', 'comidas', 'escuela', 'dormir'].map((m) => pasoQueRepresenta(m).foto);
   assert.ok(fotos.every(Boolean));
   assert.equal(new Set(fotos).size, 4);

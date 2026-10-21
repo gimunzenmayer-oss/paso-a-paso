@@ -1,17 +1,24 @@
 'use client';
 
-// 2.3 Página 3 del paywall: precio (50 C1-C5). Qué incluye el plan arriba de los
+// 2.3 Página 3 del paywall: precio (50 C1-C5).
 // Orden: título, subtítulo y las 2 tarjetas de precio enseguida, para que la
 // elegida (también la mensual, y también con el error en el pie) se vea entera en
-// el primer pliegue a 375px. Debajo de las tarjetas, la tira con 3 fotos de SU
-// rutina (el dispositivo de FICHA-ARTE) y los 4 chips de "Incluye" con el check
-// del embudo. Anual recomendado y marcado de inicio; el total anual siempre
+// el primer pliegue a 375px. La tira con 3 fotos de SU rutina (el dispositivo de
+// FICHA-ARTE) NO va entre el subtítulo y las tarjetas: sus ≈56px empujaban la
+// mensual elegida 27px bajo el pie (59px sin nombre y con el error; medido a
+// 375×812). Va debajo de las tarjetas con mt-8, y después los 4 chips de
+// "Incluye" con el check del embudo; la etiqueta "Incluye:" va en
+// --text-secondary (el acento queda para el CTA, la palabra que vende y el check).
+// Tarjetas, tira, etiqueta y cada chip entran escalonados (entrada(i), 60 ms).
+// Anual recomendado y marcado de inicio; el total anual siempre
 // visible; el mensual es un precio real. La tarjeta elegida es la más elevada
 // (superficie, borde de acento y sombra tintada); la otra queda plana.
-// El pie fijo es corto a propósito (≈130px): SOLO el botón y una línea de garantía,
-// para que la tarjeta elegida se vea entera encima. Si Hotmart no abre, el error
-// REEMPLAZA a esa línea (no se suma). La garantía con su condición, la ayuda de
-// Hotmart y la verdad del puente (2 líneas con check) van en el flujo, debajo.
+// El pie fijo es corto a propósito (≈130px): SOLO el botón y una línea de garantía
+// (con el único escudo de la página), para que la tarjeta elegida se vea entera
+// encima. Si Hotmart no abre, el error REEMPLAZA a esa línea (no se suma). En el
+// flujo, debajo: la condición de la garantía (sin ícono ni nombre: el pie ya los
+// dice), la ayuda de Hotmart, la verdad del puente (2 líneas con check) y "Pago
+// seguro" con un candado, no otro escudo.
 //
 // Checkout honesto: si faltan los links de Hotmart (o no son válidos) el botón
 // queda deshabilitado con el texto del estado honesto de la copy. Nunca un enlace
@@ -23,12 +30,12 @@
 
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { motion } from 'motion/react';
-import { CircleAlert, Info, LoaderCircle, ShieldCheck } from 'lucide-react';
+import { CircleAlert, Info, LoaderCircle, Lock, ShieldCheck } from 'lucide-react';
 import { MarkedCopy } from '@/components/landing/MarkedCopy';
 import type { Plan } from '@/lib/embudo/checkout';
 import { pasosConFoto, type PasoRutina } from '@/lib/embudo/rutinas';
 import { enviarEvento } from '@/lib/eventos-cliente';
-import { Ayuda, BotonPrincipal, CheckQueSeLlena, EnlacePrincipal, EnlaceTexto, Miniatura, PieFijo, Titulo } from './ui';
+import { Ayuda, BotonPrincipal, CheckQueSeLlena, EnlacePrincipal, EnlaceTexto, entrada, Miniatura, PieFijo, Titulo } from './ui';
 import { llenar, PAYWALL_PRECIO, PAYWALL_SIN_CHECKOUT, type Variables, type VariablesPaywall } from './textos';
 
 /** Fracción de las tarjetas que debe verse para contar paywall_visto (36/60: ≥35 %). */
@@ -199,34 +206,46 @@ export function PaywallPrecio({
       <Ayuda>{llenar(PAYWALL_PRECIO.subtitulo, v)}</Ayuda>
 
       <fieldset ref={ofertaRef} aria-labelledby="titulo-paso" className="mt-4 flex flex-col gap-3">
-        <TarjetaPlan plan="anual" elegido={plan === 'anual'} onElegir={onElegir} />
-        <TarjetaPlan plan="mensual" elegido={plan === 'mensual'} onElegir={onElegir} />
+        <motion.div {...entrada(0)}>
+          <TarjetaPlan plan="anual" elegido={plan === 'anual'} onElegir={onElegir} />
+        </motion.div>
+        <motion.div {...entrada(1)}>
+          <TarjetaPlan plan="mensual" elegido={plan === 'mensual'} onElegir={onElegir} />
+        </motion.div>
       </fieldset>
 
-      {/* Su rutina ya armada: 3 fotos de 40 (decorativas; el texto la nombra). */}
-      <div className="mt-5 flex items-center gap-3">
+      {/* Su rutina ya armada: 3 fotos de 40 (decorativas; el texto la nombra). Va DEBAJO de las tarjetas, con
+          mt-8: entre el subtítulo y las tarjetas empujaba la mensual elegida bajo el pie (ver arriba). */}
+      <motion.div {...entrada(2)} className="mt-8 flex items-center gap-3">
         <span aria-hidden="true" className="flex shrink-0 gap-1.5">
           {pasosConFoto(pasos, 3).map((paso) => (
             <Miniatura key={paso.texto} paso={paso} tamano={40} />
           ))}
         </span>
-        <p className="min-w-0 text-[16px] leading-snug font-semibold text-[var(--text-primary)]">{llenar(PAYWALL_PRECIO.rutinaLista, v)}</p>
-      </div>
+        <p className="min-w-0 text-[16px] leading-snug font-semibold text-pretty text-[var(--text-primary)]">
+          {llenar(PAYWALL_PRECIO.rutinaLista, v)}
+        </p>
+      </motion.div>
 
       {/* Qué incluye: chips con el check del embudo (ancla de conversión: chips en toda lista de beneficios). */}
-      <div className="mt-3">
-        <p id={ID_INCLUYE} className="text-[13px] leading-tight font-bold tracking-[0.06em] text-[var(--accent)] uppercase">
+      <div className="mt-4">
+        <motion.p
+          {...entrada(3)}
+          id={ID_INCLUYE}
+          className="text-[13px] leading-tight font-bold tracking-[0.06em] text-[var(--text-secondary)] uppercase"
+        >
           {PAYWALL_PRECIO.incluyeTitulo}
-        </p>
+        </motion.p>
         <ul aria-labelledby={ID_INCLUYE} className="mt-2 flex flex-wrap gap-2">
-          {PAYWALL_PRECIO.incluye.map((item) => (
-            <li
+          {PAYWALL_PRECIO.incluye.map((item, i) => (
+            <motion.li
               key={item}
+              {...entrada(4 + i)}
               className="inline-flex items-center gap-1.5 rounded-[var(--radius-button)] bg-[var(--chip-bg)] py-1 pr-2.5 pl-1.5 text-[16px] leading-snug text-[var(--text-primary)]"
             >
               <CheckQueSeLlena tamano={16} />
               <span className="whitespace-nowrap">{item}</span>
-            </li>
+            </motion.li>
           ))}
         </ul>
       </div>
@@ -275,13 +294,9 @@ export function PaywallPrecio({
 
       {checkout ? (
         <>
-          {/* Lo que el pie ya no carga: la garantía con su condición y la ayuda de Hotmart. */}
-          <p className="mt-3 flex items-start gap-2 text-[16px] leading-snug text-[var(--text-primary)]">
-            <ShieldCheck size={20} strokeWidth={2} color="var(--accent)" aria-hidden="true" className="mt-px shrink-0" />
-            <span>
-              <MarkedCopy text={PAYWALL_PRECIO.garantia} />
-            </span>
-          </p>
+          {/* Lo que el pie ya no carga: la condición de la garantía (sin ícono ni nombre: el pie
+              los lleva) y la ayuda de Hotmart. */}
+          <p className="mt-3 text-[16px] leading-snug text-pretty text-[var(--text-primary)]">{PAYWALL_PRECIO.garantia}</p>
           <p id={ID_AYUDA} className="mt-3 flex items-start gap-2 text-[16px] leading-snug text-[var(--text-secondary)]">
             <Info size={20} strokeWidth={2} color="var(--accent-2)" aria-hidden="true" className="mt-px shrink-0" />
             <span>{PAYWALL_PRECIO.ayuda}</span>
@@ -295,7 +310,7 @@ export function PaywallPrecio({
             ))}
           </ul>
           <p className="mt-5 flex items-start justify-center gap-2 text-center text-[16px] leading-snug text-[var(--text-secondary)]">
-            <ShieldCheck size={18} strokeWidth={2} aria-hidden="true" className="mt-0.5 shrink-0" />
+            <Lock size={18} strokeWidth={2} aria-hidden="true" className="mt-0.5 shrink-0" />
             {PAYWALL_PRECIO.pie}
           </p>
           <div className="mt-3 flex flex-col">

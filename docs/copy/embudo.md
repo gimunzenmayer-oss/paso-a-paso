@@ -31,10 +31,9 @@ La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 (si
 ### Elementos comunes
 | Elemento | Texto |
 |---|---|
-| Atrás (aria-label) | Volver a la pregunta anterior |
+| Atrás (aria-label; también en el resultado, donde vuelve al compromiso saltando la carga) | Volver al paso anterior (pendiente de aprobar) · antes: Volver a la pregunta anterior |
 | Barra (aria-label) | Paso {n} de 6 |
 | Cerrar (aria-label, esquina) | Salir y volver al inicio |
-| Logo (aria-label, solo en `/paywall`; el onboarding no lleva logo) | Paso a Paso, ir al inicio |
 
 ### 1.1 Nombre del peque (se puede saltar)
 - Título: ¿Cómo se llama [acento]tu peque[/acento]?
@@ -45,6 +44,7 @@ La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 (si
 - Saltar: Prefiero no decirlo
 - Error, el campo está vacío y toca Seguir: Escribe su nombre o toca «Prefiero no decirlo».
 - Error, más de 20 letras: Usa un nombre o apodo de hasta 20 letras.
+- Bajo el campo, en el plano hundido (16px), para qué se pide: Lo usamos para nombrarlo en su rutina. (pendiente de aprobar) · antes: (no había)
 
 ### 1.2 Edad
 - Título: ¿Cuántos años tiene [acento]{nombre}[/acento]?
@@ -56,7 +56,7 @@ La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 (si
 
 ### 1.3 Momento más difícil (define la primera rutina)
 - Título: ¿Qué momento del día [acento]cuesta más[/acento]?
-- Ayuda: Por ahí empieza su primera rutina.
+- Ayuda: Por ahí empieza su primera rutina, con fotos. (pendiente de aprobar) · antes: Por ahí empieza su primera rutina.
 - Opciones (selección única, avanza sola):
 
 | Opción (label) | Subtexto | Rutina en `app/js/datos.js` | `{momento}` | `{n_pasos}` |
@@ -88,17 +88,18 @@ La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 (si
 - Si elige varias, `{crisis}` usa la primera.
 
 ### 1.5 Reconocimiento con etiqueta de identidad
-Lleva arriba la tira con las 3 primeras fotos de su rutina y el check verde en la primera (la misma del resumen del paywall), sin opciones y con un solo botón.
+Lleva arriba la tira con las 3 primeras fotos de su rutina y el check verde en la primera (la misma del resumen del paywall y de 1.6, al ancho completo), sin opciones y con un solo botón.
 - Título: Ya eres quien [acento]mejor conoce[/acento] a {nombre}
 - Texto: En un minuto nombraste que {momento} cuesta y qué pasa cuando {crisis}. Eso es [b]observar[/b], y es la base del [b]Método Antes, Durante y Después[/b]. (pendiente de aprobar) · antes: En un minuto nombraste su momento difícil y qué pasa cuando {crisis}. Eso es…
 - Texto 2 (quita la culpa): No es falta de paciencia. Es que {nombre} no sabe qué viene, y tú no tenías a mano qué hacer.
-- Botón: Seguir
+- Botón: Armar su primera rutina (pendiente de aprobar) · antes: Seguir
 
 ### 1.6 Compromiso
 - Título: Mañana probamos la rutina de [acento]{momento}[/acento] con {nombre}
 - Ayuda: {n_pasos} pasos con fotos, en este teléfono. Una sola rutina, un día, basta para empezar. (pendiente de aprobar) · antes: Una sola rutina, un día. Con eso basta para empezar.
-- Debajo de la ayuda, en el plano hundido (13px), los pasos que no entran en la tira de 3 fotos: Y {n} pasos más: {paso} · {paso} · … (pendiente de aprobar)
-- Botón principal: Sí, la probamos mañana (pendiente de aprobar) · antes: Sí, mañana la probamos
+- Arriba, la misma tira de 3 fotos de 1.5 (plano hundido, check en la primera, al ancho completo).
+- Debajo de la ayuda, en el plano hundido (16px), los pasos que no entran en la tira de 3 fotos: Y {n} pasos más: {paso} · {paso} · … (pendiente de aprobar) · antes: a 13px
+- Botón principal: Sí, la probamos (pendiente de aprobar) · antes: Sí, la probamos mañana
 - Enlace secundario: Cambiar el momento (vuelve a 1.3)
 - Si `{momento}` es "la mañana", el título cambia a: Mañana temprano probamos [acento]su rutina[/acento] con {nombre} (pendiente de aprobar) · antes: Mañana temprano probamos [acento]su rutina de la mañana[/acento] con {nombre}
 
@@ -110,7 +111,8 @@ Dura de 4 a 6 segundos. Cada línea recibe su check, una tras otra.
 - Línea 2 (Durante): Kit de calma para cuando {crisis}
 - Línea 3 (Durante): Guía «¿Momento difícil?» a un toque
 - Línea 4 (Después): Diario para contarle a su terapeuta
-- Al terminar (aria-live): El plan de {nombre} está listo. Pruébalo ahora. (solo texto, sin botón) (pendiente de aprobar) · antes: El plan de {nombre} está listo.
+- Al terminar (aria-live, como pie de la tarjeta de las 4 líneas; pantalla de transición: avanza sola al resultado, sin botón ni órdenes): El plan de {nombre} está listo. (pendiente de aprobar) · antes: El plan de {nombre} está listo. Pruébalo ahora.
+- Línea pendiente: etapa y texto en gris secundario (sin opacidad, AA); solo el círculo vacío queda al 60 %.
 - Al marcarse la línea 1 aparecen 3 fotos de su rutina, una tras otra.
 - Si ya llegó al resultado antes (volvió a esta pantalla), las líneas se marcan cada 350 ms en vez de cada 1,1 s.
 - Con "reducir movimiento": las 4 líneas aparecen ya marcadas y el texto es el mismo.
@@ -122,11 +124,13 @@ Dura de 4 a 6 segundos. Cada línea recibe su check, una tras otra.
 - Botón del paso 1: ¡Hecho!
 - Botón del paso 1 (aria-label): Marcar «{paso_1}» como hecho
 - Después de tocar:
-  - texto: Así se ve cada paso cumplido. Sin imprimir nada. Y para cuando {crisis}, el kit de calma ya está en su plan. (pendiente de aprobar) · antes: Así se ve cada paso cumplido. Sin imprimir nada.
+  - texto: Así se ve cada paso cumplido, sin imprimir nada. Y cuando {crisis}, el kit de calma ya está en su plan. (pendiente de aprobar) · antes: Así se ve cada paso cumplido. Sin imprimir nada. Y para cuando {crisis}, el kit de calma ya está en su plan.
+  - 2.ª línea (16px, gris), el Después del Método: Lo que pase queda anotado para su terapeuta. (pendiente de aprobar) · antes: (no había)
   - progreso: 1 de {n_pasos}
 - CTA (se ve de inmediato en estilo secundario y pasa a principal después del toque): Quiero el plan de {nombre} (pendiente de aprobar) · antes: Seguir con el plan de {nombre}
-- Microlínea bajo el CTA (13px), SOLO si el checkout de Hotmart está configurado: 7 días gratis · cancelas cuando quieras (pendiente de aprobar)
-- Enlace: Primero quiero ver la app de ejemplo (→ `/app`)
+- Microlínea bajo el CTA (16px), SOLO si el checkout de Hotmart está configurado: [b]7 días gratis[/b] · cancelas cuando quieras (pendiente de aprobar) · antes: a 13px y sin negrita
+- Enlace: Ver antes la app de ejemplo (→ `/app`) (pendiente de aprobar) · antes: Primero quiero ver la app de ejemplo
+- Cabecera: con atrás (‹), que vuelve al compromiso (1.6) sin pasar otra vez por «Armando el plan».
 
 ---
 
@@ -135,36 +139,37 @@ Dura de 4 a 6 segundos. Cada línea recibe su check, una tras otra.
 Elementos comunes a las 3 páginas:
 - Cerrar (✕, aria-label): Cerrar y volver al plan
 - Indicador (aria-label): Página {n} de 3
-- Botón en las páginas 2 y 3 (vuelve a la anterior, igual que el atrás del teléfono): ‹ Atrás (pendiente de aprobar)
+- Botón a la izquierda, el mismo en las 3 páginas y sin logo: ‹ Atrás (pendiente de aprobar). En la página 1 vuelve a `/onboarding` (su resultado); en la 2 y la 3, a la anterior (igual que el atrás del teléfono). · antes: en la página 1 iba el logo, que llevaba a la landing.
 - Sin onboarding en este teléfono no hay plan que resumir: `/paywall` lleva a `/onboarding`.
 
 ### 2.1 Página 1: resumen
 - Título: El plan de {nombre} para [acento]{momento}[/acento] está listo
-- Subtítulo: Hecho con tus {N} respuestas, con el [b]Método Antes, Durante y Después[/b].
+- Subtítulo, con 3 respuestas o más: Hecho con tus {N} respuestas, con el [b]Método Antes, Durante y Después[/b].
+- Subtítulo, con menos de 3: Hecho con lo que nos contaste, con el [b]Método Antes, Durante y Después[/b]. (pendiente de aprobar) · antes: siempre «Hecho con tus {N} respuestas»
 - 3 puntos (con sus respuestas):
   1. **Antes**: su rutina de {momento}, {n_pasos} pasos con fotos (pendiente de aprobar) · antes: su rutina de {momento}, paso a paso y con fotos
   2. **Durante**: kit de calma para cuando {crisis}
   3. **Después**: su semana anotada, lista para la terapeuta
 - Línea de pérdida honesta (peso regular): Tu plan ya está en este teléfono. [b]Pruébalo gratis 7 días[/b]. (pendiente de aprobar) · antes: Tu plan ya está en este teléfono. Falta activarlo.
-- Botón: Ver cómo funciona la prueba
-- Salida: Ahora no
+- Botón: Ver mis 7 días gratis (pendiente de aprobar) · antes: Ver cómo funciona la prueba
+- Salida: Ahora no, volver a su rutina (pendiente de aprobar) · antes: Ahora no
 
 ### 2.2 Página 2: la prueba, día por día
 - Título: [acento]7 días[/acento] para probarlo sin pagar
 - Línea de tiempo:
-  - **Hoy**: Hoy mismo, su rutina de {momento} · Con fotos, el kit de calma y la guía para cuando {crisis} (pendiente de aprobar) · antes: Acceso completo · Su rutina, el kit de calma y la guía
+  - **Hoy** (nodo: el check del embudo; debajo, 3 fotos de su rutina): Su rutina de {momento}, con fotos · El kit de calma y la guía para cuando {crisis} (pendiente de aprobar) · antes: Hoy mismo, su rutina de {momento} · Con fotos, el kit de calma y la guía para cuando {crisis}
   - **Día 5**: Te avisamos por correo · 2 días antes de cualquier cobro
-  - **Día 7 · {fecha_cobro}**: Empieza el cobro: {monto} (pendiente de aprobar) · Solo si sigues. Cancela antes y no pagas nada
+  - **Día 7 · {fecha_cobro}**: Empieza el cobro: {monto} (pendiente de aprobar) · Solo si sigues. Cancela antes y no pagas nada. ({monto} nunca se parte entre dos líneas.)
 - Debajo (bloque hundido con escudo): Y después, 30 días de la [b]Garantía del Día Tranquilo[/b]: si no te ayuda, te devolvemos todo. (pendiente de aprobar) · antes: Y después, 30 días de la [b]Garantía del Día Tranquilo[/b].
-- Botón: Ver precios
+- Botón: Ver los planes de {nombre} (pendiente de aprobar) · antes: Ver precios
 - Salida: Ahora no
 
 ### 2.3 Página 3: precio
 - Título: Días más [acento]predecibles[/acento] para {nombre}, desde hoy
 - Subtítulo: Mañana {nombre} ya sabe qué viene. Empiezas gratis y eliges cómo seguir después. (pendiente de aprobar) · antes: Empiezas gratis. Eliges cómo seguir después.
-- Orden: las 2 tarjetas van justo después del subtítulo (la elegida se ve entera en el primer pliegue, también con el error en el pie); debajo, la tira de su rutina y "Incluye". (pendiente de aprobar) · antes: "Incluye" en una línea sobre las tarjetas.
+- Orden: las 2 tarjetas van justo después del subtítulo (la elegida se ve entera en el primer pliegue, también con el error en el pie); debajo, separada 32px, la tira de su rutina y luego "Incluye". (pendiente de aprobar) · antes: "Incluye" en una línea sobre las tarjetas. Ronda 3: se probó la tira entre el subtítulo y las tarjetas y empujaba la mensual elegida bajo el pie (27px; 59px sin nombre y con el error): se dejó debajo para que la tarjeta elegida quede entera.
 - Junto a una tira de 3 fotos de su rutina: Su rutina de {momento} ya está armada (pendiente de aprobar)
-- Incluye (etiqueta y 4 chips con el check del embudo; nombres de la app y de la landing §6): [b]Incluye:[/b] Su rutina con fotos · Kit de calma · Guía «Ahora mismo» · Diario e informe (pendiente de aprobar)
+- Incluye (etiqueta en gris secundario —el acento queda para el CTA, la palabra que vende y el check— y 4 chips con el check del embudo; nombres de la app y de la landing §6): [b]Incluye:[/b] Su rutina con fotos · Kit de calma · Guía «Ahora mismo» · Diario e informe (pendiente de aprobar)
 - Tarjeta Anual (recomendada y marcada de inicio):
   - etiqueta: Mejor precio
   - nombre: Anual
@@ -178,12 +183,12 @@ Elementos comunes a las 3 páginas:
 - Botón: Empezar mis 7 días gratis (el CTA de la oferta de la landing §6)
 - Botón, mientras abre: Abriendo Hotmart…
 - Pie fijo: SOLO el botón y una línea bajo él: [b]Garantía del Día Tranquilo[/b] · 30 días (pendiente de aprobar) · antes: el pie llevaba la garantía completa y la ayuda de Hotmart.
-- En el flujo, justo debajo del pie: la garantía con su condición (landing §7; sin la línea del correo de soporte, que aún no existe): [b]Garantía del Día Tranquilo[/b]: si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo. (pendiente de aprobar)
+- En el flujo, justo debajo del pie: la condición de la garantía, sin ícono ni nombre (el pie ya los lleva: un solo escudo en la página): Si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo. (pendiente de aprobar) · antes: [b]Garantía del Día Tranquilo[/b]: si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo.
 - Ayuda, en el flujo, con ícono de información: En Hotmart, completa tus datos y elige «Quiero un periodo gratis». (pendiente de aprobar) · antes: debajo del botón, en el pie.
 - 2 líneas de confianza, con check:
   1. Hoy no pagas nada · primer cobro el {fecha_cobro}
   2. Cancelas en Hotmart cuando quieras
-- Fila final: Pago seguro con Hotmart · tarjeta o medios locales
+- Fila final (con un candado, no un escudo): Pago seguro con Hotmart · tarjeta o medios locales
 - Enlaces:
   - Ahora no
   - ¿Ya pagaste? Entra aquí (→ `/entrar`)

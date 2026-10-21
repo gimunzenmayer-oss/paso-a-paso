@@ -7,6 +7,8 @@
 //   (sin elección muestra una pista amable en vez de bloquear, 50 A3).
 // Las opciones entran escalonadas (60 ms, la firma de FICHA-ARTE; con reducir
 // movimiento, solo el fundido). En 1.3 cada opción lleva la foto de su rutina.
+// En 1.1, bajo el campo, el «por qué» de la pregunta en el plano hundido (el
+// segundo plano de la pantalla, FICHA-ARTE: hundido #E6ECE5, radio de tarjeta).
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
@@ -72,6 +74,12 @@ export function NombrePeque({
       <p id="error-nombre" role="alert" className="mt-2 min-h-6 text-[16px] leading-snug font-semibold text-[var(--error)]">
         {error}
       </p>
+      <motion.p
+        {...entrada(0, 0.1)}
+        className="mt-2 rounded-[var(--radius-card)] bg-[var(--surface-2)] p-4 text-[16px] leading-[1.45] text-pretty text-[var(--text-secondary)]"
+      >
+        {NOMBRE.porque}
+      </motion.p>
       <PieFijo>
         <BotonPrincipal type="submit">{NOMBRE.boton}</BotonPrincipal>
         <BotonTexto onClick={onSaltar}>{NOMBRE.saltar}</BotonTexto>

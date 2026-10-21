@@ -2,7 +2,8 @@
 
 // 2.1 Página 1 del paywall: el resumen de lo que armó el onboarding, con SUS
 // respuestas (50 C0: recap del valor + inversión visible, "Hecho con tus {N}
-// respuestas"). Solo se pinta si hubo onboarding (Paywall.tsx lleva a /onboarding
+// respuestas", con el número solo si son 3 o más: con menos, «Hecho con lo que nos
+// contaste»). Solo se pinta si hubo onboarding (Paywall.tsx lleva a /onboarding
 // si no). Arriba, el dispositivo propio de FICHA-ARTE: la tira con las 3 primeras
 // fotos de SU rutina, en 3 columnas que llenan el ancho, y el check verde en la
 // primera (TiraDeFotos, la misma del reconocimiento), sobre el plano hundido. La
@@ -15,25 +16,34 @@ import type { PasoRutina } from '@/lib/embudo/rutinas';
 import { Ayuda, BotonPrincipal, CheckQueSeLlena, EnlaceTexto, PieFijo, TiraDeFotos, Titulo } from './ui';
 import { llenar, PAYWALL_RESUMEN, type Variables, type VariablesPaywall } from './textos';
 
+/** Con menos respuestas el número le resta valor al plan. */
+const MIN_RESPUESTAS_CON_NUMERO = 3;
+
 export function PaywallResumen({
   v,
   pasos,
+  respuestas,
   hrefVolver,
   enfocar,
   onSeguir,
 }: {
+  /** v.N lleva el mismo número, ya como texto del copy. */
   v: Variables & VariablesPaywall;
+  /** Cuántas preguntas respondió (contarRespuestas). */
+  respuestas: number;
   /** Los pasos de su rutina (rutinaDe(momento)). */
   pasos: readonly PasoRutina[];
   hrefVolver: string;
   enfocar: boolean;
   onSeguir: () => void;
 }) {
+  const conNumero = respuestas >= MIN_RESPUESTAS_CON_NUMERO;
+  const subtitulo = conNumero ? PAYWALL_RESUMEN.subtitulo : PAYWALL_RESUMEN.subtituloSinNumero;
   return (
     <div className="flex flex-1 flex-col">
       <Titulo texto={llenar(PAYWALL_RESUMEN.titulo, v)} enfocar={enfocar} />
       <Ayuda>
-        <MarkedCopy text={llenar(PAYWALL_RESUMEN.subtitulo, v)} />
+        <MarkedCopy text={llenar(subtitulo, v)} />
       </Ayuda>
 
       {/* Decorativa: los pasos ya se nombran en el punto "Antes" de la lista. */}

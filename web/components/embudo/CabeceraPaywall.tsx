@@ -1,16 +1,16 @@
 'use client';
 
-// Cabecera del paywall: una sola fila como la del onboarding [izquierda | indicador
-// de 3 páginas | ✕], todo a 48px (docs/copy/embudo.md §2, elementos comunes). A la
-// izquierda: el logo en la página 1 y "‹ Atrás" en las páginas 2 y 3 (vuelve a la
-// anterior, igual que el atrás del navegador). El ✕ se ve desde el primer cuadro y
-// cierra en el primer toque: vuelve al plan sin ventanas ni frases de culpa (50 C1, C5).
+// Cabecera del paywall: una sola fila como la del onboarding [‹ Atrás | indicador
+// de 3 páginas | ✕], todo a 48px (docs/copy/embudo.md §2, elementos comunes). La
+// misma en las 3 páginas, sin logo (el logo llevaba a la landing: un toque sacaba
+// del embudo). "‹ Atrás" en la página 1 es un enlace a /onboarding (vuelve a su
+// resultado); en la 2 y la 3 vuelve a la anterior, igual que el atrás del navegador.
+// El ✕ se ve desde el primer cuadro y cierra en el primer toque: vuelve al plan sin
+// ventanas ni frases de culpa (50 C1, C5).
 
-import Link from 'next/link';
 import { motion } from 'motion/react';
 import { ChevronLeft, X } from 'lucide-react';
-import { LogoMarca } from './BarraProgreso';
-import { COMUN, llenar, PAYWALL_COMUN, TOTAL_PAGINAS_PAYWALL } from './textos';
+import { llenar, PAYWALL_COMUN, TOTAL_PAGINAS_PAYWALL } from './textos';
 
 const TOQUE =
   'inline-flex h-12 shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition-colors duration-150 hover:bg-[color-mix(in_oklab,var(--text-tertiary)_12%,transparent)] [touch-action:manipulation]';
@@ -23,21 +23,27 @@ export function CabeceraPaywall({
   /** 1..3 */
   pagina: number;
   hrefVolver: string;
-  /** Páginas 2 y 3: vuelve a la anterior. Sin él (página 1) va el logo. */
+  /** Páginas 2 y 3: vuelve a la anterior. Sin él (página 1), "‹ Atrás" lleva a hrefVolver. */
   onAtras?: () => void;
 }) {
   const etiqueta = llenar(PAYWALL_COMUN.indicador, { n: String(pagina) });
+  const claseAtras = `${TOQUE} gap-0.5 pr-3 pl-1 text-[16px] font-semibold`;
+  const contenidoAtras = (
+    <>
+      <ChevronLeft size={24} strokeWidth={2} aria-hidden="true" />
+      {PAYWALL_COMUN.atras}
+    </>
+  );
   return (
     <header className="sticky top-0 z-20 -mx-5 flex items-center gap-2 bg-[var(--bg)] px-3 pt-[max(8px,env(safe-area-inset-top))] pb-2">
       {onAtras ? (
-        <button type="button" onClick={onAtras} className={`${TOQUE} gap-0.5 pr-3 pl-1 text-[16px] font-semibold`}>
-          <ChevronLeft size={24} strokeWidth={2} aria-hidden="true" />
-          {PAYWALL_COMUN.atras}
+        <button type="button" onClick={onAtras} className={claseAtras}>
+          {contenidoAtras}
         </button>
       ) : (
-        <Link href="/" aria-label={COMUN.logo} className="inline-flex size-12 shrink-0 items-center justify-center rounded-full">
-          <LogoMarca />
-        </Link>
+        <a href={hrefVolver} className={claseAtras}>
+          {contenidoAtras}
+        </a>
       )}
       <div
         role="progressbar"

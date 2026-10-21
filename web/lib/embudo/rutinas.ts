@@ -75,8 +75,13 @@ export function rutinaDe(momento: Momento | undefined): Rutina {
 }
 
 /** Los primeros n pasos CON foto, para las tiras de fotos (una tira nunca muestra
- *  el ícono de reemplazo). Si la rutina tiene menos fotos, completa con los demás. */
+ *  el ícono de reemplazo). Prefiere fotos a sangre: un recorte de producto sobre
+ *  blanco (fondoClaro) entre fotos a sangre se lee como otro lenguaje, así que
+ *  solo entra si no hay n fotos a sangre. Se conserva el orden de la rutina. Si la
+ *  rutina tiene menos fotos, completa con los demás. */
 export function pasosConFoto(pasos: readonly PasoRutina[], n: number): PasoRutina[] {
+  const aSangre = pasos.filter((p) => p.foto && !p.fondoClaro);
+  if (aSangre.length >= n) return aSangre.slice(0, n);
   const conFoto = pasos.filter((p) => p.foto);
   return (conFoto.length >= n ? conFoto : [...conFoto, ...pasos.filter((p) => !p.foto)]).slice(0, n);
 }

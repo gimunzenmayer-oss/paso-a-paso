@@ -11,7 +11,8 @@
 //
 // Historial: cada página es una entrada del navegador (?p=2, ?p=3 con
 // history.pushState, que Next integra con su router). El atrás del sistema y el
-// botón "Atrás" de la cabecera vuelven a la página anterior, no fuera del paywall.
+// botón "Atrás" de la cabecera vuelven a la página anterior, no fuera del paywall;
+// en la página 1, "‹ Atrás" vuelve a /onboarding (su resultado).
 //
 // Checkout: NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL / _ANUAL (se fijan al compilar)
 // pasan por checkoutDe (lib/embudo/checkout.ts). Si alguno falta o no es un link https de Hotmart, la
@@ -125,10 +126,11 @@ export function Paywall() {
   }, [sinPlan, router]);
 
   const respuestas = progreso?.respuestas ?? {};
+  const nRespuestas = contarRespuestas(respuestas);
   const plan: Plan = planElegido ?? planUrl ?? progreso?.plan ?? 'anual';
   const v = {
     ...variablesDe(respuestas),
-    N: String(contarRespuestas(respuestas)),
+    N: String(nRespuestas),
     fecha_cobro: fecha ?? '',
     monto: PAYWALL_PRUEBA.monto[plan],
   };
@@ -145,9 +147,11 @@ export function Paywall() {
   let pantalla = null;
   if (progreso && !sinPlan && fecha !== null) {
     if (pagina === 0) {
-      pantalla = <PaywallResumen v={v} pasos={pasos} hrefVolver={hrefVolver} enfocar={navegado} onSeguir={() => ir(1)} />;
+      pantalla = (
+        <PaywallResumen v={v} pasos={pasos} respuestas={nRespuestas} hrefVolver={hrefVolver} enfocar={navegado} onSeguir={() => ir(1)} />
+      );
     } else if (pagina === 1) {
-      pantalla = <PaywallPrueba v={v} hrefVolver={hrefVolver} enfocar={navegado} onSeguir={() => ir(2)} />;
+      pantalla = <PaywallPrueba v={v} pasos={pasos} hrefVolver={hrefVolver} enfocar={navegado} onSeguir={() => ir(2)} />;
     } else {
       pantalla = (
         <PaywallPrecio
@@ -169,6 +173,7 @@ export function Paywall() {
         {/* overflow-x-clip: la entrada de cada página (x: 40px) no abre scroll horizontal. clip, no
             hidden: no crea un contenedor de scroll, así la cabecera y el pie siguen pegados (sticky). */}
         <div className="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col overflow-x-clip px-5">
+          {/* Página 1: sin onAtras, "‹ Atrás" es un enlace a hrefVolver (/onboarding, su resultado). */}
           <CabeceraPaywall pagina={pagina + 1} hrefVolver={hrefVolver} onAtras={pagina > 0 ? atras : undefined} />
           <main className="flex flex-1 flex-col pt-6">
             <AnimatePresence mode="wait" initial={false} custom={direccion}>

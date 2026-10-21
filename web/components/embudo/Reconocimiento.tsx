@@ -2,9 +2,10 @@
 
 // 1.5 Reconocimiento con etiqueta de identidad (50 A5, variante final).
 // Arriba, las 3 primeras fotos reales de SU rutina con el check verde en la
-// primera (TiraDeFotos: el mismo bloque del resumen del paywall). Así 1.5 y 1.6
-// hablan el mismo lenguaje de fotos, sin ilustración que parezca un esqueleto de
-// carga. Sin opciones, un solo botón. Entrada escalonada a 60 ms (entrada(i)).
+// primera (TiraDeFotos fluida: el mismo bloque, al ancho completo, en 1.5, 1.6 y el
+// resumen del paywall). Así 1.5 y 1.6 hablan el mismo lenguaje de fotos, sin
+// ilustración que parezca un esqueleto de carga. Sin opciones, un solo botón, que
+// dice a dónde lleva. Entrada escalonada a 60 ms (entrada(i)).
 
 import { motion } from 'motion/react';
 import { MarkedCopy } from '@/components/landing/MarkedCopy';
@@ -27,7 +28,7 @@ export function Reconocimiento({
   return (
     <div className="flex flex-1 flex-col">
       <motion.div {...entrada(0)} className="mb-6">
-        <TiraDeFotos pasos={pasos} tamano={72} className="w-fit" />
+        <TiraDeFotos pasos={pasos} tamano="fluida" />
       </motion.div>
       <motion.div {...entrada(1)}>
         <Titulo texto={llenar(RECONOCIMIENTO.titulo, v)} enfocar={enfocar} />

@@ -4,21 +4,11 @@
 // lleva al inicio; dos salidas iguales confunden). Barra fina (50 A2: línea de
 // 3px, acento sobre neutro, pill) que arranca en 10 % (progreso regalado) y nunca
 // retrocede: el ancho sale del paso más lejano alcanzado, no del abierto.
-// LogoMarca sigue aquí porque la usa la cabecera del paywall.
 
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { ChevronLeft, X } from 'lucide-react';
 import { COMUN, llenar, TOTAL_PASOS } from './textos';
-
-export function LogoMarca() {
-  return (
-    <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
-      <rect width="32" height="32" rx="9" fill="var(--accent)" />
-      <path d="M8 21h5v-5h5v-5h6" fill="none" stroke="var(--surface)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 const BOTON_ICONO =
   'inline-flex size-12 shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition-colors duration-150 hover:bg-[color-mix(in_oklab,var(--text-tertiary)_12%,transparent)] [touch-action:manipulation]';
@@ -33,7 +23,7 @@ export function BarraProgreso({
   porcentaje: number;
   /** 1..6 para el aria-label "Paso {n} de 6". */
   pasoVisible: number;
-  /** Sin función = sin botón (primer paso, cargando y resultado). */
+  /** Sin función = sin botón (primer paso y cargando). */
   onAtras?: () => void;
   onCerrar: () => void;
 }) {

@@ -38,6 +38,7 @@ import {
 // Pantallas: 0 nombre · 1 edad · 2 momento · 3 crisis · 4 reconocimiento · 5 compromiso · 6 cargando · 7 resultado.
 // En "cargando" la barra sigue en 85: llegar a 100 mientras dice "Armando…" contradice la pantalla.
 const PORCENTAJE = [10, 25, 40, 55, 70, 85, 85, 100] as const;
+const COMPROMISO = 5;
 const CARGANDO = 6;
 const RESULTADO = 7;
 
@@ -106,7 +107,11 @@ export function Onboarding() {
   const p = progreso ?? null;
   const paso = p?.paso ?? 0;
 
-  const atras = p && paso > 0 && paso < CARGANDO ? () => ir(paso - 1, -1) : undefined;
+  // Atrás en todos los pasos menos el primero y "armando el plan" (dura unos segundos y
+  // avanza solo). Desde el resultado vuelve al compromiso, saltando la carga: ahí puede
+  // tocar "Cambiar el momento" si la rutina que ve no es la que quería.
+  const atras =
+    p && paso > 0 && paso !== CARGANDO ? () => ir(paso === RESULTADO ? COMPROMISO : paso - 1, -1) : undefined;
   const cerrar = () => {
     if (p && paso < RESULTADO) enviarEvento('onboarding_abandonado', { paso: Math.min(paso + 1, TOTAL_PASOS) });
   };
@@ -172,7 +177,7 @@ export function Onboarding() {
               pasoCompletado(3);
               if (volverACompromiso) {
                 setVolverACompromiso(false);
-                ir(5);
+                ir(COMPROMISO);
               } else ir(3);
             }}
           />
@@ -219,12 +224,12 @@ export function Onboarding() {
             enfocar={navegado}
             onSeguir={() => {
               pasoCompletado(5);
-              ir(5);
+              ir(COMPROMISO);
             }}
           />
         );
         break;
-      case 5:
+      case COMPROMISO:
         pantalla = (
           <Compromiso
             v={v}
