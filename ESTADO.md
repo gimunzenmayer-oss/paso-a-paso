@@ -107,3 +107,8 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 ### Capa 4: animaciones (2026-10-21) ✅
 - Hecho: todos los botones y tarjetas tocables se encogen un poco al tocarlos (0,12 s) · cada pantalla nueva entra escalonada (60 ms entre bloques) y los 6 botones del modo niño también · opciones del diario hacen un pequeño "pop" al marcarse · al cambiar algo dentro de la misma pantalla (elegir tipo, Ver más) ya no salta arriba ni se repite la animación · todo se apaga con "Modo calma" y con "reducir movimiento" del teléfono · sw.js v12.
 - Verificado: typecheck ✓ · build ✓ · servidor ✓ · sin errores de página · con movimiento: animación "entrar" con 0/60/120 ms · con reducir movimiento: none · repintar conserva el scroll (400 → 400) y navegar vuelve arriba (0) · captura L4-entrada-80ms.png.
+### Capa 5: retención (2026-10-21, en curso)
+- Hecho: plan escrito en docs/copy/retencion.md (3 correos: bienvenida, activación al 3.er día, pago fallido; recordatorios posibles sin servidor; hoja de canales).
+- Garantía: la landing promete 30 días. Se mantiene el texto; la dueña debe configurar 30 días de garantía en Hotmart antes de vender.
+- Entrada de pago (onboarding → paywall → cuenta → acceso por Hotmart): se le preguntó a la usuaria si se construye ahora.
+- Funciones nuevas para decidir: notificaciones push; tarjeta «¿Cómo fue esta semana?» tras 7 días sin anotar.
