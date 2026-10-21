@@ -1,0 +1,171 @@
+/* Panel de la dueña: valores exactos de FICHA-ARTE.md (brand kit final).
+   Contraste verificado: texto 2º #52605A sobre fondo 5.96:1 y sobre hundido 5.50:1;
+   éxito sobre su fondo 4.57:1; error 5.05:1; aviso 5.76:1. */
+.panel {
+  --bg: #f2f4ef;
+  --surface: #fbfcf9;
+  --surface-2: #e6ece5;
+  --text-primary: #22302a;
+  --text-secondary: #52605a;
+  --text-tertiary: #52605a;
+  --ok: #3c7a57;
+  --ok-bg: #edf4ef;
+  --err: #9a4a3e;
+  --err-bg: #f5e6e2;
+  --warn: #6a5634;
+  --warn-bg: #f1e8d6;
+  --line: rgb(34 48 42 / 0.08);
+  --field-border: rgb(34 48 42 / 0.22);
+}
+
+/* Campos hundidos respecto de la tarjeta (nivel "hundido" de la ficha). */
+.panel .campo {
+  min-height: 48px;
+  width: 100%;
+  border-radius: var(--radius-button);
+  border: 1px solid var(--field-border);
+  background: var(--surface-2);
+  padding: 0 14px;
+  font-size: 18px;
+  color: var(--text-primary);
+  box-shadow: inset 0 1px 2px rgb(34 48 42 / 0.08);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+}
+.panel .campo:focus {
+  border-color: var(--accent-2);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-2) 22%, transparent);
+}
+.panel .campo[aria-invalid='true'] {
+  border-color: var(--err);
+}
+
+/* Entrada suave de cada bloque (spring de la ficha ≈ 300ms). Sin movimiento si la persona lo pidió. */
+@keyframes panel-entra {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.panel .entra {
+  animation: panel-entra 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.panel .entra:nth-child(2) { animation-delay: 60ms; }
+.panel .entra:nth-child(3) { animation-delay: 120ms; }
+.panel .entra:nth-child(4) { animation-delay: 180ms; }
+.panel .entra:nth-child(n + 5) { animation-delay: 240ms; }
+
+/* Firma de la ficha: el check salvia se dibuja (trazo) al aparecer. */
+@keyframes panel-trazo {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes panel-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+  }
+}
+.panel .check-vivo {
+  animation: panel-pop 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--retraso, 120ms);
+}
+.panel .check-vivo path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: panel-trazo 320ms ease-out forwards;
+  animation-delay: calc(var(--retraso, 120ms) + 140ms);
+}
+
+/* Tira de pasos (dispositivo de la marca): el círculo salvia se llena y luego se dibuja el check. */
+@keyframes panel-llena {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+}
+.panel .llena {
+  animation: panel-llena 300ms ease-out both;
+  animation-delay: var(--retraso, 120ms);
+}
+
+/* Barras que crecen desde su base (300ms, cada una 60ms después de la anterior). */
+@keyframes panel-crece-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes panel-crece-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+.panel .crece-y {
+  transform-origin: bottom;
+  animation: panel-crece-y 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.panel .crece-x {
+  transform-origin: left;
+  animation: panel-crece-x 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Lo que se despliega aparece suave, no de golpe. */
+.panel details[open] > :not(summary) {
+  animation: panel-entra 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes panel-pulso {
+  50% {
+    opacity: 0.55;
+  }
+}
+.panel .esqueleto {
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  animation: panel-pulso 1.4s ease-in-out infinite;
+}
+
+.panel .monto-fijo {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel .monto-anim {
+    display: none;
+  }
+  .panel .monto-fijo {
+    display: inline;
+  }
+  .panel .entra,
+  .panel .esqueleto,
+  .panel .check-vivo,
+  .panel .llena,
+  .panel .crece-x,
+  .panel .crece-y,
+  .panel details[open] > :not(summary) {
+    animation: none;
+  }
+  .panel .check-vivo path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .panel * {
+    transition-duration: 0ms !important;
+  }
+}

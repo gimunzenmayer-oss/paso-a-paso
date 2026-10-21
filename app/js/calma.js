@@ -198,6 +198,7 @@ window.PP = window.PP || {};
   // 2) VISTA DEL NIÑO
   // =====================================================
   PP.abrirCalma = function (que) {
+    if (PP.evento) PP.evento('calma_usada');
     if (que === 'respirar') return respirar();
     if (que === 'contar') return contar();
     if (que === 'ayuda') return ayuda();

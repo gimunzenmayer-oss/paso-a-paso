@@ -22,6 +22,12 @@ export default function Privacidad() {
       <ul>
         <li>Tu correo electrónico y los datos de tu compra, para darte acceso y gestionar la suscripción.</li>
         <li>Datos técnicos mínimos (fecha de acceso, tipo de navegador) para mantener el servicio seguro y funcionando.</li>
+        <li>
+          Estadísticas de uso <strong>anónimas</strong>: un número al azar que identifica al teléfono (no a ti ni a tu peque) y qué
+          funciones se usan, por ejemplo “se completó un paso de rutina”. Nunca el contenido: ni nombres, ni fotos, ni el diario.
+          Nos sirven para saber qué mejorar.
+        </li>
+        <li>Si la app falla, el mensaje técnico del error y la pantalla donde ocurrió, para poder arreglarlo.</li>
       </ul>
       <p>No recogemos el nombre, la edad ni el diagnóstico de tu peque fuera de tu teléfono.</p>
       <h2>3. Con quién se comparten (proveedores)</h2>

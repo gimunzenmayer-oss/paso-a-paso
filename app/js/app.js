@@ -71,6 +71,8 @@ window.PP = window.PP || {};
     if (opciones.raiz) historial = [];
     PP.actual = { nombre: nombre, params: params || {} };
     pintar();
+    var medir = { informe: 'informe_abierto', guiaFicha: 'guia_ficha_abierta' }[nombre];
+    if (medir && PP.evento) PP.evento(medir);
   };
 
   PP.atras = function () {

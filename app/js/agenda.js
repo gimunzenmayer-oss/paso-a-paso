@@ -314,9 +314,14 @@ window.PP = window.PP || {};
         if (t.hasAttribute('data-hecho')) {
           // 1) Guardar que está hecho  2) Refuerzo suave  3) Pasar al siguiente
           ocupado = true;
-          if (pr.hechos.indexOf(paso.id) < 0) pr.hechos.push(paso.id);
+          var nuevo = pr.hechos.indexOf(paso.id) < 0;
+          if (nuevo) pr.hechos.push(paso.id);
           PP.persistir();
-          if (pr.hechos.length === r.pasos.length) PP.anotarEstrella(r); // rutina terminada: ¡una estrella!
+          if (nuevo) PP.evento('rutina_paso_completado');
+          if (pr.hechos.length === r.pasos.length) {
+            PP.anotarEstrella(r); // rutina terminada: ¡una estrella!
+            if (nuevo) PP.evento('rutina_completada', { pasos: r.pasos.length });
+          }
           var frase = FRASES[pr.hechos.length % FRASES.length];
           $('.carta-paso', cont).classList.add('hecho');
           t.disabled = true;

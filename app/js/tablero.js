@@ -172,6 +172,7 @@ window.PP = window.PP || {};
   // 3) TABLERO DEL NIÑO (modo niño)
   // =====================================================
   PP.abrirTablero = function () {
+    if (PP.evento) PP.evento('tablero_usado');
     var t = tablero();
     var activa = t.categorias[0] ? t.categorias[0].id : null;  // pestaña elegida
     var ultimo = null;                                          // último botón tocado

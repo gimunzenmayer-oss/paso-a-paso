@@ -272,7 +272,7 @@ window.PP = window.PP || {};
         if (e.tipo === 'bueno') { e.intensidad = 0; e.duracion = ''; e.causas = []; e.ayudo = []; }
         delete e.ejemplo;
         var k = diario.findIndex(function (x) { return x.id === e.id; });
-        if (k >= 0) diario[k] = e; else diario.push(e);
+        if (k >= 0) diario[k] = e; else { diario.push(e); if (PP.evento) PP.evento('diario_nota_guardada'); }
         guardar().then(function () { PP.avisar('Guardado en el diario'); });
         PP.ir('diario', null, { raiz: true });
       };

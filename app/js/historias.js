@@ -135,6 +135,7 @@ window.PP = window.PP || {};
 
   PP.leerHistoria = function (id) {
     var h = buscar(id); if (!h) return;
+    if (PP.evento) PP.evento('historia_leida');
     var i = 0;
     PP.entrarModoNino(function (cont) {
       function dibujar() {

@@ -1,7 +1,7 @@
 # ESTADO — Paso a Paso
-Última actualización: 2026-10-20 | Sesión actual: 1 (Flujo C: mejorar app existente)
+Última actualización: 2026-10-21 | Sesión actual: 1 (Flujo C: mejorar app existente) | Panel de administración construido, en revisión visual
 
-⏸️ CHECKPOINT — Última acción completada: página de ventas construida + legales + auditoría / Siguiente acción exacta: aplicar revisión del revisor-visual → publicar vista previa → pedir datos de la responsable
+⏸️ CHECKPOINT — Última acción completada: panel de administración construido y probado (ronda 5 de revisión visual aplicada) / Siguiente acción exacta: pasar la ronda 6 del revisor-visual a Resumen, Clientes, Costos y Verificar (la ronda se cortó por límite de uso) → cerrar el panel → instalar la app de Claude en GitHub → publicar
 
 ## Qué es esta app (3 líneas máximo)
 PWA para madres/padres de niños autistas de 2 a 12 años (ejemplo: Mateo, 6). Dos zonas: "Espacio de Mateo" (niño, bloqueado con PIN) y zona de la familia (agenda visual, tablero de comunicación, temporizador, kit de calma con música, historias sociales, diario de crisis cifrado, logros, informe para profesionales, guía).
@@ -70,3 +70,14 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Supabase: no se crea aún. No hay login ni pagos construidos (onboarding → paywall → login van antes). Se crea en la etapa de Login.
 - ⚠️ Vercel Hobby no permite uso comercial: pasar a Pro (US$20/mes) antes de la primera venta.
 - La primera publicación es la página de ventas + app de ejemplo. Aún NO cobra: falta onboarding, paywall, login, webhook de Hotmart y correos (Resend). Gate de seguridad pendiente.
+
+## Panel de administración (2026-10-21)
+- Qué es: panel real (sin demos) conectado a Supabase de producción (uvubnzymrkqirdvneeds). Rutas: /admin (Resumen), /admin/clientes, /admin/costos, /admin/entrar, /admin/verificar. Código en web/app/admin, web/components/admin, web/lib/admin; base en supabase/migrations (13 archivos, todos aplicados en producción).
+- Seguridad: acceso solo para admin verificado EN EL SERVIDOR + segundo factor (código de Google Authenticator, aal2) + la base lo exige en cada consulta (private.assert_admin). Probado por HTTP: anónima → entrar; clienta normal → rechazada; admin sin código → verificar; admin con código → 200. La base niega admin_panel y admin_lista_clientes a una clienta normal.
+- Pruebas hechas: tsc limpio · eslint limpio · next build OK (13 rutas) · pruebas automáticas de formularios (anotar, validar, borrar, deshacer, quitar/dar acceso, deshacer acceso) sin errores · recarga en la primera vez muestra la misma clave.
+- Revisor visual (umbral ≥36/40 usabilidad y ≥16/20 craft). Ronda 5: Entrar LISTA 36/16 · Clientes 35/16 · Costos 35/16 · Verificar 34/16 · Resumen 32/15. Después se aplicaron los arreglos de la ronda 5 y se lanzó la ronda 6, que se CORTÓ por límite de uso (no hay veredicto de la ronda 6). Veredictos y capturas: docs/revisiones/admin-*. Pendiente: repetir la ronda 6 en Resumen, Clientes, Costos y Verificar; iterar hasta pasar.
+- Decisiones: CAC solo sobre canales con gasto (los gratis no abaratan el costo); cambios manuales de acceso siempre reversibles y con motivo; borrar costo/gasto se puede deshacer; un solo monto por mes y canal (reemplaza); la letra del panel es 13/18/24/28/36 (registrada en FICHA-ARTE.md, sin 15px); funciones de ingesta protegidas por llave que solo vive en el servidor; el aviso de Hotmart falla cerrado si no está verificado; admin_clientes antiguo queda sin uso.
+- Sin fecha de fin al "Dar acceso a mano": queda para la etapa de Login (hoy nada aplica vencimientos); el aviso "Ojo" previene.
+- Mejoras futuras (no se hicieron, cero features nuevas): contador de intentos restantes del código; marcar la fila recién anotada; "pagadores fantasma" (pagan y no usan la app, necesita login de clientas); conciliación con Hotmart; Sentry; editar gasto en anuncios sin reemplazar.
+- Pendientes de la dueña: (1) instalar la app de Claude en GitHub (gimunzenmayer-oss/paso-a-paso) para poder publicar; (2) después del primer despliegue, en Supabase poner la URL del sitio y la redirección /admin/auth/callback; (3) la clave hottok de Hotmart; (4) variables en Vercel: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, INGEST_KEY, HOTMART_HOTTOK y, opcional, NEXT_PUBLIC_SITE_URL; (5) ⚠ Vercel Pro cuesta US$20/mes y hace falta antes de vender; (6) ⚠ el envío de correos de Supabase está limitado a ~2 por hora hasta conectar un correo propio (Resend).
+- 🔒 Gate: panel sin claves secretas en el navegador ✓ · prueba cruzada de permisos ✓ (anónima/normal/admin) · límite de intentos del código (5 en 15 min) ✓ · aviso de Hotmart verificado ✓ (falla cerrado) · política de privacidad ✓. Quedan por revisar antes de vender: prueba cruzada con 2 clientas reales (cuando exista login de clientas) y la ronda 6 del revisor.
