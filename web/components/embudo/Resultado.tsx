@@ -6,23 +6,30 @@
 // El CTA se ve desde el inicio (no se esconde el camino), pero en variante
 // secundaria: la acción principal de esta pantalla es "¡Hecho!". Después del
 // toque pasa a lleno con un pulso. Una sola acción llena a la vez.
+// Bajo el CTA, la microlínea "7 días gratis · cancelas cuando quieras" SOLO si hay
+// checkout configurado (conCheckout): sin links de Hotmart no hay prueba que
+// activar y la línea prometería algo que no se puede hacer.
+// Los pasos 2..n entran escalonados (60 ms, la firma de FICHA-ARTE).
 
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { Hairline } from '@/components/landing/ui';
 import type { PasoRutina } from '@/lib/embudo/rutinas';
-import { Ayuda, CheckQueSeLlena, EnlacePrincipal, Miniatura, PieFijo, Titulo } from './ui';
+import { Ayuda, CheckQueSeLlena, EnlacePrincipal, entrada, Miniatura, PieFijo, Titulo } from './ui';
 import { llenar, RESULTADO, type Variables } from './textos';
 
 export function Resultado({
   v,
   pasos,
   hrefPlan,
+  conCheckout,
   enfocar,
 }: {
   v: Variables;
   pasos: readonly PasoRutina[];
   hrefPlan: string;
+  /** Hay links de Hotmart válidos (checkoutDe): solo entonces se promete la prueba. */
+  conCheckout: boolean;
   enfocar: boolean;
 }) {
   const [hecho, setHecho] = useState(false);
@@ -31,7 +38,7 @@ export function Resultado({
   return (
     <div className="flex flex-1 flex-col">
       <Titulo texto={llenar(RESULTADO.titulo, v)} enfocar={enfocar} />
-      <Ayuda>{RESULTADO.ayuda}</Ayuda>
+      <Ayuda>{llenar(RESULTADO.ayuda, v)}</Ayuda>
 
       {primero && (
         <Hairline emphasis surface="surface" className="mt-6 shadow-[var(--shadow-2)]">
@@ -63,7 +70,7 @@ export function Resultado({
             transition={{ duration: 0.3 }}
             className="text-[18px] leading-snug text-[var(--text-primary)]"
           >
-            {RESULTADO.despues}{' '}
+            {llenar(RESULTADO.despues, v)}{' '}
             <span className="font-semibold whitespace-nowrap text-[var(--accent)] tabular-nums">{llenar(RESULTADO.progreso, v)}</span>
           </motion.p>
         )}
@@ -71,11 +78,15 @@ export function Resultado({
 
       {/* pb-4: el último paso termina por encima del degradado del pie al llegar al final. */}
       <ol className="flex flex-col gap-2 pb-4">
-        {resto.map((p) => (
-          <li key={p.texto} className="flex items-center gap-3 rounded-[var(--radius-card)] bg-[var(--surface)] p-2 pr-3 shadow-[var(--shadow-1)]">
+        {resto.map((p, i) => (
+          <motion.li
+            key={p.texto}
+            {...entrada(i, 0.1)}
+            className="flex items-center gap-3 rounded-[var(--radius-card)] bg-[var(--surface)] p-2 pr-3 shadow-[var(--shadow-1)]"
+          >
             <Miniatura paso={p} tamano={56} />
             <span className="text-[18px] leading-snug text-[var(--text-primary)]">{p.texto}</span>
-          </li>
+          </motion.li>
         ))}
       </ol>
 
@@ -83,6 +94,7 @@ export function Resultado({
         <EnlacePrincipal href={hrefPlan} secundario={!hecho} resaltado={hecho}>
           {llenar(RESULTADO.cta, v)}
         </EnlacePrincipal>
+        {conCheckout && <p className="mt-1 text-center text-[13px] leading-tight text-[var(--text-secondary)]">{RESULTADO.confianza}</p>}
         <a
           href="/app/index.html"
           className="mx-auto flex min-h-12 items-center justify-center px-4 text-[16px] font-semibold text-[var(--text-secondary)] underline decoration-[color-mix(in_oklab,var(--text-secondary)_45%,transparent)] underline-offset-4"

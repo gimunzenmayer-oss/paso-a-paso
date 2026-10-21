@@ -5,10 +5,14 @@
 // - PreguntaUnica: chips que avanzan solos tras 300 ms con la elección visible.
 // - PreguntaVarias: chips que se marcan y desmarcan + "Seguir" siempre activo
 //   (sin elección muestra una pista amable en vez de bloquear, 50 A3).
+// Las opciones entran escalonadas (60 ms, la firma de FICHA-ARTE; con reducir
+// movimiento, solo el fundido). En 1.3 cada opción lleva la foto de su rutina.
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { motion } from 'motion/react';
 import { limpiarNombre } from '@/lib/embudo/estado';
-import { Ayuda, BotonPrincipal, BotonTexto, Opcion, PieFijo, Titulo } from './ui';
+import type { PasoRutina } from '@/lib/embudo/rutinas';
+import { Ayuda, BotonPrincipal, BotonTexto, entrada, Opcion, PieFijo, Titulo } from './ui';
 import { conMayuscula, MAX_LETRAS_NOMBRE, NOMBRE } from './textos';
 
 /* ── 1.1 Nombre del peque ──────────────────────────────────────────────────── */
@@ -58,14 +62,14 @@ export function NombrePeque({
         autoCorrect="off"
         spellCheck={false}
         enterKeyHint="next"
-        maxLength={40}
+        maxLength={MAX_LETRAS_NOMBRE}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? 'ayuda-nombre error-nombre' : 'ayuda-nombre'}
         className={`mt-8 h-14 w-full rounded-[var(--radius-button)] border bg-[var(--surface)] px-4 text-[18px] text-[var(--text-primary)] shadow-[var(--shadow-1)] outline-none placeholder:text-[var(--text-tertiary)] focus:border-2 focus:border-[var(--accent-2)] ${
-          error ? 'border-2 border-[#9A4A3E]' : 'border-[color-mix(in_oklab,var(--text-tertiary)_35%,transparent)]'
+          error ? 'border-2 border-[var(--error)]' : 'border-[color-mix(in_oklab,var(--text-tertiary)_35%,transparent)]'
         }`}
       />
-      <p id="error-nombre" role="alert" className="mt-2 min-h-6 text-[16px] leading-snug font-semibold text-[#9A4A3E]">
+      <p id="error-nombre" role="alert" className="mt-2 min-h-6 text-[16px] leading-snug font-semibold text-[var(--error)]">
         {error}
       </p>
       <PieFijo>
@@ -90,7 +94,7 @@ export function PreguntaUnica<T extends string>({
 }: {
   titulo: string;
   ayuda?: string;
-  opciones: readonly { id: T; label: string; subtexto?: string }[];
+  opciones: readonly { id: T; label: string; subtexto?: string; paso?: PasoRutina }[];
   elegida?: T;
   enfocar: boolean;
   /** Guarda la respuesta al instante (el chip queda marcado). */
@@ -120,8 +124,10 @@ export function PreguntaUnica<T extends string>({
       <Titulo texto={titulo} enfocar={enfocar} />
       {ayuda && <Ayuda>{ayuda}</Ayuda>}
       <div role="group" aria-labelledby="titulo-paso" className="mt-8 flex flex-col gap-3 pb-8">
-        {opciones.map((o) => (
-          <Opcion key={o.id} label={o.label} subtexto={o.subtexto} seleccionado={elegida === o.id} onClick={() => elegir(o.id)} />
+        {opciones.map((o, i) => (
+          <motion.div key={o.id} {...entrada(i, 0.1)}>
+            <Opcion label={o.label} subtexto={o.subtexto} paso={o.paso} seleccionado={elegida === o.id} onClick={() => elegir(o.id)} />
+          </motion.div>
         ))}
       </div>
     </div>
@@ -172,8 +178,10 @@ export function PreguntaVarias({
       <Ayuda>{ayuda}</Ayuda>
       {/* pb-8: la última opción queda por encima del degradado del pie. */}
       <div role="group" aria-labelledby="titulo-paso" className="mt-8 flex flex-col gap-3 pb-8">
-        {opciones.map((o) => (
-          <Opcion key={o.id} label={o.label} seleccionado={elegidas.includes(o.id)} onClick={() => alternar(o.id)} />
+        {opciones.map((o, i) => (
+          <motion.div key={o.id} {...entrada(i, 0.1)}>
+            <Opcion label={o.label} seleccionado={elegidas.includes(o.id)} onClick={() => alternar(o.id)} />
+          </motion.div>
         ))}
       </div>
       <PieFijo>

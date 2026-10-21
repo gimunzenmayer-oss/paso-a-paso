@@ -94,3 +94,17 @@ test('paywall: {N} cuenta solo respuestas vigentes (crisis con ids viejos no cue
   // Mezcla: cuenta, porque queda una opción vigente.
   assert.equal(contarRespuestas({ edad: '5-7', momento: 'dormir', crisis: ['cambia', 'llora'] }), 3);
 });
+
+test('rutinas: las tiras usan pasos con foto y 1.3 no repite foto entre opciones', async () => {
+  const { pasosConFoto, pasoQueRepresenta, rutinaDe } = await import('../lib/embudo/rutinas.ts');
+  const noche = pasosConFoto(rutinaDe('dormir').pasos, 3).map((p) => p.texto);
+  assert.deepEqual(noche, ['Cenar', 'Bañarse', 'Lavarse los dientes']);
+  const fotos = ['manana', 'comidas', 'escuela', 'dormir'].map((m) => pasoQueRepresenta(m).foto);
+  assert.ok(fotos.every(Boolean));
+  assert.equal(new Set(fotos).size, 4);
+});
+
+test('checkout: sin variables NEXT_PUBLIC_HOTMART_* no hay checkout (el resultado no promete la prueba)', async () => {
+  const { checkoutDe } = await import('../lib/embudo/checkout.ts');
+  assert.equal(checkoutDe('instagram'), null);
+});

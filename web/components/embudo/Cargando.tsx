@@ -6,17 +6,42 @@
 // 4 líneas aparecen ya marcadas y el texto es el mismo. Cada línea nombra su etapa
 // del Método (Antes · Durante · Después) y se marca con el mismo check que se
 // llena del resultado: el embudo tiene un solo check.
+// Las líneas van en una tarjeta con hairline (el plano de la superficie) y entran
+// escalonadas (60 ms). Al marcarse la línea 1 ("… pasos con fotos") aparecen esas
+// fotos: 3 miniaturas de su rutina, una tras otra. Quien ya vio la pantalla
+// (volvió después de "Cambiar el momento") no espera otra vez: `rapido` marca las
+// líneas a 350 ms.
 
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { CheckQueSeLlena, Titulo } from './ui';
+import { Hairline } from '@/components/landing/ui';
+import { pasosConFoto, type PasoRutina } from '@/lib/embudo/rutinas';
+import { CheckQueSeLlena, entrada, Miniatura, Titulo } from './ui';
 import { CARGANDO, llenar, type Variables } from './textos';
 
 const ENTRE_LINEAS_MS = 1100;
 const PAUSA_FINAL_MS = 700;
+/** Ya la vio: la misma secuencia, sin hacerla esperar otra vez. */
+const ENTRE_LINEAS_RAPIDO_MS = 350;
+const PAUSA_FINAL_RAPIDO_MS = 400;
 const LECTURA_REDUCIDO_MS = 2500;
+const LECTURA_REDUCIDO_RAPIDO_MS = 900;
 
-export function Cargando({ v, enfocar, onListo }: { v: Variables; enfocar: boolean; onListo: () => void }) {
+export function Cargando({
+  v,
+  pasos,
+  rapido,
+  enfocar,
+  onListo,
+}: {
+  v: Variables;
+  /** Los pasos de su rutina: la línea 1 muestra sus fotos al marcarse. */
+  pasos: readonly PasoRutina[];
+  /** true si ya llegó al resultado antes (alcanzado ≥ resultado). */
+  rapido: boolean;
+  enfocar: boolean;
+  onListo: () => void;
+}) {
   const reduce = useReducedMotion() === true;
   const [hechas, setHechas] = useState(0);
   const total = CARGANDO.lineas.length;
@@ -25,54 +50,68 @@ export function Cargando({ v, enfocar, onListo }: { v: Variables; enfocar: boole
 
   useEffect(() => {
     if (reduce) {
-      const t = setTimeout(onListo, LECTURA_REDUCIDO_MS);
+      const t = setTimeout(onListo, rapido ? LECTURA_REDUCIDO_RAPIDO_MS : LECTURA_REDUCIDO_MS);
       return () => clearTimeout(t);
     }
-    const tiempos = CARGANDO.lineas.map((_, i) => setTimeout(() => setHechas(i + 1), (i + 1) * ENTRE_LINEAS_MS));
-    tiempos.push(setTimeout(onListo, total * ENTRE_LINEAS_MS + PAUSA_FINAL_MS));
+    const paso = rapido ? ENTRE_LINEAS_RAPIDO_MS : ENTRE_LINEAS_MS;
+    const tiempos = CARGANDO.lineas.map((_, i) => setTimeout(() => setHechas(i + 1), (i + 1) * paso));
+    tiempos.push(setTimeout(onListo, total * paso + (rapido ? PAUSA_FINAL_RAPIDO_MS : PAUSA_FINAL_MS)));
     return () => tiempos.forEach(clearTimeout);
-  }, [reduce, onListo, total]);
+  }, [reduce, rapido, onListo, total]);
 
   return (
     <div className="flex flex-1 flex-col" aria-busy={!terminado}>
       <Titulo texto={llenar(CARGANDO.titulo, v)} enfocar={enfocar} />
-      <ul className="mt-8 flex flex-col gap-4">
-        {CARGANDO.lineas.map((linea, i) => {
-          const hecha = i < listas;
-          const activa = i === listas;
-          return (
-            <li
-              key={linea.texto}
-              className={`flex min-h-11 items-start gap-3 text-[18px] leading-[1.4] transition-opacity duration-200 ${
-                hecha || activa ? 'opacity-100' : 'opacity-40'
-              }`}
-            >
-              <span className="relative mt-0.5 inline-flex size-6 shrink-0 items-center justify-center">
-                <AnimatePresence initial={false} mode="wait">
-                  {hecha ? (
-                    <CheckQueSeLlena key="hecha" tamano={24} />
-                  ) : (
-                    <motion.span
-                      key="pendiente"
-                      aria-hidden="true"
-                      className={`inline-block size-[22px] rounded-full border-2 ${
-                        activa ? 'border-[var(--accent)]' : 'border-[color-mix(in_oklab,var(--text-tertiary)_50%,transparent)]'
-                      }`}
-                      animate={activa && !reduce ? { opacity: [1, 0.35, 1] } : { opacity: 1 }}
-                      transition={activa && !reduce ? { duration: 1, repeat: Infinity } : { duration: 0 }}
-                    />
-                  )}
-                </AnimatePresence>
-              </span>
-              <span className="flex min-w-0 flex-col">
-                <span className="text-[13px] leading-tight font-bold tracking-[0.06em] text-[var(--accent)] uppercase">{linea.etapa}</span>
-                <span>{llenar(linea.texto, v)}</span>
-              </span>
-            </li>
-          );
-        })}
-      </ul>
-      <p aria-live="polite" className="mt-8 min-h-7 text-[18px] font-semibold text-[var(--accent)]">
+      <Hairline surface="surface" className="mt-8 shadow-[var(--shadow-2)]">
+        <ul className="flex flex-col gap-4 p-4">
+          {CARGANDO.lineas.map((linea, i) => {
+            const hecha = i < listas;
+            const activa = i === listas;
+            return (
+              <motion.li key={linea.texto} {...entrada(i)} className="flex min-h-11 flex-col">
+                <span
+                  className={`flex items-start gap-3 text-[18px] leading-[1.4] transition-opacity duration-200 ${
+                    hecha || activa ? 'opacity-100' : 'opacity-40'
+                  }`}
+                >
+                  <span className="relative mt-0.5 inline-flex size-6 shrink-0 items-center justify-center">
+                    <AnimatePresence initial={false} mode="wait">
+                      {hecha ? (
+                        <CheckQueSeLlena key="hecha" tamano={24} />
+                      ) : (
+                        <motion.span
+                          key="pendiente"
+                          aria-hidden="true"
+                          className={`inline-block size-[22px] rounded-full border-2 ${
+                            activa ? 'border-[var(--accent)]' : 'border-[color-mix(in_oklab,var(--text-tertiary)_50%,transparent)]'
+                          }`}
+                          animate={activa && !reduce ? { opacity: [1, 0.35, 1] } : { opacity: 1 }}
+                          transition={activa && !reduce ? { duration: 1, repeat: Infinity } : { duration: 0 }}
+                        />
+                      )}
+                    </AnimatePresence>
+                  </span>
+                  <span className="flex min-w-0 flex-col">
+                    <span className="text-[13px] leading-tight font-bold tracking-[0.06em] text-[var(--accent)] uppercase">{linea.etapa}</span>
+                    <span>{llenar(linea.texto, v)}</span>
+                  </span>
+                </span>
+                {/* Línea 1 marcada: aparecen las fotos que promete (decorativas: el texto ya las nombra). */}
+                {i === 0 && hecha && (
+                  <span aria-hidden="true" className="mt-3 ml-9 flex gap-2">
+                    {pasosConFoto(pasos, 3).map((paso, j) => (
+                      <motion.span key={paso.texto} {...entrada(j)} className="inline-flex">
+                        <Miniatura paso={paso} tamano={56} />
+                      </motion.span>
+                    ))}
+                  </span>
+                )}
+              </motion.li>
+            );
+          })}
+        </ul>
+      </Hairline>
+      <p aria-live="polite" className="mt-6 min-h-7 text-[18px] font-semibold text-[var(--accent)]">
         {terminado ? llenar(CARGANDO.listo, v) : ''}
       </p>
     </div>

@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { Check, Shirt } from 'lucide-react';
 import { MarkedCopy } from '@/components/landing/MarkedCopy';
-import type { PasoRutina } from '@/lib/embudo/rutinas';
+import { pasosConFoto, type PasoRutina } from '@/lib/embudo/rutinas';
 
 /* ── <Titulo> — el único h1 del paso. Recibe el foco cuando se llega navegando
    (lectores de pantalla y teclado empiezan aquí, no en el botón que ya no existe). ── */
@@ -161,18 +161,23 @@ export function PieFijo({ children }: { children: ReactNode }) {
 }
 
 /* ── <Opcion> — chip de ancho completo, 60px+ (50 A2). Seleccionado: borde
-   acento 2px + fondo acento 10% + check que entra con escala. ── */
+   acento 2px + fondo acento 10% + check que entra con escala. El borde de 2px se
+   compensa con 1px menos de relleno: el texto no se corre al elegir. Con `paso`
+   (pregunta 1.3) lleva a la izquierda la foto real de esa rutina. ── */
 export function Opcion({
   label,
   subtexto,
+  paso,
   seleccionado,
   onClick,
 }: {
   label: string;
   subtexto?: string;
+  paso?: PasoRutina;
   seleccionado: boolean;
   onClick: () => void;
 }) {
+  const relleno = paso ? (seleccionado ? 'py-[7px] pl-[7px] pr-[15px]' : 'py-2 pl-2 pr-4') : seleccionado ? 'px-[15px] py-[11px]' : 'px-4 py-3';
   return (
     <motion.button
       type="button"
@@ -180,12 +185,13 @@ export function Opcion({
       onClick={onClick}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.12 }}
-      className={`flex min-h-[60px] w-full items-center gap-3 rounded-[var(--radius-button)] px-4 py-3 text-left [touch-action:manipulation] transition-[border-color,background-color] duration-150 ${
+      className={`flex min-h-[60px] w-full items-center gap-3 rounded-[var(--radius-button)] text-left [touch-action:manipulation] transition-[border-color,background-color] duration-150 ${relleno} ${
         seleccionado
           ? 'border-2 border-[var(--accent)] bg-[color-mix(in_oklab,var(--accent)_10%,var(--surface))]'
-          : 'border border-[color-mix(in_oklab,var(--text-tertiary)_30%,transparent)] bg-[var(--surface)] shadow-[var(--shadow-1)]'
+          : 'border border-[color-mix(in_oklab,var(--text-tertiary)_30%,transparent)] bg-[var(--surface)] shadow-[var(--shadow-2)]'
       }`}
     >
+      {paso && <Miniatura paso={paso} tamano={56} />}
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="text-[18px] leading-snug font-semibold text-[var(--text-primary)]">{label}</span>
         {subtexto && <span className="mt-0.5 text-[16px] leading-snug text-[var(--text-secondary)]">{subtexto}</span>}
@@ -218,29 +224,83 @@ export function Opcion({
 
 /* ── <Miniatura> — foto real de un paso (app/js/datos.js). Un solo tratamiento para
    todas: recorte cuadrado, fondo --surface-2, radio de botón (14) y un filo
-   interior suave, así una foto sobre blanco no se pierde contra la tarjeta. Sin
-   foto (p. ej. "Ponerse el pijama"): ícono lucide en el mismo marco, nunca emoji. ── */
-export function Miniatura({ paso, tamano }: { paso: PasoRutina; tamano: 56 | 72 }) {
-  const lado = tamano === 72 ? 'size-[72px]' : 'size-14';
+   interior suave, así una foto sobre blanco no se pierde contra la tarjeta. Una
+   foto de fondo blanco (fondoClaro) se funde con el marco (multiply): el blanco
+   toma el --surface-2 y no queda un cuadro blanco dentro del marco. Sin foto
+   (p. ej. "Ponerse el pijama"): ícono lucide en el mismo marco, nunca emoji.
+   tamano 'fluida' = llena el ancho de su celda (tiras en grilla), siempre cuadrada. ── */
+export function Miniatura({ paso, tamano }: { paso: PasoRutina; tamano: 40 | 56 | 72 | 'fluida' }) {
+  const fluida = tamano === 'fluida';
+  const lado = fluida ? 'aspect-square w-full' : tamano === 72 ? 'size-[72px]' : tamano === 56 ? 'size-14' : 'size-10';
+  const icono = fluida || tamano === 72 ? 30 : tamano === 56 ? 24 : 20;
+  const foto = `size-full object-cover ${paso.fondoClaro ? 'mix-blend-multiply' : ''}`;
   return (
     <span
       aria-hidden="true"
       className={`${lado} relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[var(--radius-button)] bg-[var(--surface-2)] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--text-tertiary)_22%,transparent)]`}
     >
       {paso.foto ? (
-        <Image src={paso.foto} alt="" width={tamano} height={tamano} sizes={`${tamano}px`} className="size-full object-cover" />
+        fluida ? (
+          <Image src={paso.foto} alt="" fill sizes="(max-width: 480px) 30vw, 144px" className={foto} />
+        ) : (
+          <Image src={paso.foto} alt="" width={tamano} height={tamano} sizes={`${tamano}px`} className={foto} />
+        )
       ) : (
-        <Shirt size={tamano === 72 ? 30 : 24} strokeWidth={1.8} color="var(--text-secondary)" aria-hidden="true" />
+        <Shirt size={icono} strokeWidth={1.8} color="var(--text-secondary)" aria-hidden="true" />
       )}
     </span>
   );
 }
 
+/* ── <TiraDeFotos> — el dispositivo propio de FICHA-ARTE: las primeras fotos CON
+   foto de su rutina sobre el plano hundido, con el check verde en la primera (el
+   paso cumplido). Decorativa: los pasos ya se nombran en el texto de al lado.
+   'fluida' reparte el ancho en 3 columnas iguales (resumen del paywall); 72 las
+   alinea a la izquierda (reconocimiento). Las fotos entran una a una (60 ms). ── */
+export function TiraDeFotos({
+  pasos,
+  tamano,
+  className = '',
+}: {
+  pasos: readonly PasoRutina[];
+  tamano: 72 | 'fluida';
+  className?: string;
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`rounded-[var(--radius-card)] bg-[var(--surface-2)] p-3 ${tamano === 'fluida' ? 'grid grid-cols-3 gap-3' : 'flex gap-3'} ${className}`}
+    >
+      {pasosConFoto(pasos, 3).map((paso, i) => (
+        <motion.span key={paso.texto} {...entrada(i)} className="relative flex">
+          <Miniatura paso={paso} tamano={tamano} />
+          {i === 0 && (
+            <span className="absolute -right-2 -bottom-2 inline-flex rounded-full bg-[var(--surface-2)] p-0.5">
+              <CheckQueSeLlena tamano={24} />
+            </span>
+          )}
+        </motion.span>
+      ))}
+    </div>
+  );
+}
+
+/* ── entrada(i) — el escalonado de la firma de movimiento (FICHA-ARTE: stagger
+   60 ms, ease-out 300 ms). Sube 8px y aparece; con reducir movimiento, el
+   MotionConfig de la página deja solo el fundido. ── */
+export function entrada(i: number, base = 0) {
+  return {
+    initial: { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.3, delay: base + 0.06 * i, ease: [0.16, 1, 0.3, 1] as const },
+  };
+}
+
 /* ── <CheckQueSeLlena> — EL check del embudo (la firma de movimiento de
    FICHA-ARTE): círculo de acento que aparece con spring y trazo que se dibuja.
-   Lo usan el resultado (48) y "armando el plan" (24). Con reducir movimiento
-   aparece ya lleno. ── */
-export function CheckQueSeLlena({ tamano = 48 }: { tamano?: 24 | 48 }) {
+   Lo usan el resultado (48), "armando el plan", las tiras y las listas (24) y los
+   chips de "Incluye" (16). Con reducir movimiento aparece ya lleno. ── */
+export function CheckQueSeLlena({ tamano = 48 }: { tamano?: 16 | 24 | 48 }) {
   const reduce = useReducedMotion() === true;
   return (
     <motion.svg
@@ -266,7 +326,7 @@ export function CheckQueSeLlena({ tamano = 48 }: { tamano?: 24 | 48 }) {
         d="M14 24.5l7 7 13-14"
         fill="none"
         stroke="var(--bg)"
-        strokeWidth={tamano === 24 ? 5 : 4}
+        strokeWidth={tamano === 48 ? 4 : tamano === 24 ? 5 : 6}
         strokeLinecap="round"
         strokeLinejoin="round"
         initial={{ pathLength: reduce ? 1 : 0 }}

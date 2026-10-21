@@ -11,6 +11,9 @@ export interface PasoRutina {
   texto: string;
   /** Foto real de la app. Sin foto en datos.js (p. ej. "Ponerse el pijama") → undefined. */
   foto?: string;
+  /** La foto tiene fondo blanco (recorte de producto): se funde con el marco
+   *  (mix-blend-multiply) en vez de dejar un cuadro blanco dentro de --surface-2. */
+  fondoClaro?: true;
 }
 
 export interface Rutina {
@@ -38,8 +41,8 @@ export const RUTINAS: Record<RutinaId, Rutina> = {
     nombre: 'Volver de la escuela',
     pasos: [
       { texto: 'Quitarse los zapatos', foto: '/app/img/zapatos.jpg' },
-      { texto: 'Lavarse las manos', foto: '/app/img/manos.jpg' },
-      { texto: 'Merendar', foto: '/app/img/manzana.jpg' },
+      { texto: 'Lavarse las manos', foto: '/app/img/manos.jpg', fondoClaro: true },
+      { texto: 'Merendar', foto: '/app/img/manzana.jpg', fondoClaro: true },
       { texto: 'Rato tranquilo', foto: '/app/img/tranquilo.jpg' },
       { texto: 'Jugar en el parque', foto: '/app/img/parque.jpg' },
     ],
@@ -49,7 +52,7 @@ export const RUTINAS: Record<RutinaId, Rutina> = {
     nombre: 'Noche',
     pasos: [
       { texto: 'Cenar', foto: '/app/img/cenar.jpg' },
-      { texto: 'Bañarse', foto: '/app/img/banarse.jpg' },
+      { texto: 'Bañarse', foto: '/app/img/banarse.jpg', fondoClaro: true },
       { texto: 'Ponerse el pijama' },
       { texto: 'Lavarse los dientes', foto: '/app/img/dientes.jpg' },
       { texto: 'Leer un cuento', foto: '/app/img/cuento.jpg' },
@@ -69,4 +72,20 @@ export const RUTINA_DE_MOMENTO: Record<Momento, RutinaId> = {
 
 export function rutinaDe(momento: Momento | undefined): Rutina {
   return RUTINAS[RUTINA_DE_MOMENTO[momento ?? 'manana']];
+}
+
+/** Los primeros n pasos CON foto, para las tiras de fotos (una tira nunca muestra
+ *  el ícono de reemplazo). Si la rutina tiene menos fotos, completa con los demás. */
+export function pasosConFoto(pasos: readonly PasoRutina[], n: number): PasoRutina[] {
+  const conFoto = pasos.filter((p) => p.foto);
+  return (conFoto.length >= n ? conFoto : [...conFoto, ...pasos.filter((p) => !p.foto)]).slice(0, n);
+}
+
+/** La foto que representa cada opción de la pregunta 1.3. Es el primer paso de su
+ *  rutina, salvo "Irse a dormir": su rutina ("Noche") empieza en "Cenar", la misma
+ *  foto que "Las comidas", así que muestra su propio paso, "Dormir". */
+export function pasoQueRepresenta(momento: Momento): PasoRutina {
+  const pasos = rutinaDe(momento).pasos;
+  if (momento === 'dormir') return pasos.find((p) => p.texto === 'Dormir') ?? pasos[0];
+  return pasos[0];
 }

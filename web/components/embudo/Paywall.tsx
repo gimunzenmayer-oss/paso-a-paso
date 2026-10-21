@@ -14,13 +14,13 @@
 // botón "Atrás" de la cabecera vuelven a la página anterior, no fuera del paywall.
 //
 // Checkout: NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL / _ANUAL (se fijan al compilar)
-// pasan por urlCheckout. Si alguno falta o no es un link https de Hotmart, la
+// pasan por checkoutDe (lib/embudo/checkout.ts). Si alguno falta o no es un link https de Hotmart, la
 // página 3 muestra el estado honesto (botón deshabilitado), nunca un enlace roto.
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, type Variants } from 'motion/react';
-import { urlCheckout, type Plan } from '@/lib/embudo/checkout';
+import { checkoutDe, type Plan } from '@/lib/embudo/checkout';
 import { contarRespuestas, fechaCobro } from '@/lib/embudo/prueba';
 import { rutinaDe } from '@/lib/embudo/rutinas';
 import { useProgreso } from './almacen';
@@ -29,18 +29,6 @@ import { PaywallResumen } from './PaywallResumen';
 import { PaywallPrueba } from './PaywallPrueba';
 import { PaywallPrecio } from './PaywallPrecio';
 import { PAYWALL_PRUEBA, TOTAL_PAGINAS_PAYWALL, variablesDe } from './textos';
-
-const BASES: Record<Plan, string | undefined> = {
-  mensual: process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL,
-  anual: process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_ANUAL,
-};
-
-/** Los dos links listos (con el canal de origen como sck), o null si falta alguno. */
-function checkoutCon(sck: string | undefined): Record<Plan, string> | null {
-  const mensual = urlCheckout(BASES.mensual, sck);
-  const anual = urlCheckout(BASES.anual, sck);
-  return mensual && anual ? { mensual, anual } : null;
-}
 
 /* Lecturas del teléfono que no cambian mientras la página está abierta. En el
    servidor (y al hidratar) valen null: la página se pinta cuando ya se conocen. */
@@ -153,19 +141,21 @@ export function Paywall() {
     sale: (d: 1 | -1) => ({ opacity: 0, x: reduce ? 0 : -24 * d, transition: { duration: 0.2, ease: 'easeIn' } }),
   };
 
+  const pasos = rutinaDe(respuestas.momento).pasos;
   let pantalla = null;
   if (progreso && !sinPlan && fecha !== null) {
     if (pagina === 0) {
-      pantalla = <PaywallResumen v={v} pasos={rutinaDe(respuestas.momento).pasos} hrefVolver={hrefVolver} enfocar={navegado} onSeguir={() => ir(1)} />;
+      pantalla = <PaywallResumen v={v} pasos={pasos} hrefVolver={hrefVolver} enfocar={navegado} onSeguir={() => ir(1)} />;
     } else if (pagina === 1) {
       pantalla = <PaywallPrueba v={v} hrefVolver={hrefVolver} enfocar={navegado} onSeguir={() => ir(2)} />;
     } else {
       pantalla = (
         <PaywallPrecio
           v={v}
+          pasos={pasos}
           plan={plan}
           onElegir={setPlanElegido}
-          checkout={checkoutCon(origen ?? undefined)}
+          checkout={checkoutDe(origen ?? undefined)}
           hrefVolver={hrefVolver}
           enfocar={navegado}
         />

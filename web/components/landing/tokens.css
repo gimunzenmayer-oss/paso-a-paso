@@ -34,6 +34,9 @@
 
   --accent-on-dark: #8cc0a3;  /* acento sobre la sección oscura del CTA final (≥4.5:1 sobre --text-primary) */
 
+  /* ── SEMÁNTICOS (FICHA-ARTE) ── */
+  --error: #9a4a3e;           /* error: texto y borde de un campo o acción que falló (embudo) */
+
   /* ── FORMA (radios del brand kit — UNO por rol, toda la página) ── */
   --radius-card: 18px;        /* ← reemplazar con FICHA-ARTE — cards, frames, secciones */
   --radius-button: 14px;      /* ← reemplazar con FICHA-ARTE — botones y chips de ícono */

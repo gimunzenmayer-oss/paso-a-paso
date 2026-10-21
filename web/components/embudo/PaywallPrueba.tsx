@@ -1,16 +1,26 @@
 'use client';
 
-// 2.2 Página 2 del paywall: la prueba día por día (50 C4, patrón Blinkist). Nodos
-// llenos para lo que pasa sin pagar (Hoy, Día 5) y nodo con borde para el día del
-// cobro, con su fecha exacta y el monto del plan elegido ({monto}). La línea se
-// dibuja una vez al entrar; con "reducir movimiento" aparece ya dibujada
+// 2.2 Página 2 del paywall: la prueba día por día (50 C4, patrón Blinkist). Tres
+// planos: el fondo, la línea de tiempo en una tarjeta con hairline (la superficie)
+// y la garantía en el plano hundido. El primer hito es una escena de su día (su
+// rutina de {momento} y la guía para cuando {crisis}), no una lista de funciones.
+// Nodo lleno de acento = acceso sin pagar (Hoy). El Día 5 es un aviso, no un
+// acceso: su nodo y su tramo van en la 2.ª nota de FICHA-ARTE (niebla, "después").
+// Nodo con borde = el día del cobro, con su fecha exacta y el monto del plan
+// elegido ({monto}). Cada tramo del riel y el texto de su hito entran al mismo
+// ritmo (0.15 + i·0.3 s); con "reducir movimiento" aparecen ya dibujados
 // (MotionConfig del paywall). El espacio entre hitos (pb-7) va en el texto, no en
 // el <li>: así el riel, que se estira a la altura del <li>, llega al nodo siguiente.
 
 import { motion } from 'motion/react';
+import { ShieldCheck } from 'lucide-react';
+import { Hairline } from '@/components/landing/ui';
 import { MarkedCopy } from '@/components/landing/MarkedCopy';
 import { BotonPrincipal, EnlaceTexto, PieFijo, Titulo } from './ui';
-import { llenar, PAYWALL_PRUEBA, type VariablesPaywall } from './textos';
+import { llenar, PAYWALL_PRUEBA, type Variables, type VariablesPaywall } from './textos';
+
+/** Ritmo del riel: cada hito entra 0.3 s después del anterior. */
+const ritmo = (i: number) => 0.15 + i * 0.3;
 
 export function PaywallPrueba({
   v,
@@ -18,7 +28,7 @@ export function PaywallPrueba({
   enfocar,
   onSeguir,
 }: {
-  v: VariablesPaywall;
+  v: Variables & VariablesPaywall;
   hrefVolver: string;
   enfocar: boolean;
   onSeguir: () => void;
@@ -28,42 +38,55 @@ export function PaywallPrueba({
     <div className="flex flex-1 flex-col">
       <Titulo texto={PAYWALL_PRUEBA.titulo} enfocar={enfocar} />
 
-      <ol className="mt-8 flex flex-col">
-        {PAYWALL_PRUEBA.linea.map((hito, i) => {
-          const cobro = i === ultimo;
-          return (
-            <li key={hito.cuando} className="relative flex gap-4">
-              {/* Riel: nodo + tramo hasta el siguiente hito (acento hasta el Día 5, neutro después). */}
-              <span aria-hidden="true" className="relative flex w-4 shrink-0 justify-center">
-                <span
-                  className={`relative z-10 mt-1.5 size-4 rounded-full ${
-                    cobro ? 'border-2 border-[var(--accent)] bg-[var(--bg)]' : 'bg-[var(--accent)]'
-                  }`}
-                />
-                {!cobro && (
-                  <motion.span
-                    className={`absolute top-[22px] -bottom-1.5 w-[2px] origin-top rounded-full ${
-                      i < ultimo - 1 ? 'bg-[var(--accent)]' : 'bg-[color-mix(in_oklab,var(--text-tertiary)_35%,transparent)]'
+      <Hairline emphasis surface="surface" className="mt-6 shadow-[var(--shadow-2)]">
+        <ol className="flex flex-col p-4">
+          {PAYWALL_PRUEBA.linea.map((hito, i) => {
+            const cobro = i === ultimo;
+            // El Día 5 (aviso) y su tramo hasta el cobro van en la 2.ª nota.
+            const aviso = i === ultimo - 1;
+            return (
+              <li key={hito.cuando} className="relative flex gap-4">
+                {/* Riel: nodo + tramo hasta el siguiente hito. */}
+                <span aria-hidden="true" className="relative flex w-4 shrink-0 justify-center">
+                  <span
+                    className={`relative z-10 mt-1.5 size-4 rounded-full ${
+                      cobro ? 'border-2 border-[var(--accent)] bg-[var(--surface)]' : aviso ? 'bg-[var(--accent-2)]' : 'bg-[var(--accent)]'
                     }`}
-                    initial={{ scaleY: 0 }}
-                    animate={{ scaleY: 1 }}
-                    transition={{ duration: 0.3, delay: 0.15 + i * 0.3, ease: 'easeOut' }}
                   />
-                )}
-              </span>
-              <div className={`min-w-0 ${cobro ? '' : 'pb-7'}`}>
-                <p className="text-[16px] font-bold text-[var(--accent)]">{llenar(hito.cuando, v)}</p>
-                <p className="mt-0.5 text-[18px] leading-snug font-semibold text-[var(--text-primary)]">{llenar(hito.titulo, v)}</p>
-                <p className="mt-0.5 text-[16px] leading-snug text-[var(--text-secondary)]">{hito.texto}</p>
-              </div>
-            </li>
-          );
-        })}
-      </ol>
+                  {!cobro && (
+                    <motion.span
+                      className={`absolute top-[22px] -bottom-1.5 w-[2px] origin-top rounded-full ${aviso ? 'bg-[var(--accent-2)]' : 'bg-[var(--accent)]'}`}
+                      initial={{ scaleY: 0 }}
+                      animate={{ scaleY: 1 }}
+                      transition={{ duration: 0.3, delay: ritmo(i), ease: 'easeOut' }}
+                    />
+                  )}
+                </span>
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: ritmo(i), ease: [0.16, 1, 0.3, 1] }}
+                  className={`min-w-0 ${cobro ? '' : 'pb-7'}`}
+                >
+                  <p className={`text-[16px] font-bold ${aviso ? 'text-[var(--accent-2)]' : 'text-[var(--accent)]'}`}>{llenar(hito.cuando, v)}</p>
+                  <p className="mt-0.5 text-[18px] leading-snug font-semibold text-[var(--text-primary)]">{llenar(hito.titulo, v)}</p>
+                  <p className="mt-0.5 text-[16px] leading-snug text-[var(--text-secondary)]">{llenar(hito.texto, v)}</p>
+                </motion.div>
+              </li>
+            );
+          })}
+        </ol>
+      </Hairline>
 
-      <p className="mt-8 text-[18px] leading-[1.45] text-[var(--text-primary)]">
-        <MarkedCopy text={PAYWALL_PRUEBA.debajo} />
-      </p>
+      {/* pb-6: la garantía termina por encima del degradado del pie. */}
+      <div className="pb-6">
+        <p className="mt-4 flex items-start gap-3 rounded-[var(--radius-card)] bg-[var(--surface-2)] p-4 text-[18px] leading-[1.45] text-[var(--text-primary)]">
+          <ShieldCheck size={22} strokeWidth={2} color="var(--accent)" aria-hidden="true" className="mt-0.5 shrink-0" />
+          <span>
+            <MarkedCopy text={PAYWALL_PRUEBA.debajo} />
+          </span>
+        </p>
+      </div>
 
       <PieFijo>
         <BotonPrincipal onClick={onSeguir}>{PAYWALL_PRUEBA.boton}</BotonPrincipal>

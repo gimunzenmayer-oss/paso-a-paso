@@ -50,7 +50,7 @@ export const OPCIONES_MOMENTO: readonly { id: Momento; label: string; subtexto: 
 export const CRISIS = {
   titulo: 'Cuando {nombre} se desborda, ¿[acento]qué pasa[/acento]?',
   ayuda: 'Elige las que pasen. No hay respuestas malas.',
-  boton: 'Seguir',
+  boton: 'Seguir armando su plan',
   saltar: 'Prefiero saltar esta',
   /** Pista si toca "Seguir" sin elegir ninguna (el botón nunca se bloquea). */
   pista: 'Elige al menos una o toca «Prefiero saltar esta».',
@@ -76,16 +76,18 @@ export function idsDeCrisis(crisis: readonly string[] | undefined): string[] {
 export const RECONOCIMIENTO = {
   titulo: 'Ya eres quien [acento]mejor conoce[/acento] a {nombre}',
   texto:
-    'En un minuto nombraste su momento difícil y qué pasa cuando {crisis}. Eso es [b]observar[/b], y es la base del [b]Método Antes, Durante y Después[/b].',
+    'En un minuto nombraste que {momento} cuesta y qué pasa cuando {crisis}. Eso es [b]observar[/b], y es la base del [b]Método Antes, Durante y Después[/b].',
   texto2: 'No es falta de paciencia. Es que {nombre} no sabe qué viene, y tú no tenías a mano qué hacer.',
   boton: 'Seguir',
 };
 
 export const COMPROMISO = {
   titulo: 'Mañana probamos la rutina de [acento]{momento}[/acento] con {nombre}',
-  tituloManana: 'Mañana temprano probamos [acento]su rutina de la mañana[/acento] con {nombre}',
-  ayuda: 'Una sola rutina, un día. Con eso basta para empezar.',
-  boton: 'Sí, mañana la probamos',
+  tituloManana: 'Mañana temprano probamos [acento]su rutina[/acento] con {nombre}',
+  ayuda: '{n_pasos} pasos con fotos, en este teléfono. Una sola rutina, un día, basta para empezar.',
+  /** Debajo de la ayuda: los pasos que no entran en la tira de 3 fotos ({n} = cuántos). */
+  masPasos: 'Y {n} pasos más:',
+  boton: 'Sí, la probamos mañana',
   cambiar: 'Cambiar el momento',
 };
 
@@ -98,17 +100,19 @@ export const CARGANDO = {
     { etapa: 'Durante', texto: 'Guía «¿Momento difícil?» a un toque' },
     { etapa: 'Después', texto: 'Diario para contarle a su terapeuta' },
   ],
-  listo: 'El plan de {nombre} está listo.',
+  listo: 'El plan de {nombre} está listo. Pruébalo ahora.',
 };
 
 export const RESULTADO = {
   titulo: 'La rutina de [acento]{momento}[/acento] de {nombre}',
-  ayuda: 'Toca «¡Hecho!» en el primer paso, como lo hará mañana.',
+  ayuda: 'Toca «¡Hecho!» en el primer paso, como lo hará {nombre} mañana.',
   hecho: '¡Hecho!',
   hechoAria: 'Marcar «{paso_1}» como hecho',
-  despues: 'Así se ve cada paso cumplido. Sin imprimir nada.',
+  despues: 'Así se ve cada paso cumplido. Sin imprimir nada. Y para cuando {crisis}, el kit de calma ya está en su plan.',
   progreso: '1 de {n_pasos}',
-  cta: 'Seguir con el plan de {nombre}',
+  cta: 'Quiero el plan de {nombre}',
+  /** Bajo el CTA, SOLO con checkout configurado: sin él no hay prueba que activar. */
+  confianza: '7 días gratis · cancelas cuando quieras',
   app: 'Primero quiero ver la app de ejemplo',
 };
 
@@ -127,11 +131,11 @@ export const PAYWALL_RESUMEN = {
   titulo: 'El plan de {nombre} para [acento]{momento}[/acento] está listo',
   subtitulo: 'Hecho con tus {N} respuestas, con el [b]Método Antes, Durante y Después[/b].',
   puntos: [
-    '[b]Antes[/b]: su rutina de {momento}, paso a paso y con fotos',
+    '[b]Antes[/b]: su rutina de {momento}, {n_pasos} pasos con fotos',
     '[b]Durante[/b]: kit de calma para cuando {crisis}',
     '[b]Después[/b]: su semana anotada, lista para la terapeuta',
   ],
-  perdida: 'Tu plan ya está en este teléfono. Falta activarlo.',
+  perdida: 'Tu plan ya está en este teléfono. [b]Pruébalo gratis 7 días[/b].',
   boton: 'Ver cómo funciona la prueba',
   salida: 'Ahora no',
 };
@@ -139,11 +143,11 @@ export const PAYWALL_RESUMEN = {
 export const PAYWALL_PRUEBA = {
   titulo: '[acento]7 días[/acento] para probarlo sin pagar',
   linea: [
-    { cuando: 'Hoy', titulo: 'Acceso completo', texto: 'Su rutina, el kit de calma y la guía' },
+    { cuando: 'Hoy', titulo: 'Hoy mismo, su rutina de {momento}', texto: 'Con fotos, el kit de calma y la guía para cuando {crisis}' },
     { cuando: 'Día 5', titulo: 'Te avisamos por correo', texto: '2 días antes de cualquier cobro' },
     { cuando: 'Día 7 · {fecha_cobro}', titulo: 'Empieza el cobro: {monto}', texto: 'Solo si sigues. Cancela antes y no pagas nada' },
   ],
-  debajo: 'Y después, 30 días de la [b]Garantía del Día Tranquilo[/b].',
+  debajo: 'Y después, 30 días de la [b]Garantía del Día Tranquilo[/b]: si no te ayuda, te devolvemos todo.',
   /** {monto} del Día 7 según el plan elegido (precios de §2.3). */
   monto: { anual: 'US$59.90 al año', mensual: 'US$7.99 al mes' },
   boton: 'Ver precios',
@@ -152,7 +156,9 @@ export const PAYWALL_PRUEBA = {
 
 export const PAYWALL_PRECIO = {
   titulo: 'Días más [acento]predecibles[/acento] para {nombre}, desde hoy',
-  subtitulo: 'Empiezas gratis. Eliges cómo seguir después.',
+  subtitulo: 'Mañana {nombre} ya sabe qué viene. Empiezas gratis y eliges cómo seguir después.',
+  /** Junto a la tira de 3 fotos de su rutina, sobre "Incluye". */
+  rutinaLista: 'Su rutina de {momento} ya está armada',
   /** Qué incluye el plan (nombres de la app y de la landing §6). */
   incluyeTitulo: 'Incluye:',
   incluye: ['Su rutina con fotos', 'Kit de calma', 'Guía «Ahora mismo»', 'Diario e informe'],
@@ -174,7 +180,9 @@ export const PAYWALL_PRECIO = {
   /** El mismo CTA de la oferta de la landing (§6). */
   boton: 'Empezar mis 7 días gratis',
   abriendo: 'Abriendo Hotmart…',
-  /** Justo bajo el botón: la garantía con su condición (landing §7). */
+  /** En el pie fijo, bajo el botón: una sola línea (el error de Hotmart la reemplaza). */
+  garantiaCorta: '[b]Garantía del Día Tranquilo[/b] · 30 días',
+  /** En el flujo, justo debajo del pie: la garantía con su condición (landing §7). */
   garantia:
     '[b]Garantía del Día Tranquilo[/b]: si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo.',
   confianza: ['Hoy no pagas nada · primer cobro el {fecha_cobro}', 'Cancelas en Hotmart cuando quieras'],

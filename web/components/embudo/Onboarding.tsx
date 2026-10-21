@@ -12,8 +12,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, type Variants } from 'motion/react';
 import type { Respuestas } from '@/lib/embudo/estado';
-import type { Plan } from '@/lib/embudo/checkout';
-import { rutinaDe } from '@/lib/embudo/rutinas';
+import { checkoutDe, type Plan } from '@/lib/embudo/checkout';
+import { pasoQueRepresenta, rutinaDe } from '@/lib/embudo/rutinas';
 import { enviarEvento } from '@/lib/eventos-cliente';
 import { actualizar, estadoNuevo, guardar, leerProgreso, ULTIMA_PANTALLA, useProgreso, type Progreso } from './almacen';
 import { BarraProgreso } from './BarraProgreso';
@@ -40,6 +40,12 @@ import {
 const PORCENTAJE = [10, 25, 40, 55, 70, 85, 85, 100] as const;
 const CARGANDO = 6;
 const RESULTADO = 7;
+
+// 1.3 con la foto de cada rutina (la pregunta que define la rutina la muestra).
+const OPCIONES_MOMENTO_CON_FOTO = OPCIONES_MOMENTO.map((o) => ({ ...o, paso: pasoQueRepresenta(o.id) }));
+
+// Links de Hotmart fijados al compilar: el resultado promete la prueba solo si existen.
+const CON_CHECKOUT = checkoutDe() !== null;
 
 // Un inicio = un evento, aunque React monte el componente dos veces (modo desarrollo).
 let inicioContado = false;
@@ -158,7 +164,7 @@ export function Onboarding() {
           <PreguntaUnica
             titulo={MOMENTO.titulo}
             ayuda={MOMENTO.ayuda}
-            opciones={OPCIONES_MOMENTO}
+            opciones={OPCIONES_MOMENTO_CON_FOTO}
             elegida={r.momento}
             enfocar={navegado}
             onElegir={(momento) => conRespuestas((x) => ({ ...x, momento }))}
@@ -209,6 +215,7 @@ export function Onboarding() {
         pantalla = (
           <Reconocimiento
             v={v}
+            pasos={rutina.pasos}
             enfocar={navegado}
             onSeguir={() => {
               pasoCompletado(5);
@@ -236,11 +243,18 @@ export function Onboarding() {
         );
         break;
       case CARGANDO:
-        pantalla = <Cargando v={v} enfocar={navegado} onListo={planListo} />;
+        // Ya llegó al resultado antes (p. ej. volvió por "Cambiar el momento"): no espera otra vez.
+        pantalla = <Cargando v={v} pasos={rutina.pasos} rapido={p.alcanzado >= RESULTADO} enfocar={navegado} onListo={planListo} />;
         break;
       default:
         pantalla = (
-          <Resultado v={v} pasos={rutina.pasos} hrefPlan={`/paywall${p.plan ? `?plan=${p.plan}` : ''}`} enfocar={navegado} />
+          <Resultado
+            v={v}
+            pasos={rutina.pasos}
+            hrefPlan={`/paywall${p.plan ? `?plan=${p.plan}` : ''}`}
+            conCheckout={CON_CHECKOUT}
+            enfocar={navegado}
+          />
         );
     }
   }

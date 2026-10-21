@@ -23,3 +23,18 @@ export function urlCheckout(base: string | undefined, sck?: string): string | nu
   if (canal) url.searchParams.set('sck', canal);
   return url.toString();
 }
+
+// Links base de cada plan. Next los fija al compilar (NEXT_PUBLIC_*): el mismo
+// valor en /onboarding (microlínea de confianza del resultado) y en /paywall.
+const BASES: Record<Plan, string | undefined> = {
+  mensual: process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL,
+  anual: process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_ANUAL,
+};
+
+/** Los dos links listos (con el canal de origen como sck), o null si falta alguno
+ *  o no es válido: entonces no hay prueba que activar (estado honesto). */
+export function checkoutDe(sck?: string): Record<Plan, string> | null {
+  const mensual = urlCheckout(BASES.mensual, sck);
+  const anual = urlCheckout(BASES.anual, sck);
+  return mensual && anual ? { mensual, anual } : null;
+}
