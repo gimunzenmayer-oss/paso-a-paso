@@ -71,6 +71,13 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - ⚠️ Vercel Hobby no permite uso comercial: pasar a Pro (US$20/mes) antes de la primera venta.
 - La primera publicación es la página de ventas + app de ejemplo. Aún NO cobra: falta onboarding, paywall, login, webhook de Hotmart y correos (Resend). Gate de seguridad pendiente.
 
+## Publicación — intento 2 (2026-10-21)
+- Pre-vuelo OK: tsc limpio · next build OK (16 rutas) · npm audit 0 · sin secretos en código · solo NEXT_PUBLIC_ públicos (URL y publishable de Supabase).
+- Supabase uvubnzymrkqirdvneeds: 13 migraciones aplicadas · RLS en todas las tablas public · advisors: sin ERROR; WARN de funciones SECURITY DEFINER es intencional (ingesta exige llave, admin exige private.assert_admin) · performance solo INFO (índices sin uso, aún no hay datos).
+- Código guardado localmente con commit "feat: MVP inicial" (f0cdf75) en main. Aún sin remoto.
+- Bloqueos (dueña): repo privado vacío gimunzenmayer-oss/paso-a-paso no existe · app de Claude en GitHub sin instalar · Vercel sin conexión con GitHub (git_namespaces vacío).
+- Plan al desbloquear: push → proyecto Vercel con raíz web/ (Next.js) → variables (URL y publishable de Supabase, INGEST_KEY nueva rotada en private.app_secrets, HOTMART_HOTTOK cuando llegue) → desplegar → revisar consola → URL del sitio y /admin/auth/callback en Supabase Auth (paso de la dueña).
+
 ## Panel de administración (2026-10-21)
 - Qué es: panel real (sin demos) conectado a Supabase de producción (uvubnzymrkqirdvneeds). Rutas: /admin (Resumen), /admin/clientes, /admin/costos, /admin/entrar, /admin/verificar. Código en web/app/admin, web/components/admin, web/lib/admin; base en supabase/migrations (13 archivos, todos aplicados en producción).
 - Seguridad: acceso solo para admin verificado EN EL SERVIDOR + segundo factor (código de Google Authenticator, aal2) + la base lo exige en cada consulta (private.assert_admin). Probado por HTTP: anónima → entrar; clienta normal → rechazada; admin sin código → verificar; admin con código → 200. La base niega admin_panel y admin_lista_clientes a una clienta normal.
