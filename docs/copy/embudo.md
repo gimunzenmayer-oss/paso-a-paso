@@ -25,7 +25,7 @@ Voz: español latino neutro, tuteo, cálido, sin culpa, sin "berrinche", sin "tr
 ## 1. Onboarding (`/onboarding`)
 
 Hay 6 pasos con barra (4 preguntas, el reconocimiento y el compromiso). Después vienen la pantalla "armando el plan" y el resultado.
-La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 · 100 (al cargar).
+La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 (sigue en 85 mientras arma el plan) · 100 (con el resultado).
 
 ### Elementos comunes
 | Elemento | Texto |
@@ -33,7 +33,7 @@ La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 · 
 | Atrás (aria-label) | Volver a la pregunta anterior |
 | Barra (aria-label) | Paso {n} de 6 |
 | Cerrar (aria-label, esquina) | Salir y volver al inicio |
-| Logo (aria-label) | Paso a Paso, ir al inicio |
+| Logo (aria-label, solo en `/paywall`; el onboarding no lleva logo) | Paso a Paso, ir al inicio |
 
 ### 1.1 Nombre del peque (se puede saltar)
 - Título: ¿Cómo se llama [acento]tu peque[/acento]?
@@ -42,7 +42,7 @@ La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 · 
 - Placeholder: Ej. Mateo
 - Botón: Seguir
 - Saltar: Prefiero no decirlo
-- Error, el campo está vacío y toca Seguir: Escribe su nombre o toca "Prefiero no decirlo".
+- Error, el campo está vacío y toca Seguir: Escribe su nombre o toca «Prefiero no decirlo».
 - Error, más de 20 letras: Usa un nombre o apodo de hasta 20 letras.
 
 ### 1.2 Edad
@@ -70,18 +70,19 @@ La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 · 
 ### 1.4 Qué pasa en una crisis
 - Título: Cuando {nombre} se desborda, ¿[acento]qué pasa[/acento]?
 - Ayuda: Elige las que pasen. No hay respuestas malas.
-- Opciones (varias; el botón se activa con 1):
+- Opciones (varias, máximo 4):
 
 | Opción (label) | `{crisis}` (texto corto) |
 |---|---|
 | Llora o grita fuerte | llora o grita |
-| Se tira al piso | se tira al piso |
+| Se tira al piso o golpea | se tira al piso o golpea |
 | Se tapa los oídos o se esconde | necesita esconderse |
-| Se golpea o golpea cosas | se golpea o golpea cosas |
-| Se queda callado y se cierra | se cierra |
-| Cambia cada vez | se desborda |
+| Se queda en silencio y se cierra | se cierra |
 
-- Botón: Seguir
+> Quitadas (2026-10-21, revisión visual): "Se golpea o golpea cosas" se fusionó con "Se tira al piso", y "Cambia cada vez" se quitó porque equivale a "Prefiero saltar esta".
+
+- Botón: Seguir (siempre activo)
+- Pista si toca Seguir sin elegir ninguna: Elige al menos una o toca «Prefiero saltar esta».
 - Saltar: Prefiero saltar esta (`{crisis}` = "se desborda")
 - Si elige varias, `{crisis}` usa la primera.
 
@@ -97,28 +98,29 @@ Lleva una ilustración propia, sin opciones y con un solo botón.
 - Ayuda: Una sola rutina, un día. Con eso basta para empezar.
 - Botón principal: Sí, mañana la probamos
 - Enlace secundario: Cambiar el momento (vuelve a 1.3)
-- Si `{momento}` es "la mañana", el título cambia a: Mañana temprano probamos su rutina de la mañana con {nombre}
+- Si `{momento}` es "la mañana", el título cambia a: Mañana temprano probamos [acento]su rutina de la mañana[/acento] con {nombre}
 
 ### 1.7 Cargando: armando el plan
 Dura de 4 a 6 segundos. Cada línea recibe su check, una tras otra.
 - Título: Armando el plan de [acento]{nombre}[/acento]…
-- Línea 1: Rutina de {momento}: {n_pasos} pasos con fotos
-- Línea 2: Kit de calma para cuando {crisis}
-- Línea 3: Guía "¿Momento difícil?" a un toque
-- Línea 4: Diario para contarle a su terapeuta
+- Cada línea lleva arriba su etapa del Método, en etiqueta: ANTES, DURANTE, DURANTE, DESPUÉS.
+- Línea 1 (Antes): Rutina de {momento}: {n_pasos} pasos con fotos
+- Línea 2 (Durante): Kit de calma para cuando {crisis}
+- Línea 3 (Durante): Guía «¿Momento difícil?» a un toque
+- Línea 4 (Después): Diario para contarle a su terapeuta
 - Al terminar (aria-live): El plan de {nombre} está listo.
 - Con "reducir movimiento": las 4 líneas aparecen ya marcadas y el texto es el mismo.
 
 ### 1.8 Resultado: su rutina real con "¡Hecho!"
 - Título: La rutina de [acento]{momento}[/acento] de {nombre}
-- Ayuda: Toca "¡Hecho!" en el primer paso, como lo hará mañana.
+- Ayuda: Toca «¡Hecho!» en el primer paso, como lo hará mañana.
 - Lista: los pasos reales de la rutina elegida en `datos.js` (texto y foto). Solo el paso 1 tiene botón.
 - Botón del paso 1: ¡Hecho!
-- Botón del paso 1 (aria-label): Marcar "{paso_1}" como hecho
+- Botón del paso 1 (aria-label): Marcar «{paso_1}» como hecho
 - Después de tocar:
   - texto: Así se ve cada paso cumplido. Sin imprimir nada.
   - progreso: 1 de {n_pasos}
-- CTA (se ve de inmediato y se resalta después del toque): Seguir con el plan de {nombre}
+- CTA (se ve de inmediato en estilo secundario y pasa a principal después del toque): Seguir con el plan de {nombre}
 - Enlace: Primero quiero ver la app de ejemplo (→ `/app`)
 
 ---

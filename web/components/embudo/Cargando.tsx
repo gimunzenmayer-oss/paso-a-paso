@@ -3,12 +3,13 @@
 // 1.7 "Armando el plan" (50 B): no es relleno, es el inicio del pitch. Cada línea
 // usa una respuesta real y recibe su check, una tras otra (≈4,4 s + pausa de
 // 0,7 s con todo listo). Sin botones y sin atrás. Con "reducir movimiento" las
-// 4 líneas aparecen ya marcadas y el texto es el mismo.
+// 4 líneas aparecen ya marcadas y el texto es el mismo. Cada línea nombra su etapa
+// del Método (Antes · Durante · Después) y se marca con el mismo check que se
+// llena del resultado: el embudo tiene un solo check.
 
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { CheckCustom } from '@/components/landing/ui';
-import { Titulo } from './ui';
+import { CheckQueSeLlena, Titulo } from './ui';
 import { CARGANDO, llenar, type Variables } from './textos';
 
 const ENTRE_LINEAS_MS = 1100;
@@ -41,28 +42,20 @@ export function Cargando({ v, enfocar, onListo }: { v: Variables; enfocar: boole
           const activa = i === listas;
           return (
             <li
-              key={linea}
+              key={linea.texto}
               className={`flex min-h-11 items-start gap-3 text-[18px] leading-[1.4] transition-opacity duration-200 ${
                 hecha || activa ? 'opacity-100' : 'opacity-40'
               }`}
             >
-              <span className="relative inline-flex size-[22px] shrink-0 items-center justify-center">
+              <span className="relative mt-0.5 inline-flex size-6 shrink-0 items-center justify-center">
                 <AnimatePresence initial={false} mode="wait">
                   {hecha ? (
-                    <motion.span
-                      key="hecha"
-                      initial={{ scale: 0.5, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ type: 'spring', stiffness: 420, damping: 26 }}
-                      className="inline-flex"
-                    >
-                      <CheckCustom />
-                    </motion.span>
+                    <CheckQueSeLlena key="hecha" tamano={24} />
                   ) : (
                     <motion.span
                       key="pendiente"
                       aria-hidden="true"
-                      className={`mt-0.5 inline-block size-[18px] rounded-full border-2 ${
+                      className={`inline-block size-[22px] rounded-full border-2 ${
                         activa ? 'border-[var(--accent)]' : 'border-[color-mix(in_oklab,var(--text-tertiary)_50%,transparent)]'
                       }`}
                       animate={activa && !reduce ? { opacity: [1, 0.35, 1] } : { opacity: 1 }}
@@ -71,7 +64,10 @@ export function Cargando({ v, enfocar, onListo }: { v: Variables; enfocar: boole
                   )}
                 </AnimatePresence>
               </span>
-              <span>{llenar(linea, v)}</span>
+              <span className="flex min-w-0 flex-col">
+                <span className="text-[13px] leading-tight font-bold tracking-[0.06em] text-[var(--accent)] uppercase">{linea.etapa}</span>
+                <span>{llenar(linea.texto, v)}</span>
+              </span>
             </li>
           );
         })}

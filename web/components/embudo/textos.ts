@@ -21,7 +21,7 @@ export const NOMBRE = {
   placeholder: 'Ej. Mateo',
   boton: 'Seguir',
   saltar: 'Prefiero no decirlo',
-  errorVacio: 'Escribe su nombre o toca "Prefiero no decirlo".',
+  errorVacio: 'Escribe su nombre o toca «Prefiero no decirlo».',
   errorLargo: 'Usa un nombre o apodo de hasta 20 letras.',
 };
 /** Tope de la interfaz (el copy dice 20 letras; limpiarNombre corta en 30 como tope duro). */
@@ -52,18 +52,26 @@ export const CRISIS = {
   ayuda: 'Elige las que pasen. No hay respuestas malas.',
   boton: 'Seguir',
   saltar: 'Prefiero saltar esta',
+  /** Pista si toca "Seguir" sin elegir ninguna (el botón nunca se bloquea). */
+  pista: 'Elige al menos una o toca «Prefiero saltar esta».',
   /** {crisis} cuando salta la pregunta. */
   porDefecto: 'se desborda',
 };
 // Los ids son los que se guardan en pp_onboarding.respuestas.crisis.
+// Máximo 4 (carga cognitiva): "Se golpea o golpea cosas" se fusionó en "piso" y
+// "Cambia cada vez" se quitó (equivale a "Prefiero saltar esta"). Un id viejo
+// guardado en el teléfono ('golpea', 'cambia') se ignora: ver idsDeCrisis().
 export const OPCIONES_CRISIS: readonly { id: string; label: string; corto: string }[] = [
   { id: 'llora', label: 'Llora o grita fuerte', corto: 'llora o grita' },
-  { id: 'piso', label: 'Se tira al piso', corto: 'se tira al piso' },
+  { id: 'piso', label: 'Se tira al piso o golpea', corto: 'se tira al piso o golpea' },
   { id: 'esconde', label: 'Se tapa los oídos o se esconde', corto: 'necesita esconderse' },
-  { id: 'golpea', label: 'Se golpea o golpea cosas', corto: 'se golpea o golpea cosas' },
-  { id: 'cierra', label: 'Se queda callado y se cierra', corto: 'se cierra' },
-  { id: 'cambia', label: 'Cambia cada vez', corto: 'se desborda' },
+  { id: 'cierra', label: 'Se queda en silencio y se cierra', corto: 'se cierra' },
 ];
+
+/** Las respuestas de crisis que siguen siendo opciones, en el orden en que se tocaron. */
+export function idsDeCrisis(crisis: readonly string[] | undefined): string[] {
+  return (crisis ?? []).filter((id) => OPCIONES_CRISIS.some((o) => o.id === id));
+}
 
 export const RECONOCIMIENTO = {
   titulo: 'Ya eres quien [acento]mejor conoce[/acento] a {nombre}',
@@ -75,7 +83,7 @@ export const RECONOCIMIENTO = {
 
 export const COMPROMISO = {
   titulo: 'Mañana probamos la rutina de [acento]{momento}[/acento] con {nombre}',
-  tituloManana: 'Mañana temprano probamos su rutina de la mañana con {nombre}',
+  tituloManana: 'Mañana temprano probamos [acento]su rutina de la mañana[/acento] con {nombre}',
   ayuda: 'Una sola rutina, un día. Con eso basta para empezar.',
   boton: 'Sí, mañana la probamos',
   cambiar: 'Cambiar el momento',
@@ -83,20 +91,21 @@ export const COMPROMISO = {
 
 export const CARGANDO = {
   titulo: 'Armando el plan de [acento]{nombre}[/acento]…',
+  /** Cada línea lleva su etapa del Método (la misma de §2.1 del paywall). */
   lineas: [
-    'Rutina de {momento}: {n_pasos} pasos con fotos',
-    'Kit de calma para cuando {crisis}',
-    'Guía "¿Momento difícil?" a un toque',
-    'Diario para contarle a su terapeuta',
+    { etapa: 'Antes', texto: 'Rutina de {momento}: {n_pasos} pasos con fotos' },
+    { etapa: 'Durante', texto: 'Kit de calma para cuando {crisis}' },
+    { etapa: 'Durante', texto: 'Guía «¿Momento difícil?» a un toque' },
+    { etapa: 'Después', texto: 'Diario para contarle a su terapeuta' },
   ],
   listo: 'El plan de {nombre} está listo.',
 };
 
 export const RESULTADO = {
   titulo: 'La rutina de [acento]{momento}[/acento] de {nombre}',
-  ayuda: 'Toca "¡Hecho!" en el primer paso, como lo hará mañana.',
+  ayuda: 'Toca «¡Hecho!» en el primer paso, como lo hará mañana.',
   hecho: '¡Hecho!',
-  hechoAria: 'Marcar "{paso_1}" como hecho',
+  hechoAria: 'Marcar «{paso_1}» como hecho',
   despues: 'Así se ve cada paso cumplido. Sin imprimir nada.',
   progreso: '1 de {n_pasos}',
   cta: 'Seguir con el plan de {nombre}',
@@ -196,7 +205,7 @@ export interface Variables {
 export function variablesDe(r: Respuestas): Variables {
   const rutina = rutinaDe(r.momento);
   const opcionMomento = OPCIONES_MOMENTO.find((o) => o.id === (r.momento ?? 'manana'));
-  const primera = OPCIONES_CRISIS.find((o) => o.id === r.crisis?.[0]);
+  const primera = OPCIONES_CRISIS.find((o) => o.id === idsDeCrisis(r.crisis)[0]);
   return {
     nombre: r.nombre ? conMayuscula(r.nombre) : 'tu peque',
     momento: opcionMomento?.momento ?? 'la mañana',

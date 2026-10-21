@@ -3,7 +3,8 @@
 // /onboarding — 6 pasos con barra (4 preguntas, reconocimiento y compromiso),
 // "armando el plan" y el resultado con su rutina real. Copy: docs/copy/embudo.md §1.
 // Reglas (02B, 50): una pregunta por pantalla · barra siempre visible que nunca
-// retrocede (10·25·40·55·70·85·100) · saltar en lo no crítico · avance solo en
+// retrocede (10·25·40·55·70·85, se queda en 85 mientras arma el plan y llega a 100
+// con el resultado) · saltar en lo no crítico · avance solo en
 // selección única · reducir movimiento = solo fundido.
 // Las respuestas se guardan en ESTE teléfono después de cada paso (almacen.ts) y
 // nunca salen de él: los eventos llevan solo su nombre y el número de paso.
@@ -21,10 +22,22 @@ import { Reconocimiento } from './Reconocimiento';
 import { Compromiso } from './Compromiso';
 import { Cargando } from './Cargando';
 import { Resultado } from './Resultado';
-import { CRISIS, EDAD, llenar, MOMENTO, OPCIONES_CRISIS, OPCIONES_EDAD, OPCIONES_MOMENTO, TOTAL_PASOS, variablesDe } from './textos';
+import {
+  CRISIS,
+  EDAD,
+  idsDeCrisis,
+  llenar,
+  MOMENTO,
+  OPCIONES_CRISIS,
+  OPCIONES_EDAD,
+  OPCIONES_MOMENTO,
+  TOTAL_PASOS,
+  variablesDe,
+} from './textos';
 
 // Pantallas: 0 nombre · 1 edad · 2 momento · 3 crisis · 4 reconocimiento · 5 compromiso · 6 cargando · 7 resultado.
-const PORCENTAJE = [10, 25, 40, 55, 70, 85, 100, 100] as const;
+// En "cargando" la barra sigue en 85: llegar a 100 mientras dice "Armando…" contradice la pantalla.
+const PORCENTAJE = [10, 25, 40, 55, 70, 85, 85, 100] as const;
 const CARGANDO = 6;
 const RESULTADO = 7;
 
@@ -165,9 +178,10 @@ export function Onboarding() {
             titulo={llenar(CRISIS.titulo, v)}
             ayuda={CRISIS.ayuda}
             opciones={OPCIONES_CRISIS}
-            elegidas={r.crisis ?? []}
+            elegidas={idsDeCrisis(r.crisis)}
             boton={CRISIS.boton}
             saltar={CRISIS.saltar}
+            pista={CRISIS.pista}
             enfocar={navegado}
             onCambiar={(ids) =>
               conRespuestas((x) => {
@@ -207,6 +221,7 @@ export function Onboarding() {
         pantalla = (
           <Compromiso
             v={v}
+            pasos={rutina.pasos}
             esManana={(r.momento ?? 'manana') === 'manana'}
             enfocar={navegado}
             onAceptar={() => {
@@ -233,7 +248,9 @@ export function Onboarding() {
   return (
     <MotionConfig reducedMotion="user">
       <div className="min-h-dvh bg-[var(--bg)] text-[var(--text-primary)] [font-family:var(--font-body)]">
-        <div className="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col px-5">
+        {/* overflow-x-clip: la entrada de cada paso (x: 40px) no abre scroll horizontal (igual que
+            /paywall). clip, no hidden: no crea un contenedor de scroll, así cabecera y pie siguen sticky. */}
+        <div className="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col overflow-x-clip px-5">
           <BarraProgreso
             porcentaje={PORCENTAJE[Math.min(p?.alcanzado ?? 0, ULTIMA_PANTALLA)]}
             pasoVisible={paso + 1}

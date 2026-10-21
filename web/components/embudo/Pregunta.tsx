@@ -3,7 +3,8 @@
 // Pantallas de pregunta del onboarding (50 A): una decisión por pantalla.
 // - NombrePeque: campo libre con "Seguir" y salida "Prefiero no decirlo".
 // - PreguntaUnica: chips que avanzan solos tras 300 ms con la elección visible.
-// - PreguntaVarias: chips que se marcan y desmarcan + "Seguir" (activo con 1).
+// - PreguntaVarias: chips que se marcan y desmarcan + "Seguir" siempre activo
+//   (sin elección muestra una pista amable en vez de bloquear, 50 A3).
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { limpiarNombre } from '@/lib/embudo/estado';
@@ -135,6 +136,7 @@ export function PreguntaVarias({
   elegidas,
   boton,
   saltar,
+  pista,
   enfocar,
   onCambiar,
   onSeguir,
@@ -147,25 +149,38 @@ export function PreguntaVarias({
   elegidas: readonly string[];
   boton: string;
   saltar: string;
+  /** Se muestra si toca el botón sin elegir ninguna. */
+  pista: string;
   enfocar: boolean;
   onCambiar: (ids: string[]) => void;
   onSeguir: () => void;
   onSaltar: () => void;
 }) {
-  const alternar = (id: string) =>
+  const [verPista, setVerPista] = useState(false);
+  const alternar = (id: string) => {
+    setVerPista(false);
     onCambiar(elegidas.includes(id) ? elegidas.filter((x) => x !== id) : [...elegidas, id]);
+  };
+  const seguir = () => {
+    if (elegidas.length === 0) return setVerPista(true);
+    onSeguir();
+  };
 
   return (
     <div className="flex flex-1 flex-col">
       <Titulo texto={titulo} enfocar={enfocar} />
       <Ayuda>{ayuda}</Ayuda>
-      <div role="group" aria-labelledby="titulo-paso" className="mt-8 flex flex-col gap-3">
+      {/* pb-8: la última opción queda por encima del degradado del pie. */}
+      <div role="group" aria-labelledby="titulo-paso" className="mt-8 flex flex-col gap-3 pb-8">
         {opciones.map((o) => (
           <Opcion key={o.id} label={o.label} seleccionado={elegidas.includes(o.id)} onClick={() => alternar(o.id)} />
         ))}
       </div>
       <PieFijo>
-        <BotonPrincipal disabled={elegidas.length === 0} onClick={onSeguir}>
+        <p id="pista-varias" role="alert" className="text-center text-[16px] leading-snug font-semibold text-[var(--text-secondary)]">
+          {verPista ? pista : ''}
+        </p>
+        <BotonPrincipal onClick={seguir} ariaDescribedBy={verPista ? 'pista-varias' : undefined}>
           {boton}
         </BotonPrincipal>
         <BotonTexto onClick={onSaltar}>{saltar}</BotonTexto>

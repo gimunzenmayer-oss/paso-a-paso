@@ -6,9 +6,11 @@
 // recibe el foco al cambiar de paso. Íconos lucide, nunca emoji.
 
 import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
-import { Check } from 'lucide-react';
+import Image from 'next/image';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { Check, Shirt } from 'lucide-react';
 import { MarkedCopy } from '@/components/landing/MarkedCopy';
+import type { PasoRutina } from '@/lib/embudo/rutinas';
 
 /* ── <Titulo> — el único h1 del paso. Recibe el foco cuando se llega navegando
    (lectores de pantalla y teclado empiezan aquí, no en el botón que ya no existe). ── */
@@ -31,7 +33,7 @@ export function Titulo({ texto, enfocar, id = 'titulo-paso' }: { texto: string; 
 
 export function Ayuda({ children, id }: { children: ReactNode; id?: string }) {
   return (
-    <p id={id} className="mt-3 text-[17px] leading-[1.45] text-[var(--text-secondary)]">
+    <p id={id} className="mt-3 text-[18px] leading-[1.45] text-[var(--text-secondary)]">
       {children}
     </p>
   );
@@ -64,7 +66,7 @@ export function BotonPrincipal({
       whileTap={disabled ? undefined : { scale: 0.97 }}
       animate={resaltado ? { scale: [1, 1.03, 1] } : { scale: 1 }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className={`flex h-14 w-full items-center justify-center rounded-[var(--radius-button)] bg-[var(--accent)] px-5 text-center text-[17px] leading-tight font-semibold text-[var(--bg)] transition-[opacity,box-shadow,background-color] duration-200 [touch-action:manipulation] disabled:opacity-65 ${
+      className={`flex h-14 w-full items-center justify-center rounded-[var(--radius-button)] bg-[var(--accent)] px-5 text-center text-[18px] leading-tight font-semibold text-[var(--bg)] transition-[opacity,box-shadow,background-color] duration-200 [touch-action:manipulation] disabled:opacity-65 ${
         resaltado
           ? 'shadow-[0_10px_34px_color-mix(in_oklab,var(--accent)_45%,transparent)]'
           : 'shadow-[0_8px_30px_color-mix(in_oklab,var(--accent)_25%,transparent)]'
@@ -75,11 +77,14 @@ export function BotonPrincipal({
   );
 }
 
-/* ── <EnlacePrincipal> — el mismo CTA cuando lleva a otra página (paywall, Hotmart). ── */
+/* ── <EnlacePrincipal> — el mismo CTA cuando lleva a otra página (paywall, Hotmart).
+   secundario: mientras otra acción de la pantalla es la principal (el "¡Hecho!" del
+   resultado), va en superficie con borde de acento; pasa a lleno cuando deja de serlo. ── */
 export function EnlacePrincipal({
   href,
   children,
   resaltado = false,
+  secundario = false,
   onClick,
   ariaDescribedBy,
   ariaBusy,
@@ -87,6 +92,7 @@ export function EnlacePrincipal({
   href: string;
   children: ReactNode;
   resaltado?: boolean;
+  secundario?: boolean;
   /** Corre antes de navegar (p. ej. el evento checkout_iniciado). */
   onClick?: (e: MouseEvent<HTMLAnchorElement>) => void;
   ariaDescribedBy?: string;
@@ -102,10 +108,14 @@ export function EnlacePrincipal({
       whileTap={{ scale: 0.97 }}
       animate={resaltado ? { scale: [1, 1.03, 1] } : { scale: 1 }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className={`flex h-14 w-full items-center justify-center rounded-[var(--radius-button)] bg-[var(--accent)] px-5 text-center text-[17px] leading-tight font-semibold text-[var(--bg)] transition-[box-shadow,background-color] duration-200 hover:bg-[color-mix(in_oklab,var(--accent)_88%,var(--text-primary))] [touch-action:manipulation] ${
-        resaltado
-          ? 'shadow-[0_10px_34px_color-mix(in_oklab,var(--accent)_45%,transparent)]'
-          : 'shadow-[0_8px_30px_color-mix(in_oklab,var(--accent)_25%,transparent)]'
+      className={`flex h-14 w-full items-center justify-center rounded-[var(--radius-button)] px-5 text-center text-[18px] leading-tight font-semibold transition-[box-shadow,background-color,color,border-color] duration-200 [touch-action:manipulation] ${
+        secundario
+          ? 'border-2 border-[var(--accent)] bg-[var(--surface)] text-[var(--accent)] hover:bg-[color-mix(in_oklab,var(--accent)_8%,var(--surface))]'
+          : `bg-[var(--accent)] text-[var(--bg)] hover:bg-[color-mix(in_oklab,var(--accent)_88%,var(--text-primary))] ${
+              resaltado
+                ? 'shadow-[0_10px_34px_color-mix(in_oklab,var(--accent)_45%,transparent)]'
+                : 'shadow-[0_8px_30px_color-mix(in_oklab,var(--accent)_25%,transparent)]'
+            }`
       }`}
     >
       {children}
@@ -177,8 +187,8 @@ export function Opcion({
       }`}
     >
       <span className="flex min-w-0 flex-1 flex-col">
-        <span className="text-[17px] leading-snug font-semibold text-[var(--text-primary)]">{label}</span>
-        {subtexto && <span className="mt-0.5 text-[15px] leading-snug text-[var(--text-secondary)]">{subtexto}</span>}
+        <span className="text-[18px] leading-snug font-semibold text-[var(--text-primary)]">{label}</span>
+        {subtexto && <span className="mt-0.5 text-[16px] leading-snug text-[var(--text-secondary)]">{subtexto}</span>}
       </span>
       <span
         aria-hidden="true"
@@ -203,5 +213,66 @@ export function Opcion({
         </AnimatePresence>
       </span>
     </motion.button>
+  );
+}
+
+/* ── <Miniatura> — foto real de un paso (app/js/datos.js). Un solo tratamiento para
+   todas: recorte cuadrado, fondo --surface-2, radio de botón (14) y un filo
+   interior suave, así una foto sobre blanco no se pierde contra la tarjeta. Sin
+   foto (p. ej. "Ponerse el pijama"): ícono lucide en el mismo marco, nunca emoji. ── */
+export function Miniatura({ paso, tamano }: { paso: PasoRutina; tamano: 56 | 72 }) {
+  const lado = tamano === 72 ? 'size-[72px]' : 'size-14';
+  return (
+    <span
+      aria-hidden="true"
+      className={`${lado} relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[var(--radius-button)] bg-[var(--surface-2)] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--text-tertiary)_22%,transparent)]`}
+    >
+      {paso.foto ? (
+        <Image src={paso.foto} alt="" width={tamano} height={tamano} sizes={`${tamano}px`} className="size-full object-cover" />
+      ) : (
+        <Shirt size={tamano === 72 ? 30 : 24} strokeWidth={1.8} color="var(--text-secondary)" aria-hidden="true" />
+      )}
+    </span>
+  );
+}
+
+/* ── <CheckQueSeLlena> — EL check del embudo (la firma de movimiento de
+   FICHA-ARTE): círculo de acento que aparece con spring y trazo que se dibuja.
+   Lo usan el resultado (48) y "armando el plan" (24). Con reducir movimiento
+   aparece ya lleno. ── */
+export function CheckQueSeLlena({ tamano = 48 }: { tamano?: 24 | 48 }) {
+  const reduce = useReducedMotion() === true;
+  return (
+    <motion.svg
+      viewBox="0 0 48 48"
+      width={tamano}
+      height={tamano}
+      aria-hidden="true"
+      initial={{ scale: reduce ? 1 : 0.6 }}
+      animate={{ scale: 1 }}
+      transition={{ type: 'spring', stiffness: 380, damping: 22 }}
+      className="shrink-0"
+    >
+      <motion.circle
+        cx="24"
+        cy="24"
+        r="22"
+        fill="var(--accent)"
+        initial={{ opacity: reduce ? 1 : 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: reduce ? 0 : 0.2 }}
+      />
+      <motion.path
+        d="M14 24.5l7 7 13-14"
+        fill="none"
+        stroke="var(--bg)"
+        strokeWidth={tamano === 24 ? 5 : 4}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={{ pathLength: reduce ? 1 : 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: reduce ? 0 : 0.35, delay: reduce ? 0 : 0.12, ease: 'easeOut' }}
+      />
+    </motion.svg>
   );
 }
