@@ -1,7 +1,10 @@
 // Eventos ANÓNIMOS de uso hacia /api/events (contrato 36), desde el navegador.
 // Usa el mismo número al azar del teléfono que la app (pp_dispositivo) para unir el embudo.
-// Solo viaja el nombre del evento y, si hace falta, un número (por ejemplo, el paso).
+// Solo viaja el nombre del evento y, si hace falta, un número (por ejemplo, el paso)
+// o el plan elegido en el paywall (mensual o anual).
 // Nunca se mandan aquí respuestas del onboarding ni datos del peque.
+
+import type { Plan } from '@/lib/embudo/checkout';
 
 function azar() {
   const b = new Uint8Array(16);
@@ -22,8 +25,9 @@ function leer(clave: string, crear?: () => string): string | null {
   }
 }
 
-/** Propiedades permitidas: solo números (paso, total). Nada de texto libre. */
-export type PropsEvento = Record<string, number>;
+/** Propiedades permitidas: números (paso, total) y el plan del paywall (mensual o
+ *  anual, contrato 36: `plan` y `plan_elegido`). Nada de texto libre. */
+export type PropsEvento = Record<string, number | Plan>;
 
 export function enviarEvento(tipo: string, props?: PropsEvento) {
   const cuerpo = JSON.stringify({

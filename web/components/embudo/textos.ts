@@ -1,6 +1,6 @@
-// Copy del onboarding: LITERAL de docs/copy/embudo.md §1 (no se reescribe aquí).
+// Copy del onboarding y del paywall: LITERAL de docs/copy/embudo.md §1 y §2 (no se reescribe aquí).
 // [acento]…[/acento] y [b]…[/b] se pintan con parseMarkedCopy del kit de landing.
-// Variables: {nombre}, {momento}, {crisis}, {n_pasos}, {paso_1}, {n}.
+// Variables: {nombre}, {momento}, {crisis}, {n_pasos}, {paso_1}, {n}, {N}, {fecha_cobro}.
 
 import type { Edad, Momento, Respuestas } from '@/lib/embudo/estado';
 import { rutinaDe } from '@/lib/embudo/rutinas';
@@ -103,6 +103,80 @@ export const RESULTADO = {
   app: 'Primero quiero ver la app de ejemplo',
 };
 
+/* ── §2 Paywall en 3 páginas (/paywall) ──────────────────────────────────────── */
+
+export const TOTAL_PAGINAS_PAYWALL = 3;
+
+export const PAYWALL_COMUN = {
+  cerrar: 'Cerrar y volver al plan',
+  indicador: 'Página {n} de 3',
+};
+
+export const PAYWALL_RESUMEN = {
+  titulo: 'El plan de {nombre} para [acento]{momento}[/acento] está listo',
+  subtitulo: 'Hecho con tus {N} respuestas, con el [b]Método Antes, Durante y Después[/b].',
+  puntos: [
+    '[b]Antes[/b]: su rutina de {momento}, paso a paso y con fotos',
+    '[b]Durante[/b]: kit de calma para cuando {crisis}',
+    '[b]Después[/b]: su semana anotada, lista para la terapeuta',
+  ],
+  perdida: 'Tu plan ya está en este teléfono. Falta activarlo.',
+  boton: 'Ver cómo funciona la prueba',
+  salida: 'Ahora no',
+};
+
+export const PAYWALL_PRUEBA = {
+  titulo: '[acento]7 días[/acento] para probarlo sin pagar',
+  linea: [
+    { cuando: 'Hoy', titulo: 'Acceso completo', texto: 'Su rutina, el kit de calma y la guía' },
+    { cuando: 'Día 5', titulo: 'Te avisamos por correo', texto: '2 días antes de cualquier cobro' },
+    { cuando: 'Día 7 · {fecha_cobro}', titulo: 'Empieza el cobro', texto: 'Solo si sigues. Cancela antes y no pagas nada' },
+  ],
+  debajo: 'Y después, 30 días de la [b]Garantía del Día Tranquilo[/b].',
+  boton: 'Ver precios',
+  salida: 'Ahora no',
+};
+
+export const PAYWALL_PRECIO = {
+  titulo: 'Días más [acento]predecibles[/acento] para {nombre}, desde hoy',
+  subtitulo: 'Empiezas gratis. Eliges cómo seguir después.',
+  anual: {
+    etiqueta: 'Mejor precio',
+    nombre: 'Anual',
+    precio: 'US$4.99',
+    sufijo: '/mes',
+    detalle: 'Se cobra US$59.90 al año · ahorras 4 meses',
+    nota: 'Menos de US$0.17 al día',
+  },
+  mensual: {
+    nombre: 'Mensual',
+    precio: 'US$7.99',
+    sufijo: '/mes',
+    detalle: 'Se cobra cada mes · cancelas cuando quieras',
+  },
+  ayuda: 'En Hotmart, completa tus datos y elige "Quiero un periodo gratis".',
+  boton: 'Ir a Hotmart y activar mi prueba',
+  abriendo: 'Abriendo Hotmart…',
+  confianza: [
+    'Hoy no pagas nada · primer cobro el {fecha_cobro}',
+    'Cancelas en Hotmart cuando quieras',
+    '30 días de Garantía del Día Tranquilo',
+  ],
+  pie: 'Pago seguro con Hotmart · tarjeta o medios locales',
+  salida: 'Ahora no',
+  yaPagaste: '¿Ya pagaste? Entra aquí',
+  errorAbrir: 'No se abrió Hotmart. Toca el botón otra vez o revisa si tu navegador bloqueó la ventana.',
+};
+
+/** Estado honesto mientras no existan los links de Hotmart (§2.3, "el checkout todavía no está configurado"). */
+export const PAYWALL_SIN_CHECKOUT = {
+  boton: 'Pagos disponibles muy pronto',
+  nota: 'Todavía no abrimos los pagos. Nada se cobra desde aquí.',
+  app: 'Mientras, mira la app de ejemplo',
+  contacto: '¿Quieres que te avisemos? Escríbenos a',
+  correo: 'hadaapps@gmail.com',
+};
+
 /* ── Variables ─────────────────────────────────────────────────────────────── */
 
 /** Inicial en mayúscula, sin recortar con "…" (convención del copy). */
@@ -132,7 +206,17 @@ export function variablesDe(r: Respuestas): Variables {
   };
 }
 
+/** Variables que solo usa el paywall: {N} respuestas y {fecha_cobro} (día 7 de la prueba). */
+export interface VariablesPaywall {
+  n?: string;
+  N?: string;
+  fecha_cobro?: string;
+}
+
 /** Reemplaza {variable} en un texto del copy. El nombre ya viene sin corchetes ni etiquetas. */
-export function llenar(texto: string, v: Partial<Variables> & { n?: string }): string {
-  return texto.replace(/\{(nombre|momento|crisis|n_pasos|paso_1|n)\}/g, (todo, clave: keyof Variables | 'n') => v[clave] ?? todo);
+export function llenar(texto: string, v: Partial<Variables> & VariablesPaywall): string {
+  return texto.replace(
+    /\{(nombre|momento|crisis|n_pasos|paso_1|n|N|fecha_cobro)\}/g,
+    (todo, clave: keyof Variables | keyof VariablesPaywall) => v[clave] ?? todo
+  );
 }

@@ -5,7 +5,7 @@
 // tintada, chips de opción de 60px (50 A2), pie fijo con safe-area, título que
 // recibe el foco al cambiar de paso. Íconos lucide, nunca emoji.
 
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Check } from 'lucide-react';
 import { MarkedCopy } from '@/components/landing/MarkedCopy';
@@ -75,11 +75,30 @@ export function BotonPrincipal({
   );
 }
 
-/* ── <EnlacePrincipal> — el mismo CTA cuando lleva a otra página (paywall). ── */
-export function EnlacePrincipal({ href, children, resaltado = false }: { href: string; children: ReactNode; resaltado?: boolean }) {
+/* ── <EnlacePrincipal> — el mismo CTA cuando lleva a otra página (paywall, Hotmart). ── */
+export function EnlacePrincipal({
+  href,
+  children,
+  resaltado = false,
+  onClick,
+  ariaDescribedBy,
+  ariaBusy,
+}: {
+  href: string;
+  children: ReactNode;
+  resaltado?: boolean;
+  /** Corre antes de navegar (p. ej. el evento checkout_iniciado). */
+  onClick?: (e: MouseEvent<HTMLAnchorElement>) => void;
+  ariaDescribedBy?: string;
+  /** true mientras se abre el destino ("Abriendo Hotmart…"). */
+  ariaBusy?: boolean;
+}) {
   return (
     <motion.a
       href={href}
+      onClick={onClick}
+      aria-describedby={ariaDescribedBy}
+      aria-busy={ariaBusy}
       whileTap={{ scale: 0.97 }}
       animate={resaltado ? { scale: [1, 1.03, 1] } : { scale: 1 }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -105,6 +124,19 @@ export function BotonTexto({ children, onClick }: { children: ReactNode; onClick
     >
       {children}
     </button>
+  );
+}
+
+/* ── <EnlaceTexto> — la misma salida secundaria cuando lleva a otra página
+   ("Ahora no", "¿Ya pagaste? Entra aquí"): 48px de alto, texto secundario subrayado. ── */
+export function EnlaceTexto({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <a
+      href={href}
+      className="mx-auto flex min-h-12 items-center justify-center px-4 text-center text-[16px] font-semibold text-[var(--text-secondary)] underline decoration-[color-mix(in_oklab,var(--text-secondary)_45%,transparent)] underline-offset-4 [touch-action:manipulation]"
+    >
+      {children}
+    </a>
   );
 }
 

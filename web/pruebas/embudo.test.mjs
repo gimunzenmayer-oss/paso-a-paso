@@ -65,3 +65,20 @@ test('acceso: sin sesión pide entrar, pero respeta un pase vigente', () => {
   assert.equal(r.abierta, true);
   assert.equal(r.motivo, 'entrar_pronto');
 });
+
+// Paso 5: fecha del primer cobro y respuestas contadas en el paywall.
+import { fechaCobro, contarRespuestas, DIAS_PRUEBA } from '../lib/embudo/prueba.ts';
+
+test('paywall: el cobro es el día 7, en formato humano', () => {
+  assert.equal(DIAS_PRUEBA, 7);
+  assert.equal(fechaCobro(new Date(2026, 9, 21)), '28 de octubre');
+  assert.equal(fechaCobro(new Date(2026, 9, 28, 23, 59)), '4 de noviembre');
+  assert.equal(fechaCobro(new Date(2026, 11, 28)), '4 de enero');
+});
+
+test('paywall: cuenta solo las preguntas respondidas', () => {
+  assert.equal(contarRespuestas({}), 0);
+  assert.equal(contarRespuestas({ edad: '5-7', momento: 'manana' }), 2);
+  assert.equal(contarRespuestas({ nombre: 'Mateo', edad: '5-7', momento: 'dormir', crisis: ['llora', 'piso'] }), 4);
+  assert.equal(contarRespuestas({ nombre: 'Mateo', edad: '2-4', momento: 'comidas', crisis: [] }), 3);
+});
