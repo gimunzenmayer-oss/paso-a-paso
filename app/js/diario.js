@@ -66,7 +66,7 @@ window.PP = window.PP || {};
   PP.abrirDiario = function (pin) {
     return PP.leer('diario').then(function (caja) {
       if (!caja) {
-        diario = ejemplos();
+        diario = PP.estado.perfil.sinEjemplos ? [] : ejemplos();
         if (!PP.cifrado.disponible) return guardar();
         sal = PP.cifrado.nuevaSal();
         return PP.cifrado.llave(pin, sal).then(function (k) { llave = k; return guardar(); });

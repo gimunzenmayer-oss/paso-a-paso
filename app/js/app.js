@@ -242,6 +242,9 @@ window.PP = window.PP || {};
     var rs = PP.estado.rutinas.slice().sort(function (a, b) { return a.hora.localeCompare(b.hora); });
     var elegida = rs[0];
     rs.forEach(function (r) { var p = r.hora.split(':'); if (+p[0] * 60 + +p[1] <= min + 30) elegida = r; });
+    // Hasta que termine su primera rutina, se muestra la que eligió en el onboarding
+    var inicial = PP.estado.perfil.rutinaInicial;
+    if (inicial && !(PP.estado.estrellas || []).length) elegida = rs.find(function (r) { return r.id === inicial; }) || elegida;
     return elegida;
   };
 
@@ -291,6 +294,25 @@ window.PP = window.PP || {};
     b.hidden = true;
   }
 
+  // Primeros pasos de una familia nueva (viene del onboarding): se marcan
+  // solos cuando los hace y la tarjeta desaparece al terminar los dos.
+  function tarjetaPrimerosPasos() {
+    var p = PP.estado.perfil;
+    if (!p.sinEjemplos) return '';
+    var r = PP.estado.rutinas.find(function (x) { return x.id === p.rutinaInicial; });
+    var fotoHecha = !!(r && r.pasos[0] && r.pasos[0].foto), pinHecho = !p.pinDePrueba;
+    if (fotoHecha && pinHecho) return '';
+    var paso = function (hecho, texto, ayuda, attr) {
+      var dentro = '<span class="marca-paso" aria-hidden="true">' + (hecho ? '✓' : '') + '</span>' +
+        '<span class="crece"><strong>' + texto + '</strong><span class="suave">' + (hecho ? 'Listo' : ayuda) + '</span></span>';
+      return '<li' + (hecho ? ' class="hecho"' : '') + '>' + (hecho ? '<div class="paso-fila">' + dentro + '</div>' : '<button class="paso-fila" ' + attr + '>' + dentro + '<span aria-hidden="true" class="flecha">›</span></button>') + '</li>';
+    };
+    return '<section class="tarjeta primeros-pasos" aria-labelledby="pp-t"><h3 id="pp-t">Tus primeros pasos</h3><ol class="lista-pasos">' +
+      paso(fotoHecha, 'Pon una foto de tu casa', 'En el primer paso de «' + PP.esc(r ? r.nombre : '') + '»', 'data-primer-foto') +
+      paso(pinHecho, 'Crea tu PIN', 'Protege el diario y la salida del espacio', 'data-primer-pin') +
+      '</ol></section>';
+  }
+
   PP.pantallas.inicio = {
     titulo: 'Paso a Paso',
     pintar: function (main) {
@@ -305,6 +327,7 @@ window.PP = window.PP || {};
         '  <h2 class="titular">Zona de la familia</h2>' +
         '  <button class="fila-urgente" data-ir-a="guia"><span aria-hidden="true">🧭</span><span class="crece"><strong>¿Momento difícil?</strong> Qué hacer ahora mismo</span><span aria-hidden="true">›</span></button>' +
         '</section>' +
+        tarjetaPrimerosPasos() +
         // 1) La puerta al espacio del niño, bien visible
         '<section class="tarjeta puerta-nino" aria-labelledby="esp-t">' +
         '  <div class="fila"><span class="picto-m" aria-hidden="true">🧒</span><div class="crece"><h3 id="esp-t">Espacio de ' + nombre + '</h3>' +
@@ -336,6 +359,8 @@ window.PP = window.PP || {};
         if (b.hasAttribute('data-espacio')) PP.abrirEspacio();
         if (b.dataset.empezar) PP.empezarRutina(b.dataset.empezar);
         if (b.hasAttribute('data-instalar')) instalar(b);
+        if (b.hasAttribute('data-primer-foto')) PP.ir('editarRutina', { id: PP.estado.perfil.rutinaInicial });
+        if (b.hasAttribute('data-primer-pin')) PP.ir('ajustes');
         if (b.hasAttribute('data-instalar-no')) { try { localStorage.setItem('pp_aviso_instalar', 'no'); } catch (err) { } PP.repintar(); }
         if (b.dataset.irA === 'diarioNuevo') PP.conDiario(function () { PP.ir('diarioNuevo'); });
         else if (b.dataset.irA) PP.ir(b.dataset.irA);
@@ -521,7 +546,9 @@ window.PP = window.PP || {};
 
   PP.iniciar = function () {
     PP.leer('estado').then(function (guardado) {
-      PP.estado = guardado || PP.datosEjemplo();
+      // Primera vez: si viene del onboarding, arranca con su peque; si no, con el ejemplo de Mateo
+      var onboarding = !guardado && PP.leerOnboarding();
+      PP.estado = guardado || (onboarding ? PP.datosDesdeOnboarding(onboarding) : PP.datosEjemplo());
       return PP.prepararDatos();
     }).then(function () {
       PP.aplicarPreferencias();

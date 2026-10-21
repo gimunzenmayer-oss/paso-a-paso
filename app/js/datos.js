@@ -15,13 +15,37 @@ window.PP = window.PP || {};
   //   texto  → lo que se lee y se ve
   //   picto  → el símbolo (en la versión final, un pictograma con licencia adecuada)
   //   foto   → opcional: una foto propia que sustituye al símbolo
+  // Datos de una familia que llega desde el onboarding de la web
+  // (localStorage "pp_onboarding", solo en este teléfono): el nombre y la
+  // edad de su peque, su primera rutina elegida y nada de historial de
+  // ejemplo (ni estrellas, ni logros, ni diario de Mateo).
+  var EDAD_DE = { '2-4': 3, '5-7': 6, '8-12': 10 };
+  var RUTINA_DE = { manana: 'manana', comidas: 'noche', escuela: 'tarde', dormir: 'noche' };
+  PP.leerOnboarding = function () {
+    try {
+      var o = JSON.parse(localStorage.getItem('pp_onboarding') || 'null');
+      return o && o.v === 1 && o.respuestas && typeof o.respuestas === 'object' ? o : null;
+    } catch (e) { return null; }
+  };
+  PP.datosDesdeOnboarding = function (o) {
+    var d = PP.datosEjemplo(), r = o.respuestas;
+    var nombre = typeof r.nombre === 'string' ? r.nombre.replace(/[<>\n\r\t]/g, '').trim().slice(0, 20) : '';
+    d.perfil.nombre = nombre || 'Peque';
+    d.perfil.edad = EDAD_DE[r.edad] || d.perfil.edad;
+    d.perfil.rutinaInicial = RUTINA_DE[r.momento] || 'manana';
+    d.perfil.sinEjemplos = true;
+    d.logros = [];
+    d.estrellas = [];
+    return d;
+  };
+
   PP.datosEjemplo = function () {
     return {
       perfil: {
         nombre: 'Mateo',
         edad: 6,
         pin: '1234',          // PIN del adulto para salir del modo niño
-        acento: 'espana',     // 'espana' o 'latino'
+        acento: 'latino',     // 'latino' o 'espana'
         leerEnVoz: true,      // leer cada paso en voz alta al tocarlo
         sonido: false,        // sin sonidos salvo que el adulto lo active
         modoCalma: false,     // sin animaciones ni sonidos, colores más apagados

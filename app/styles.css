@@ -199,6 +199,14 @@ img.foto { object-fit: cover; padding: 0; }
   background: var(--superficie); box-shadow: var(--sombra); display: flex; flex-direction: column; gap: 2px; justify-content: center;
 }
 .rejilla-mod .mod.ancha { grid-column: 1 / -1; min-height: 64px; }
+.primeros-pasos { gap: 10px; }
+.lista-pasos { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.paso-fila { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 8px 4px; text-align: left; background: none; border: 0; border-radius: 14px; font: inherit; color: var(--tinta); }
+.paso-fila strong, .paso-fila .suave { display: block; }
+.paso-fila .flecha { font-size: 1.6rem; color: var(--tinta-suave); }
+.lista-pasos .hecho strong { color: var(--tinta-suave); text-decoration: line-through; }
+.marca-paso { flex: none; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--cat-salvia-borde); display: grid; place-items: center; color: var(--sobre-salvia); font-weight: 700; }
+.hecho .marca-paso { background: var(--ok, var(--salvia)); border-color: transparent; }
 .fila-urgente {
   display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 12px 16px; margin-top: 6px; text-align: left;
   border-radius: var(--radio); border: 1px solid var(--cat-niebla-borde); background: var(--cat-niebla); color: var(--tinta); font: inherit;
@@ -619,10 +627,10 @@ html.calma .picto-espacio { filter: saturate(.45); }
 .pie-informe { font-size: .8rem; color: var(--tinta-suave); }
 
 /* Movimiento: respuesta al toque y entrada escalonada (lo apagan "Modo calma" y "reducir movimiento") */
-:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .boton-espacio, .menu button, .segmentado span, .pista) {
+:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .paso-fila, .boton-espacio, .menu button, .segmentado span, .pista) {
   transition: transform .12s ease-out, background-color .2s, border-color .2s, box-shadow .2s;
 }
-:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .boton-espacio, .menu button, .segmentado span, .pista):active:not(:disabled) { transform: scale(.97); }
+:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .paso-fila, .boton-espacio, .menu button, .segmentado span, .pista):active:not(:disabled) { transform: scale(.97); }
 .detalles > summary { min-height: var(--toque); display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--salvia); cursor: pointer; list-style: none; }
 .detalles > summary::-webkit-details-marker { display: none; }
 .detalles > summary::before { content: "+"; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--cat-salvia-borde); }
