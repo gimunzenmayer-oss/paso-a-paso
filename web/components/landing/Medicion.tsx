@@ -1,39 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
+import { enviarEvento as enviar } from '@/lib/eventos-cliente';
 
 // Cifras ANÓNIMAS de la página de ventas para el panel (contrato 36): visita y toque en "Probar gratis".
-// Usa el mismo número al azar del teléfono que la app (pp_dispositivo) para unir el embudo.
-function azar() {
-  const b = new Uint8Array(16);
-  crypto.getRandomValues(b);
-  return Array.from(b, (x) => x.toString(16).padStart(2, '0')).join('');
-}
-
-function leer(clave: string, crear?: () => string): string | null {
-  try {
-    let v = localStorage.getItem(clave);
-    if (!v && crear) {
-      v = crear();
-      localStorage.setItem(clave, v);
-    }
-    return v;
-  } catch {
-    return crear ? crear() : null;
-  }
-}
-
-function enviar(tipo: string) {
-  const cuerpo = JSON.stringify({
-    type: tipo,
-    device_id: leer('pp_dispositivo', azar),
-    source: leer('pp_origen'),
-    qa: leer('pp_qa') === '1',
-  });
-  if (!navigator.sendBeacon?.('/api/events', new Blob([cuerpo], { type: 'application/json' }))) {
-    fetch('/api/events', { method: 'POST', body: cuerpo, keepalive: true, headers: { 'content-type': 'application/json' } }).catch(() => {});
-  }
-}
+// El envío (con el número al azar del teléfono, pp_dispositivo) vive en lib/eventos-cliente.ts.
 
 // Una visita = un evento, aunque React monte el componente dos veces (modo desarrollo).
 let visitaContada = false;

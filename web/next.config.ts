@@ -41,11 +41,10 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  // Mientras se construye la bienvenida, "Probar gratis" abre la app de ejemplo.
   // /app y /app/ llevan a la app (antes daban 404: solo existía /app/index.html).
+  // /onboarding ya es una página propia (app/onboarding).
   async redirects() {
     return [
-      { source: "/onboarding", destination: "/app/index.html", permanent: false },
       { source: "/app", destination: "/app/index.html", permanent: false },
       { source: "/app/", destination: "/app/index.html", permanent: false },
     ];
