@@ -55,12 +55,12 @@ window.PP = window.PP || {};
         '<div class="cifras"><div><strong class="num">' + esta.length + '</strong><span>esta semana</span></div><div><strong class="num">' + pasada + '</strong><span>la semana anterior</span></div></div>' +
         PP.barrasRanking(Object.keys(porRutina).map(function (k) { return [k, porRutina[k]]; }).sort(function (a, b) { return b[1] - a[1]; })) +
         '<p class="suave">' + nombre + ' gana una estrella cada vez que termina una rutina entera.</p></section>' +
-        '<section class="tarjeta bloque"><h2 class="seccion-t">Apuntar un logro</h2>' +
+        '<section class="tarjeta bloque"><h2 class="seccion-t">Anotar un logro</h2>' +
         '<form id="form-l" class="formulario">' +
         '<div class="chips" role="group" aria-label="Dibujo">' + RAPIDOS.map(function (p) {
           return '<button type="button" class="chip-op emoji' + (p === params.picto ? ' activo' : '') + '" aria-pressed="' + (p === params.picto) + '" data-picto="' + p + '">' + p + '</button>';
         }).join('') + '</div>' +
-        '<label class="campo" for="l-texto">¿Qué ha conseguido?<input id="l-texto" placeholder="Por ejemplo: se lavó las manos él solo" required></label>' +
+        '<label class="campo" for="l-texto">¿Qué logró?<input id="l-texto" placeholder="Por ejemplo: se lavó las manos él solo" required></label>' +
         '<button type="submit" class="btn principal">Guardar logro</button></form></section>' +
         '<h2 class="seccion-t">Logros (' + logros.length + ')</h2>' +
         '<div class="lista">' + logros.map(function (l) {
@@ -94,7 +94,7 @@ window.PP = window.PP || {};
         '<section class="tarjeta-estrellas" aria-label="' + esta.length + ' estrellas esta semana">' +
         '<div class="fila-estrellas">' + (esta.length ? esta.slice(0, 14).map(function () { return estrellaSvg(); }).join('') : estrellaSvg('estrella-mini vacia')) + '</div>' +
         '<p class="cuantas"><strong class="num">' + esta.length + '</strong> ' + (esta.length === 1 ? 'estrella' : 'estrellas') + ' esta semana</p></section>' +
-        (logros.length ? '<p class="etiqueta-nino">Lo que he conseguido</p><div class="lista-nino">' + logros.map(function (l) {
+        (logros.length ? '<p class="etiqueta-nino">Lo que logré</p><div class="lista-nino">' + logros.map(function (l) {
           return '<button class="tarjeta-nino" data-logro="' + l.id + '"><span class="picto-m" aria-hidden="true">' + PP.esc(l.picto) + '</span><span class="crece"><strong>' + PP.esc(l.texto) + '</strong></span></button>';
         }).join('') + '</div>' : '') + '</div>';
       PP.decir(esta.length ? 'Tienes ' + esta.length + (esta.length === 1 ? ' estrella' : ' estrellas') + ' esta semana. ¡Muy bien!' : 'Mis estrellas');

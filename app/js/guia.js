@@ -42,7 +42,7 @@ window.PP = window.PP || {};
         '<label class="campo" for="guia-buscar">Buscar en la guía<input id="guia-buscar" type="search" placeholder="Por ejemplo: dormir, ruido, pega" autocomplete="off"></label>' +
         '<section class="bloque" aria-labelledby="dif-t"><h2 id="dif-t" class="seccion-t">Momentos difíciles</h2>' +
         '<div class="lista" id="guia-lista">' + PP.guia.fichas.map(filaFicha).join('') + '</div></section>' +
-        '<p class="aviso-legal">Estas fichas son orientaciones generales. Cada niño y cada niña es distinto: compártelas con su terapeuta para adaptarlas. Ante un riesgo para la salud, llama al 112 o al número de emergencias de tu país.</p>';
+        '<p class="aviso-legal">Estas fichas son orientaciones generales. Cada niño y cada niña es distinto: compártelas con su terapeuta para adaptarlas. Ante un riesgo para la salud, llama al 911 o al número de emergencias de tu país.</p>';
 
       // Buscar: filtra la lista mientras se escribe
       $('#guia-buscar', main).oninput = function (e) {

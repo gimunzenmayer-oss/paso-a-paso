@@ -42,11 +42,11 @@ window.PP = window.PP || {};
             { id: 'm4', texto: 'Desayunar', picto: '🥣' },
             { id: 'm5', texto: 'Lavarse los dientes', picto: '🪥' },
             { id: 'm6', texto: 'Ponerse los zapatos', picto: '👟' },
-            { id: 'm7', texto: 'Coger la mochila', picto: '🎒' }
+            { id: 'm7', texto: 'Tomar la mochila', picto: '🎒' }
           ]
         },
         {
-          id: 'tarde', nombre: 'Volver del cole', hora: '16:30', picto: '🏠',
+          id: 'tarde', nombre: 'Volver de la escuela', hora: '16:30', picto: '🏠',
           pasos: [
             { id: 't1', texto: 'Quitarse los zapatos', picto: '👟' },
             { id: 't2', texto: 'Lavarse las manos', picto: '🧼' },
@@ -77,7 +77,7 @@ window.PP = window.PP || {};
         respirar: 4,
         cosas: [
           { id: PP.nuevoId(), picto: '🤗', texto: 'Quiero un abrazo' },
-          { id: PP.nuevoId(), picto: '🎧', texto: 'Quiero mis cascos' },
+          { id: PP.nuevoId(), picto: '🎧', texto: 'Quiero mis audífonos' },
           { id: PP.nuevoId(), picto: '🛋️', texto: 'Necesito un descanso' },
           { id: PP.nuevoId(), picto: '🤫', texto: 'Necesito silencio' },
           { id: PP.nuevoId(), picto: '💧', texto: 'Quiero agua' },
@@ -93,7 +93,7 @@ window.PP = window.PP || {};
       ],
       estrellas: [12, 11, 9, 8, 6, 5, 4, 2, 1, 1].map(function (d, i) {
         var r = ['manana', 'noche', 'tarde'][i % 3];
-        return { fecha: PP.diasAtras(d), rutina: r, nombre: { manana: 'Mañana', tarde: 'Volver del cole', noche: 'Noche' }[r] };
+        return { fecha: PP.diasAtras(d), rutina: r, nombre: { manana: 'Mañana', tarde: 'Volver de la escuela', noche: 'Noche' }[r] };
       }),
       // Cuántas veces se toca cada botón del tablero (para el informe)
       uso: { tablero: {} }
@@ -129,16 +129,16 @@ window.PP = window.PP || {};
       h('Voy al médico', '🩺', [
         ['🩺', 'A veces voy al médico. El médico cuida de mi salud.'],
         ['🚗', 'Voy con mamá o con papá.'],
-        ['⏳', 'En la sala de espera hay otras personas. Puedo esperar con mis cascos o mirando un cuento.'],
+        ['⏳', 'En la sala de espera hay otras personas. Puedo esperar con mis audífonos o mirando un cuento.'],
         ['👂', 'El médico me mira los oídos, la boca y escucha mi corazón. Puede estar un poco frío. No duele.'],
         ['✋', 'Si algo me molesta, puedo decir «Para» o apretar la mano de mamá.'],
-        ['🏠', 'Cuando terminamos, volvemos a casa. ¡Lo he hecho muy bien!']
+        ['🏠', 'Cuando terminamos, volvemos a casa. ¡Lo hice muy bien!']
       ]),
       h('Me corto el pelo', '💇', [
         ['💇', 'Cuando el pelo crece mucho, me lo cortan.'],
         ['🪑', 'Me siento en una silla especial. Me ponen una capa para no llenarme de pelitos.'],
         ['✂️', 'Las tijeras hacen ruido: «chas, chas». Cortar el pelo no duele.'],
-        ['🎧', 'Si hay mucho ruido, puedo ponerme los cascos o contar hasta diez.'],
+        ['🎧', 'Si hay mucho ruido, puedo ponerme los audífonos o contar hasta diez.'],
         ['🪞', 'Al terminar me miro en el espejo. ¡Tengo el pelo nuevo!']
       ]),
       h('Vamos a un cumpleaños', '🎂', [
@@ -146,8 +146,8 @@ window.PP = window.PP || {};
         ['🎈', 'Habrá niños, música y juegos. A veces hay mucho ruido.'],
         ['🛋️', 'Si necesito descansar, puedo ir a un sitio tranquilo con mamá.'],
         ['🕯️', 'Cantamos «Cumpleaños feliz» y mi amigo sopla las velas.'],
-        ['🍰', 'Puedo comer tarta si quiero. Si no quiero, también está bien.'],
-        ['🏠', 'Después volvemos a casa. ¡Ha sido un día especial!']
+        ['🍰', 'Puedo comer pastel si quiero. Si no quiero, también está bien.'],
+        ['🏠', 'Después volvemos a casa. ¡Fue un día especial!']
       ])
     ];
   };
@@ -169,14 +169,18 @@ window.PP = window.PP || {};
     'Quitarse los zapatos': 'img/zapatos.jpg',
     'Zapatos': 'img/zapatos.jpg',
     'Coger la mochila': 'img/mochila.jpg',
+    'Tomar la mochila': 'img/mochila.jpg',
     'Mochila': 'img/mochila.jpg',
     'Esperar': 'img/espera.jpg',
     'Calma': 'img/descanso.jpg',
     'Historias': 'img/cuento.jpg',
+    'Hablar': 'img/ayuda.jpg',
+    'Mis estrellas': 'img/contento.jpg',
     'Quiero mi peluche': 'img/tranquilo.jpg',
     'Lo que me ayuda': 'img/abrazo.jpg',
     'Mañana': 'img/manana.jpg',
     'Volver del cole': 'img/tarde.jpg',
+    'Volver de la escuela': 'img/tarde.jpg',
     'Noche': 'img/noche.jpg',
     'Lavarse las manos': 'img/manos.jpg',
     'Merendar': 'img/manzana.jpg',
@@ -209,6 +213,8 @@ window.PP = window.PP || {};
     'Triste': 'img/triste.jpg',
     'Estoy enfadado': 'img/enfadado.jpg',
     'Enfadado': 'img/enfadado.jpg',
+    'Estoy enojado': 'img/enfadado.jpg',
+    'Enojado': 'img/enfadado.jpg',
     'Estoy cansado': 'img/cansado.jpg',
     'Cansado': 'img/cansado.jpg',
     'Tengo miedo': 'img/miedo.jpg',
@@ -220,6 +226,7 @@ window.PP = window.PP || {};
     'Necesito silencio': 'img/silencio.jpg',
     'Hay mucho ruido': 'img/ruido.jpg',
     'Quiero mis cascos': 'img/cascos.jpg',
+    'Quiero mis audífonos': 'img/cascos.jpg',
     'Necesito espacio': 'img/espacio.jpg',
     'Espera, por favor': 'img/espera.jpg',
     'Plátano': 'img/platano.jpg',
@@ -228,6 +235,7 @@ window.PP = window.PP || {};
     'Beber leche': 'img/leche.jpg',
     'Galleta': 'img/galleta.jpg',
     'Zumo': 'img/zumo.jpg',
+    'Jugo': 'img/zumo.jpg',
     'Mamá': 'img/mama.jpg',
     'Papá': 'img/papa.jpg',
     'Abuela': 'img/abuela.jpg',
@@ -247,7 +255,7 @@ window.PP = window.PP || {};
     { que: "Espera, por favor", autor: "Nathan Dumlao", usuario: "nate_dumlao" },
     { que: "Estoy cansado", autor: "Xia Yang", usuario: "imrxia" },
     { que: "Estoy contento", autor: "Mieke Campbell", usuario: "miekelauren" },
-    { que: "Estoy enfadado", autor: "Vitaly Gariev", usuario: "silverkblack" },
+    { que: "Estoy enojado", autor: "Vitaly Gariev", usuario: "silverkblack" },
     { que: "Estoy triste", autor: "Anna Khromova", usuario: "anna_khromova" },
     { que: "Galleta", autor: "Vyshnavi Bisani", usuario: "vyshnavibisani" },
     { que: "Hay mucho ruido", autor: "aboodi vesakaran", usuario: "aboodi_vm" },
@@ -269,7 +277,7 @@ window.PP = window.PP || {};
     { que: "Para", autor: "Saif71.com", usuario: "saif71" },
     { que: "Plátano", autor: "Mockup Graphics", usuario: "mockupgraphics" },
     { que: "Quiero jugar", autor: "Vanessa Bucceri", usuario: "vbcreative" },
-    { que: "Quiero mis cascos", autor: "C D-X", usuario: "cdx2" },
+    { que: "Quiero mis audífonos", autor: "C D-X", usuario: "cdx2" },
     { que: "Quiero música", autor: "Alireza Attari", usuario: "alireza_attari" },
     { que: "Quiero salir", autor: "Casper van Battum", usuario: "cvbattum" },
     { que: "Quiero un abrazo", autor: "Bethany Beck", usuario: "bethanybeck" },
@@ -279,9 +287,9 @@ window.PP = window.PP || {};
     { que: "Tengo calor", autor: "Rajiv Bajaj", usuario: "rajiv63" },
     { que: "Tengo frío", autor: "Paige Cody", usuario: "paige_cody" },
     { que: "Tengo miedo", autor: "Caleb Woods", usuario: "caleb_woods" },
-    { que: "Volver del cole", autor: "Dale Pike", usuario: "grogger" },
+    { que: "Volver de la escuela", autor: "Dale Pike", usuario: "grogger" },
     { que: "Yo", autor: "🇸🇮 Janko Ferlič", usuario: "itfeelslikefilm" },
-    { que: "Zumo", autor: "ABHISHEK HAJARE", usuario: "abhishek_hajare" }
+    { que: "Jugo", autor: "ABHISHEK HAJARE", usuario: "abhishek_hajare" }
   ];
 
   // Tablero de comunicación de ejemplo.
@@ -297,14 +305,14 @@ window.PP = window.PP || {};
           b('💧', 'Quiero agua'), b('🍽️', 'Quiero comer'), b('🧸', 'Quiero jugar'), b('🚽', 'Quiero ir al baño'),
           b('🤗', 'Quiero un abrazo'), b('🌳', 'Quiero salir'), b('🎵', 'Quiero música'), b('📖', 'Quiero un cuento')] },
         { id: 'siento', nombre: 'Me siento', color: 'niebla', botones: [
-          b('😊', 'Estoy contento'), b('😢', 'Estoy triste'), b('😠', 'Estoy enfadado'), b('🥱', 'Estoy cansado'),
+          b('😊', 'Estoy contento'), b('😢', 'Estoy triste'), b('😠', 'Estoy enojado'), b('🥱', 'Estoy cansado'),
           b('😨', 'Tengo miedo'), b('🤕', 'Me duele'), b('🥵', 'Tengo calor'), b('🥶', 'Tengo frío')] },
         { id: 'necesito', nombre: 'Necesito', color: 'arena', botones: [
-          b('🛋️', 'Necesito un descanso'), b('🤫', 'Necesito silencio'), b('🙉', 'Hay mucho ruido'), b('🎧', 'Quiero mis cascos'),
-          b('🧍', 'Necesito espacio'), b('⏳', 'Espera, por favor'), b('🔁', 'Otra vez'), b('✅', 'He terminado')] },
+          b('🛋️', 'Necesito un descanso'), b('🤫', 'Necesito silencio'), b('🙉', 'Hay mucho ruido'), b('🎧', 'Quiero mis audífonos'),
+          b('🧍', 'Necesito espacio'), b('⏳', 'Espera, por favor'), b('🔁', 'Otra vez'), b('✅', 'Terminé')] },
         { id: 'comida', nombre: 'Comida', color: 'melocoton', botones: [
           b('🍎', 'Manzana'), b('🍌', 'Plátano'), b('🍞', 'Pan'), b('🥛', 'Leche'),
-          b('🍪', 'Galleta'), b('🍝', 'Pasta'), b('🥣', 'Yogur'), b('🧃', 'Zumo')] },
+          b('🍪', 'Galleta'), b('🍝', 'Pasta'), b('🥣', 'Yogur'), b('🧃', 'Jugo')] },
         { id: 'personas', nombre: 'Personas', color: 'lavanda', botones: [
           b('👩', 'Mamá'), b('👨', 'Papá'), b('👵', 'Abuela'), b('👩‍🏫', 'Profesora'), b('🧒', 'Amigo'), b('🙂', 'Yo')] }
       ]
@@ -313,14 +321,14 @@ window.PP = window.PP || {};
 
   // Biblioteca de símbolos para elegir al crear pasos (por categorías)
   PP.biblioteca = [
-    { cat: 'Aseo', items: [['🚽', 'Ir al baño'], ['🪥', 'Lavarse los dientes'], ['🧼', 'Lavarse las manos'], ['🛁', 'Bañarse'], ['🚿', 'Ducharse'], ['💇', 'Peinarse']] },
+    { cat: 'Higiene', items: [['🚽', 'Ir al baño'], ['🪥', 'Lavarse los dientes'], ['🧼', 'Lavarse las manos'], ['🛁', 'Bañarse'], ['🚿', 'Ducharse'], ['💇', 'Peinarse']] },
     { cat: 'Ropa', items: [['👕', 'Vestirse'], ['👖', 'Pantalón'], ['🧦', 'Calcetines'], ['👟', 'Zapatos'], ['🧥', 'Abrigo'], ['🩳', 'Pijama']] },
-    { cat: 'Comida', items: [['🥣', 'Desayunar'], ['🍽️', 'Comer'], ['🍎', 'Merendar'], ['🥛', 'Beber leche'], ['💧', 'Beber agua'], ['🥪', 'Bocadillo']] },
-    { cat: 'Fuera', items: [['🎒', 'Mochila'], ['🏫', 'Ir al cole'], ['🚗', 'Ir en coche'], ['🚌', 'Autobús'], ['🛝', 'Parque'], ['🛒', 'Supermercado']] },
-    { cat: 'Jugar y descansar', items: [['🧸', 'Rato tranquilo'], ['🧩', 'Puzle'], ['🎨', 'Pintar'], ['📖', 'Cuento'], ['🎵', 'Música'], ['😴', 'Dormir']] },
-    { cat: 'Emociones', items: [['😊', 'Contento'], ['😢', 'Triste'], ['😠', 'Enfadado'], ['😨', 'Miedo'], ['🥱', 'Cansado'], ['🤕', 'Me duele']] },
+    { cat: 'Comida', items: [['🥣', 'Desayunar'], ['🍽️', 'Comer'], ['🍎', 'Merendar'], ['🥛', 'Beber leche'], ['💧', 'Beber agua'], ['🥪', 'Sándwich']] },
+    { cat: 'Fuera', items: [['🎒', 'Mochila'], ['🏫', 'Ir a la escuela'], ['🚗', 'Ir en coche'], ['🚌', 'Autobús'], ['🛝', 'Parque'], ['🛒', 'Supermercado']] },
+    { cat: 'Jugar y descansar', items: [['🧸', 'Rato tranquilo'], ['🧩', 'Rompecabezas'], ['🎨', 'Pintar'], ['📖', 'Cuento'], ['🎵', 'Música'], ['😴', 'Dormir']] },
+    { cat: 'Emociones', items: [['😊', 'Contento'], ['😢', 'Triste'], ['😠', 'Enojado'], ['😨', 'Miedo'], ['🥱', 'Cansado'], ['🤕', 'Me duele']] },
     { cat: 'Personas', items: [['👩', 'Mamá'], ['👨', 'Papá'], ['👵', 'Abuela'], ['👴', 'Abuelo'], ['👩‍🏫', 'Profesora'], ['🧒', 'Amigo']] },
-    { cat: 'Respuestas', items: [['👍', 'Sí'], ['👎', 'No'], ['🙋', 'Ayuda'], ['✋', 'Para'], ['➕', 'Más'], ['✅', 'He terminado']] },
+    { cat: 'Respuestas', items: [['👍', 'Sí'], ['👎', 'No'], ['🙋', 'Ayuda'], ['✋', 'Para'], ['➕', 'Más'], ['✅', 'Terminé']] },
     { cat: 'Salud', items: [['💊', 'Medicina'], ['🩺', 'Médico'], ['🦷', 'Dentista'], ['🧘', 'Respirar'], ['🤗', 'Abrazo'], ['🛏️', 'Despertar']] }
   ];
 

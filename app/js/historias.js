@@ -38,7 +38,7 @@ window.PP = window.PP || {};
         '<li>Cuenta qué va a pasar, qué puede sentir y qué puede hacer si algo le molesta.</li>' +
         '<li>Usa palabras como «a veces» o «puede que», para no prometer lo que quizá cambie.</li>' +
         '<li>Termina con algo positivo y tranquilo.</li>' +
-        '<li>Si puedes, usa fotos reales del sitio y de las personas.</li></ul></details>';
+        '<li>Si puedes, usa fotos reales del lugar y de las personas.</li></ul></details>';
       main.onclick = function (e) {
         var b = e.target.closest('button'); if (!b) return;
         if (b.dataset.leer) PP.leerHistoria(b.dataset.leer);

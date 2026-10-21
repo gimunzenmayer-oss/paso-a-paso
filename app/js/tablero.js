@@ -17,7 +17,7 @@ window.PP = window.PP || {};
 
   // Colores suaves de las categorías (el nombre se usa en el CSS: .cat-salvia...)
   var COLORES = [
-    ['salvia', 'Verde'], ['niebla', 'Azul'], ['arena', 'Arena'], ['melocoton', 'Melocotón'], ['lavanda', 'Lavanda']
+    ['salvia', 'Verde'], ['niebla', 'Azul'], ['arena', 'Arena'], ['melocoton', 'Durazno'], ['lavanda', 'Lavanda']
   ];
   var TAMANOS = [[2, 'Grandes'], [3, 'Medianos'], [4, 'Pequeños']];
   var FIJOS = '__fijos'; // identificador especial para las palabras fijas
@@ -82,7 +82,7 @@ window.PP = window.PP || {};
       main.innerHTML =
         '<form class="formulario" id="form-cat" novalidate>' +
         (esFijos ? '<p class="intro">Estas palabras salen siempre arriba del tablero, en cualquier categoría. Mejor que sean pocas (de 3 a 5).</p>' :
-          '<label class="campo" for="cat-nombre">Nombre de la categoría<input id="cat-nombre" value="' + PP.esc(c.nombre) + '" placeholder="Por ejemplo: En el cole" autocomplete="off"></label>' +
+          '<label class="campo" for="cat-nombre">Nombre de la categoría<input id="cat-nombre" value="' + PP.esc(c.nombre) + '" placeholder="Por ejemplo: En la escuela" autocomplete="off"></label>' +
           '<fieldset class="colores"><legend class="campo-leyenda">Color</legend>' + COLORES.map(function (x) {
             return '<label class="color-op"><input type="radio" name="color" value="' + x[0] + '"' + (c.color === x[0] ? ' checked' : '') + '><span class="cat-' + x[0] + '">' + x[1] + '</span></label>';
           }).join('') + '</fieldset>') +
@@ -120,7 +120,7 @@ window.PP = window.PP || {};
         if (d.grabar != null) {
           var bot = c.botones[+d.grabar];
           if (!PP.grabando()) t.classList.add('grabando');
-          PP.grabarVoz(function (audio) { bot.audio = audio; PP.repintar(); PP.avisar('Grabación guardada. Pulsa Guardar.'); });
+          PP.grabarVoz(function (audio) { bot.audio = audio; PP.repintar(); PP.avisar('Grabación guardada. Toca Guardar.'); });
         }
         if (d.subir != null) { mover(c.botones, +d.subir, -1); PP.repintar(); }
         if (d.bajar != null) { mover(c.botones, +d.bajar, 1); PP.repintar(); }

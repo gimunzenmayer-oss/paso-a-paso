@@ -46,7 +46,7 @@ window.PP = window.PP || {};
     { id: 'lluvia', texto: 'Lluvia', picto: '🌧️' },
     { id: 'mar', texto: 'Olas del mar', picto: '🌊' },
     { id: 'ruido', texto: 'Ruido suave', picto: '🌫️' },
-    { id: 'nana', texto: 'Nana', picto: '🌙' },
+    { id: 'nana', texto: 'Canción de cuna', picto: '🌙' },
     { id: 'campanitas', texto: 'Campanitas', picto: '🎐' }
   ];
 
@@ -156,10 +156,10 @@ window.PP = window.PP || {};
     pintar: function (main) {
       var c = conf(), nombre = PP.esc(PP.estado.perfil.nombre);
       main.innerHTML =
-        '<p class="intro">Herramientas para que ' + nombre + ' se regule. Funcionan mejor si las practicáis en momentos tranquilos, para que las conozca antes de necesitarlas.</p>' +
+        '<p class="intro">Herramientas para que ' + nombre + ' se regule. Funcionan mejor si las practican en momentos tranquilos, para que las conozca antes de necesitarlas.</p>' +
         '<button class="btn principal grande ancho" data-dar>Dar el kit de calma a ' + nombre + '</button>' +
         '<h2 class="seccion-t">Respiración</h2>' +
-        '<fieldset class="segmentado tres"><legend class="sr">Segundos para coger y soltar el aire</legend>' +
+        '<fieldset class="segmentado tres"><legend class="sr">Segundos para tomar y soltar el aire</legend>' +
         [3, 4, 5].map(function (s) { return '<label><input type="radio" name="resp" value="' + s + '"' + (c.respirar === s ? ' checked' : '') + '><span>' + s + ' segundos</span></label>'; }).join('') +
         '</fieldset>' +
         '<h2 class="seccion-t">Lo que le ayuda <span class="suave">(' + c.cosas.length + ')</span></h2>' +
@@ -171,7 +171,7 @@ window.PP = window.PP || {};
         }).join('') + '</ul>' +
         '<button class="btn ancho" data-anadir>+ Añadir algo que le ayuda</button>' +
         '<h2 class="seccion-t">Música para calmarse</h2>' +
-        '<p class="suave">Lluvia, olas del mar, ruido suave, una nana y campanitas. Los crea el propio teléfono: no hace falta internet ni instalar nada. Prueba cuál le gusta; a muchos niños les ayuda un sonido constante y bajito cuando hay demasiado ruido alrededor.</p>' +
+        '<p class="suave">Lluvia, olas del mar, ruido suave, una canción de cuna y campanitas. Los crea el propio teléfono: no hace falta internet ni instalar nada. Prueba cuál le gusta; a muchos niños les ayuda un sonido constante y bajito cuando hay demasiado ruido alrededor.</p>' +
         '<div id="hoja" class="hoja" hidden></div>';
 
       main.onclick = function (e) {
@@ -233,8 +233,8 @@ window.PP = window.PP || {};
       var burbuja = $('.burbuja', cont), texto = $('.resp-texto', cont);
       function fase(dentro) {
         burbuja.classList.toggle('grande', dentro);
-        texto.textContent = dentro ? 'Coge aire…' : 'Suelta el aire…';
-        if (vueltas < 2) PP.decir(dentro ? 'Coge aire' : 'Suéltalo');
+        texto.textContent = dentro ? 'Toma aire…' : 'Suelta el aire…';
+        if (vueltas < 2) PP.decir(dentro ? 'Toma aire' : 'Suéltalo');
         reloj = setTimeout(function () {
           if (!dentro) {
             vueltas++;

@@ -18,7 +18,7 @@ window.PP = window.PP || {};
     { id: 'temporizador', texto: 'Esperar', picto: '⏳', color: 'arena', abrir: function () { PP.abrirTemporizador(); } },
     { id: 'calma', texto: 'Calma', picto: '🫧', color: 'lavanda', abrir: function () { PP.abrirCalma(); } },
     { id: 'historias', texto: 'Historias', picto: '📖', color: 'melocoton', abrir: function () { PP.abrirHistorias(); } },
-    { id: 'logros', texto: 'Mis estrellas', picto: '⭐', color: 'arena', abrir: function () { PP.abrirEstrellas(); } }
+    { id: 'logros', texto: 'Mis estrellas', picto: '⭐', color: 'sol', abrir: function () { PP.abrirEstrellas(); } }
   ];
 
   PP.abrirEspacio = function () {

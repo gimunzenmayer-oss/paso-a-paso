@@ -125,7 +125,7 @@ window.PP = window.PP || {};
         if (d.grabar != null) {
           var paso = b.pasos[+d.grabar];
           if (!PP.grabando()) t.classList.add('grabando');
-          PP.grabarVoz(function (audio) { paso.audio = audio; PP.repintar(); PP.avisar('Grabación guardada. Pulsa Guardar rutina.'); });
+          PP.grabarVoz(function (audio) { paso.audio = audio; PP.repintar(); PP.avisar('Grabación guardada. Toca Guardar rutina.'); });
         }
         if (d.subir != null) { mover(b.pasos, +d.subir, -1); PP.repintar(); }
         if (d.bajar != null) { mover(b.pasos, +d.bajar, 1); PP.repintar(); }

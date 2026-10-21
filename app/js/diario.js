@@ -17,7 +17,7 @@ window.PP = window.PP || {};
   PP.TIPOS = [
     { id: 'crisis', texto: 'Crisis', picto: '🌋' },
     { id: 'bloqueo', texto: 'Bloqueo', picto: '🐢' },
-    { id: 'frustracion', texto: 'Enfado', picto: '😤' },
+    { id: 'frustracion', texto: 'Enojo', picto: '😤' },
     { id: 'sensorial', texto: 'Sobrecarga sensorial', picto: '🔊' },
     { id: 'sueno', texto: 'Sueño', picto: '🌙' },
     { id: 'comida', texto: 'Comida', picto: '🥦' },
@@ -27,7 +27,7 @@ window.PP = window.PP || {};
   var INTENSIDAD = ['Muy leve', 'Leve', 'Media', 'Fuerte', 'Muy fuerte'];
   var DURACION = [['5', 'Menos de 5 min'], ['15', '5 a 15 min'], ['30', '15 a 30 min'], ['60', 'Más de 30 min']];
   var CAUSAS = ['Ruido', 'Cambio de planes', 'Tener que esperar', 'Hambre', 'Cansancio', 'Pasar de una actividad a otra', 'Mucha gente', 'Luces', 'Ropa o texturas', 'Le dijeron que no', 'No lo sabemos'];
-  var AYUDO = ['Sitio tranquilo', 'Cascos', 'Abrazo o presión', 'Respirar', 'Tablero', 'Anticipar con la agenda', 'Temporizador', 'Música', 'Agua o comida', 'Esperar sin hablar', 'Nada funcionó'];
+  var AYUDO = ['Sitio tranquilo', 'Audífonos', 'Abrazo o presión', 'Respirar', 'Tablero', 'Anticipar con la agenda', 'Temporizador', 'Música', 'Agua o comida', 'Esperar sin hablar', 'Nada funcionó'];
   PP.tipoDe = function (id) { return PP.TIPOS.find(function (t) { return t.id === id; }) || PP.TIPOS[7]; };
   PP.esDificil = function (e) { return e.tipo !== 'bueno'; };
 
@@ -43,10 +43,10 @@ window.PP = window.PP || {};
       return { id: PP.nuevoId(), fecha: PP.diasAtras(dias) + 'T' + hora, tipo: tipo, intensidad: int, duracion: dur, causas: causas, ayudo: ayudo, nota: nota || '', ejemplo: true };
     };
     return [
-      e(13, '18:10', 'crisis', 4, '15', ['Ruido', 'Cansancio'], ['Sitio tranquilo', 'Cascos'], 'Cumpleaños de un primo, mucha música.'),
+      e(13, '18:10', 'crisis', 4, '15', ['Ruido', 'Cansancio'], ['Sitio tranquilo', 'Audífonos'], 'Cumpleaños de un primo, mucha música.'),
       e(11, '08:05', 'frustracion', 2, '5', ['Cambio de planes'], ['Anticipar con la agenda'], ''),
-      e(10, '17:30', 'sensorial', 3, '15', ['Ruido', 'Mucha gente'], ['Cascos'], 'Supermercado a la salida del cole.'),
-      e(8, '21:15', 'sueno', 2, '30', ['Cansancio'], ['Música'], 'Le costó dormir; con la nana se calmó.'),
+      e(10, '17:30', 'sensorial', 3, '15', ['Ruido', 'Mucha gente'], ['Audífonos'], 'Supermercado a la salida de la escuela.'),
+      e(8, '21:15', 'sueno', 2, '30', ['Cansancio'], ['Música'], 'Le costó dormir; con la canción de cuna se calmó.'),
       e(7, '16:45', 'bueno', 0, '', [], [], 'Pidió «Quiero un abrazo» con el tablero.'),
       e(6, '17:50', 'crisis', 3, '15', ['Pasar de una actividad a otra', 'Cansancio'], ['Temporizador', 'Sitio tranquilo'], 'Al salir del parque.'),
       e(4, '08:20', 'bloqueo', 2, '5', ['Tener que esperar'], ['Esperar sin hablar'], ''),
@@ -72,7 +72,7 @@ window.PP = window.PP || {};
         return PP.cifrado.llave(pin, sal).then(function (k) { llave = k; return guardar(); });
       }
       if (caja.plano) {
-        diario = caja.entradas || [];
+        diario = renombrarEtiquetas(caja.entradas || []);
         if (!PP.cifrado.disponible) return;
         // Se guardó sin cifrar (navegador antiguo): ahora lo ciframos
         sal = PP.cifrado.nuevaSal();
@@ -80,9 +80,22 @@ window.PP = window.PP || {};
       }
       sal = caja.sal;
       return PP.cifrado.llave(pin, sal).then(function (k) {
-        return PP.cifrado.descifrar(k, caja).then(function (d) { llave = k; diario = d; });
+        return PP.cifrado.descifrar(k, caja).then(function (d) { llave = k; diario = renombrarEtiquetas(d); });
       });
     });
+  };
+
+  // Etiquetas que cambiaron de nombre (español de España → latino)
+  function renombrarEtiquetas(lista) {
+    lista.forEach(function (e) { e.ayudo = (e.ayudo || []).map(function (x) { return x === 'Cascos' ? 'Audífonos' : x; }); });
+    return lista;
+  }
+
+  // Quitar las entradas de ejemplo (desde el Diario o desde el Informe)
+  PP.borrarEjemplosDiario = function () {
+    var antes = diario; diario = diario.filter(function (x) { return !x.ejemplo; });
+    return guardar().then(function () { PP.avisar('Ejemplos borrados'); PP.repintar(); })
+      .catch(function () { diario = antes; PP.avisar('No se pudieron borrar. Prueba otra vez.'); });
   };
 
   PP.cerrarDiario = function () { diario = null; llave = null; };
@@ -122,6 +135,7 @@ window.PP = window.PP || {};
   };
 
   // ---------- Gráficos sencillos (barras, un solo color) ----------
+  PP.barrasDias = barrasDias;
   function barrasDias(entradas, dias) {
     var datos = [];
     for (var d = dias - 1; d >= 0; d--) {
@@ -198,10 +212,7 @@ window.PP = window.PP || {};
         if (b.dataset.editar) PP.ir('diarioNuevo', { id: b.dataset.editar });
         if (b.hasAttribute('data-cerrar')) { PP.cerrarDiario(); PP.repintar(); }
         if (b.hasAttribute('data-guia')) PP.ir('guia', null, { raiz: true });
-        if (b.hasAttribute('data-sin-ejemplos')) { var antes = diario; diario = diario.filter(function (x) { return !x.ejemplo; });
-          guardar().then(function () { PP.avisar('Ejemplos borrados'); PP.repintar(); })
-            .catch(function () { diario = antes; PP.avisar('No se pudieron borrar. Prueba otra vez.'); });
-        }
+        if (b.hasAttribute('data-sin-ejemplos')) { PP.borrarEjemplosDiario(); }
       };
     }
   };
@@ -234,7 +245,7 @@ window.PP = window.PP || {};
       var bueno = e.tipo === 'bueno';
       main.innerHTML =
         '<form class="formulario" id="form-d">' +
-        '<h2 class="seccion-t" id="d-tipo-t">¿Qué ha pasado?</h2>' +
+        '<h2 class="seccion-t" id="d-tipo-t">¿Qué pasó?</h2>' +
         '<p class="error-campo" id="d-tipo-error" role="alert"' + (params.faltaTipo && !e.tipo ? '' : ' hidden') + '>Elige qué pasó para poder guardar.</p>' +
         '<div class="rejilla-tipos">' + PP.TIPOS.map(function (t) {
           return '<button type="button" class="tipo-op' + (e.tipo === t.id ? ' activo' : '') + '" aria-pressed="' + (e.tipo === t.id) + '" data-tipo="' + t.id + '"><span aria-hidden="true">' + t.picto + '</span>' + t.texto + '</button>';
@@ -250,7 +261,7 @@ window.PP = window.PP || {};
           }).join('') + '</fieldset>' +
           '<h2 class="seccion-t">¿Qué crees que lo provocó? <span class="suave">(puedes marcar varias)</span></h2>' + chips(CAUSAS, 'causas') +
           '<h2 class="seccion-t">¿Qué ayudó?</h2>' + chips(AYUDO, 'ayudo') : '') +
-        (e.tipo ? '<label class="campo" for="d-nota">Nota <span class="suave">(opcional)</span><textarea id="d-nota" rows="3" placeholder="' + (bueno ? '¿Qué salió bien?' : 'Dónde estabais, qué pasó antes…') + '">' + PP.esc(e.nota) + '</textarea></label>' +
+        (e.tipo ? '<label class="campo" for="d-nota">Nota <span class="suave">(opcional)</span><textarea id="d-nota" rows="3" placeholder="' + (bueno ? '¿Qué salió bien?' : 'Dónde estaban, qué pasó antes…') + '">' + PP.esc(e.nota) + '</textarea></label>' +
           '<label class="campo" for="d-fecha">Cuándo<input id="d-fecha" type="datetime-local" value="' + PP.esc(e.fecha.slice(0, 16)) + '"></label>' : '') +
         (params.id ? '<div class="zona-extra" id="zona-borrar"><button type="button" class="btn peligro" data-borrar>Borrar esta nota</button></div>' : '') +
         '<div class="pie-form" id="pie-d"><button type="submit" class="btn principal">Guardar</button><button type="button" class="btn" data-cancelar>Cancelar</button></div>' +

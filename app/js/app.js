@@ -295,11 +295,12 @@ window.PP = window.PP || {};
         '<section class="bloque">' +
         '  <p class="saludo">' + saludo + '</p>' +
         '  <h2 class="titular">Zona de la familia</h2>' +
+        '  <button class="fila-urgente" data-ir-a="guia"><span aria-hidden="true">🧭</span><span class="crece"><strong>¿Momento difícil?</strong> Qué hacer ahora mismo</span><span aria-hidden="true">›</span></button>' +
         '</section>' +
         // 1) La puerta al espacio del niño, bien visible
         '<section class="tarjeta puerta-nino" aria-labelledby="esp-t">' +
         '  <div class="fila"><span class="picto-m" aria-hidden="true">🧒</span><div class="crece"><h3 id="esp-t">Espacio de ' + nombre + '</h3>' +
-        '  <p class="suave">Sus herramientas en grande, sin menús de adultos. Para salir: mantén pulsado el candado y escribe tu PIN.</p></div></div>' +
+        '  <p class="suave">Sus herramientas en grande. Para salir, mantén presionado el candado.</p></div></div>' +
         '  <button class="btn principal grande ancho" data-espacio>Abrir el espacio de ' + nombre + '</button>' +
         '</section>' +
         // 2) La rutina de ahora
@@ -314,8 +315,7 @@ window.PP = window.PP || {};
         // 3) Ayudas para el adulto
         '<section class="bloque" aria-labelledby="ayu-t"><h2 id="ayu-t" class="seccion-t">Para ti</h2>' +
         '<div class="rejilla-mod">' +
-        '<button class="mod" data-ir-a="diarioNuevo"><span class="mod-n">📝 Anotar en el diario</span><span class="mod-d">Registro rápido, en 30 segundos</span></button>' +
-        '<button class="mod" data-ir-a="guia"><span class="mod-n">🧭 ¿Momento difícil?</span><span class="mod-d">Qué hacer ahora mismo</span></button>' +
+        '<button class="mod ancha" data-ir-a="diarioNuevo"><span class="mod-n">📝 Anotar en el diario</span><span class="mod-d">Registro rápido, en 30 segundos</span></button>' +
         '<button class="mod" data-ir-a="preparar"><span class="mod-n">🧩 Preparar herramientas</span><span class="mod-d">Rutinas, tablero, historias…</span></button>' +
         '<button class="mod" data-ir-a="logros"><span class="mod-n">⭐ ' + semana + ' estrella' + (semana === 1 ? '' : 's') + ' esta semana</span><span class="mod-d">Logros y avances</span></button>' +
         '</div></section>' +
@@ -503,7 +503,9 @@ window.PP = window.PP || {};
   PP.prepararDatos = function () {
     var e = PP.completarDatos(PP.estado);
     // 'Seño' pasó a llamarse 'Profesora'
-    e.tablero.categorias.forEach(function (c) { c.botones.forEach(function (b) { if (b.texto === 'Seño') b.texto = 'Profesora'; }); });
+    // y los textos de España pasaron a español latino
+    var NUEVOS = { 'Seño': 'Profesora', 'Estoy enfadado': 'Estoy enojado', 'He terminado': 'Terminé', 'Zumo': 'Jugo', 'Quiero mis cascos': 'Quiero mis audífonos' };
+    e.tablero.categorias.forEach(function (c) { c.botones.forEach(function (b) { if (NUEVOS[b.texto]) b.texto = NUEVOS[b.texto]; }); });
     var listo = (e.perfil.pin && PP.cifrado.disponible) ? PP.fijarPin(e.perfil.pin) : Promise.resolve();
     if (e.perfil.pinDePrueba == null) e.perfil.pinDePrueba = e.perfil.pin === '1234';
     return listo.then(function () { return PP.persistir(); });

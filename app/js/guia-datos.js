@@ -38,17 +38,17 @@ window.PP = window.PP || {};
         ],
         momento: [
           'Primero, la seguridad: aparta objetos peligrosos y, si hace falta, a otros niños.',
-          'Baja los estímulos: apaga la tele, baja luces, aléjate del ruido si podéis.',
+          'Baja los estímulos: apaga la tele, baja luces, aléjate del ruido si pueden.',
           'Habla muy poco, con voz baja y frases cortas: "Estoy aquí. Estás a salvo."',
-          'Dale espacio. Mantente cerca sin tocar, salvo que sepas que el contacto le calma.',
-          'Ofrece su objeto de calma (cascos, mantita, peluche) sin insistir.',
+          'Dale espacio. Mantente cerca sin tocar, salvo que sepas que el contacto lo calma.',
+          'Ofrece su objeto de calma (audífonos, mantita, peluche) sin insistir.',
           'Espera. La crisis baja sola cuando el cuerpo se regula; tu calma le ayuda.'
         ],
         evitar: [
           'Hacer preguntas, dar explicaciones largas o razonar.',
           'Gritar, castigar o amenazar: aumenta la sobrecarga.',
-          'Sujetarle salvo que haya peligro real e inmediato.',
-          'Rodearle de gente o dejar que otros miren y opinen.',
+          'Sujetarlo salvo que haya peligro real e inmediato.',
+          'Rodearlo de gente o dejar que otros miren y opinen.',
           'Exigir que pida perdón o que hable en ese momento.'
         ],
         despues: [
@@ -58,7 +58,7 @@ window.PP = window.PP || {};
           'Anota en el diario qué pasó antes (lugar, hora, sueño, comida, ruido) para encontrar patrones.',
           'Cuídate tú también: es normal sentirse agotado o con ganas de llorar.'
         ],
-        urgente: 'Si hay riesgo de que se haga daño grave o lo haga a otros y no puedes evitarlo, llama al 112 (o al número de emergencias de tu país).',
+        urgente: 'Si hay riesgo de que se haga daño grave o lo haga a otros y no puedes evitarlo, llama al 911 (o al número de emergencias de tu país).',
         herramientas: ['calma']
       },
       {
@@ -73,7 +73,7 @@ window.PP = window.PP || {};
           'Deja a medias lo que estaba haciendo.'
         ],
         momento: [
-          'Acepta el silencio: no le obligues a hablar ni a mirarte.',
+          'Acepta el silencio: no lo obligues a hablar ni a mirarte.',
           'Ofrece un espacio tranquilo y protegido donde pueda quedarse.',
           'Usa el tablero o tarjetas para que pueda comunicar sin palabras ("necesito descanso").',
           'Quita exigencias: la tarea, la salida o la visita pueden esperar.',
@@ -82,19 +82,19 @@ window.PP = window.PP || {};
         evitar: [
           'Interpretarlo como desobediencia o mala educación.',
           'Insistir con preguntas: "¿Qué te pasa? ¡Contéstame!"',
-          'Tocarle o moverle de golpe.',
+          'Tocarlo o moverlo de golpe.',
           'Llenar el silencio con ruido o con muchas personas.'
         ],
         despues: [
           'Deja que vuelva a su ritmo; puede necesitar horas.',
           'Reduce las demandas el resto del día.',
-          'Anota qué lo provocó: muchas veces es acumulación (cole + ruido + poco sueño).',
+          'Anota qué lo provocó: muchas veces es acumulación (escuela + ruido + poco sueño).',
           'Piensa con su terapeuta cómo darle descansos antes de llegar a ese punto.'
         ],
         herramientas: ['tablero']
       },
       {
-        id: 'frustracion', titulo: 'Enfado o frustración', picto: '😤',
+        id: 'frustracion', titulo: 'Enojo o frustración', picto: '😤',
         resumen: 'Algo no sale como esperaba y no sabe expresarlo.',
         quees: 'A diferencia de la crisis por sobrecarga, aquí el niño tiene cierto control y suele buscar algo: que le den un objeto, terminar una actividad, que algo pare. Muchas veces es la única forma que encuentra de comunicar una necesidad o un "no".',
         senales: [
@@ -104,14 +104,14 @@ window.PP = window.PP || {};
           'Aparece en momentos concretos (al apagar la tablet, al salir del parque).'
         ],
         momento: [
-          'Pon nombre a lo que siente: "Estás enfadado porque se acabó la tablet."',
+          'Pon nombre a lo que siente: "Estás enojado porque se acabó la tablet."',
           'Mantén el límite con calma y pocas palabras si es necesario.',
           'Ofrece dos opciones aceptables: "¿Guardamos la tablet tú o yo?"',
           'Enséñale cómo pedirlo: con el tablero, un gesto o una palabra.',
           'Refuerza enseguida cualquier forma tranquila de comunicar.'
         ],
         evitar: [
-          'Ceder justo cuando el enfado es más fuerte (aprende que así funciona).',
+          'Ceder justo cuando el enojo es más fuerte (aprende que así funciona).',
           'Discutir o dar sermones largos.',
           'Ridiculizar o comparar con otros niños.',
           'Retirar el cariño como castigo.'
@@ -135,13 +135,13 @@ window.PP = window.PP || {};
         ],
         momento: [
           'Sal del lugar o busca un rincón más tranquilo cuanto antes.',
-          'Ofrece cascos de cancelación de ruido, gorra o gafas de sol.',
+          'Ofrece audífonos con cancelación de ruido, gorra o lentes de sol.',
           'Habla poco y en voz baja.',
           'Ofrece presión profunda si le gusta (abrazo firme, mantita pesada).'
         ],
         evitar: [
           'Decir "no es para tanto" o "no pasa nada": para él sí pasa.',
-          'Obligarle a quedarse "para que se acostumbre".',
+          'Obligarlo a quedarse "para que se acostumbre".',
           'Añadir más estímulos (cantar, hablar mucho, poner música).'
         ],
         despues: [
@@ -155,7 +155,7 @@ window.PP = window.PP || {};
       {
         id: 'cambios', titulo: 'Cambios inesperados', picto: '🔀',
         resumen: 'Un plan que cambia, una ruta distinta, una visita sorpresa.',
-        quees: 'La previsibilidad da seguridad. Cuando algo cambia sin aviso, el niño pierde ese mapa mental y puede sentir mucha ansiedad, aunque el cambio parezca pequeño (otra ruta al cole, otra maestra, la piscina cerrada).',
+        quees: 'La previsibilidad da seguridad. Cuando algo cambia sin aviso, el niño pierde ese mapa mental y puede sentir mucha ansiedad, aunque el cambio parezca pequeño (otra ruta a la escuela, otra maestra, la piscina cerrada).',
         senales: [
           'Pregunta una y otra vez por el plan original.',
           'Se aferra a una rutina o a un objeto.',
@@ -186,7 +186,7 @@ window.PP = window.PP || {};
         senales: [
           'Se toca o golpea suavemente una zona antes de hacerlo fuerte.',
           'Aparece con más frecuencia cuando está cansado, enfermo o sobrecargado.',
-          'Señales de dolor: se toca el oído, la boca o la tripa.'
+          'Señales de dolor: se toca el oído, la boca o la panza.'
         ],
         momento: [
           'Protege sin pelear: pon un cojín entre su cabeza y la pared, o tu mano.',
@@ -204,7 +204,7 @@ window.PP = window.PP || {};
           'Anota cuándo pasó, qué ocurrió antes y si podía haber dolor.',
           'Consulta con su pediatra y terapeuta; un plan individual es lo más eficaz.'
         ],
-        urgente: 'Si hay un golpe fuerte en la cabeza, sangrado que no para o te preocupa una lesión, acude a urgencias o llama al 112 (o al número de emergencias de tu país).'
+        urgente: 'Si hay un golpe fuerte en la cabeza, sangrado que no para o te preocupa una lesión, acude a urgencias o llama al 911 (o al número de emergencias de tu país).'
       },
       {
         id: 'agresion', titulo: 'Agresión hacia otros', picto: '🤚',
@@ -223,8 +223,8 @@ window.PP = window.PP || {};
         ],
         evitar: [
           'Devolver el golpe o usar castigo físico.',
-          'Gritar o acorralarle.',
-          'Obligarle a pedir perdón en ese momento.'
+          'Gritar o acorralarlo.',
+          'Obligarlo a pedir perdón en ese momento.'
         ],
         despues: [
           'Atiende a la otra persona y, con calma, explica a los demás que fue un momento de sobrecarga.',
@@ -245,13 +245,13 @@ window.PP = window.PP || {};
         ],
         momento: [
           'Corre detrás sin gritar su nombre de forma alarmante; usa una palabra clave practicada ("¡Quieto!").',
-          'Si le pierdes de vista, busca primero cerca del agua y de las carreteras.',
+          'Si lo pierdes de vista, busca primero cerca del agua y de las carreteras.',
           'Pide ayuda a quienes estén cerca con una descripción clara (ropa, edad, que no habla).',
-          'Si no le encuentras en pocos minutos, llama al 112.'
+          'Si no lo encuentras en pocos minutos, llama al 911.'
         ],
         evitar: [
           'Perder tiempo buscando solo/a: pide ayuda pronto.',
-          'Regañar con gritos al encontrarle (puede volver a huir).'
+          'Regañar con gritos al encontrarlo (puede volver a huir).'
         ],
         despues: [
           'Revisa la seguridad de casa: cerraduras altas, alarmas en puertas.',
@@ -259,7 +259,7 @@ window.PP = window.PP || {};
           'Practica "stop" y "dame la mano" como juego.',
           'Enséñale a nadar o pide información sobre seguridad en el agua si le atrae.'
         ],
-        urgente: 'Si no le encuentras, llama al 112 (o al número de emergencias de tu país) cuanto antes y di que es un niño autista que puede no responder a su nombre.'
+        urgente: 'Si no lo encuentras, llama al 911 (o al número de emergencias de tu país) cuanto antes y di que es un niño autista que puede no responder a su nombre.'
       },
       {
         id: 'sueno', titulo: 'Problemas para dormir', picto: '🌙',
@@ -328,8 +328,8 @@ window.PP = window.PP || {};
           'Lleva su objeto de calma y algo que le guste para después.'
         ],
         evitar: [
-          'Mentir ("no te va a doler") si va a haber una vacuna o un pinchazo.',
-          'Sujetarle por sorpresa.'
+          'Mentir ("no te va a doler") si va a haber una vacuna o una inyección.',
+          'Sujetarlo por sorpresa.'
         ],
         despues: [
           'Refuerza con algo que le guste.',
@@ -354,7 +354,7 @@ window.PP = window.PP || {};
         ],
         evitar: [
           'Discutir con desconocidos en ese momento.',
-          'Reñir a tu hijo para "quedar bien".'
+          'Regañar a tu hijo para "quedar bien".'
         ],
         despues: [
           'Date permiso para sentir lo que sientas: rabia, vergüenza o tristeza son normales.',

@@ -50,18 +50,20 @@ window.PP = window.PP || {};
 
       var tabla = function (filas, cab) {
         if (!filas.length) return '<p class="suave">Sin datos en este periodo.</p>';
-        return '<table class="tabla"><thead><tr>' + cab.map(function (c) { return '<th>' + c + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        // Si la última columna son números, va alineada a la derecha y con ancho fijo
+        var cifra = filas.every(function (f) { return /^\d+$/.test(f[f.length - 1]); });
+        return '<table class="tabla' + (cifra ? ' cifra' : '') + '"><thead><tr>' + cab.map(function (c) { return '<th>' + c + '</th>'; }).join('') + '</tr></thead><tbody>' +
           filas.map(function (f) { return '<tr>' + f.map(function (c) { return '<td>' + PP.esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>';
       };
 
       main.innerHTML =
         '<section class="tarjeta bloque no-imprimir">' +
-        '<p>Elige el periodo y pulsa "Imprimir". En la ventana que aparece puedes elegir <strong>Guardar como PDF</strong> para enviarlo o llevarlo en el móvil.</p>' +
+        '<p>Elige el periodo y toca "Imprimir". En la ventana que aparece puedes elegir <strong>Guardar como PDF</strong> para enviarlo o llevarlo en el celular.</p>' +
         '<fieldset class="segmentado tres"><legend class="campo-leyenda">Periodo</legend>' + PERIODOS.map(function (x) {
           return '<label><input type="radio" name="per" value="' + x[0] + '"' + (params.dias === x[0] ? ' checked' : '') + '><span>' + x[1] + '</span></label>';
         }).join('') + '</fieldset>' +
-        PP.interruptor('inf-notas', 'Incluir las notas del diario', 'Desactivado: solo se ven los números', params.notas) +
-        (ejemplos ? '<p class="aviso-legal">Ojo: el diario aún tiene entradas de ejemplo. Bórralas en el Diario antes de llevar el informe.</p>' : '') +
+        PP.interruptor('inf-notas', 'Incluir las notas del diario', params.notas ? 'Activado: se incluyen las notas escritas' : 'Desactivado: solo se ven los números', params.notas) +
+        (ejemplos ? '<div class="aviso-legal fila"><span class="crece">Ojo: el diario aún tiene entradas de ejemplo.</span><button class="btn" data-sin-ejemplos>Borrarlas</button></div>' : '') +
         '<button class="btn principal grande ancho" data-imprimir>Imprimir o guardar como PDF</button></section>' +
 
         '<article class="informe" aria-label="Vista previa del informe">' +
@@ -71,18 +73,19 @@ window.PP = window.PP || {};
 
         '<h3>Rutinas</h3>' +
         '<p>Rutinas terminadas enteras: <strong>' + estrellas.length + '</strong>, en <strong>' + Object.keys(diasConRutina).length + '</strong> de ' + params.dias + ' días.</p>' +
-        tabla(Object.keys(porRutina).map(function (k) { return [k, String(porRutina[k])]; }), ['Rutina', 'Veces terminada']) +
+        tabla(Object.keys(porRutina).map(function (k) { return [k, String(porRutina[k])]; }), ['Rutina', 'Veces terminadas']) +
 
         '<h3>Comunicación (tablero)</h3>' +
-        tabla(topPalabras.map(function (x) { return [x[0], String(x[1])]; }), ['Lo que más ha dicho', 'Veces']) +
+        tabla(topPalabras.map(function (x) { return [x[0], String(x[1])]; }), ['Lo que más dijo', 'Veces']) +
 
         '<h3>Diario de la familia</h3>' +
         '<p>Momentos difíciles: <strong>' + dificiles.length + '</strong>' + (dificiles.length ? ' · intensidad media ' + media.toFixed(1) + ' de 5' : '') +
         ' · Buenos momentos anotados: <strong>' + (entradas.length - dificiles.length) + '</strong></p>' +
         tabla(Object.keys(porTipo).map(function (k) { return [k, String(porTipo[k])]; }), ['Tipo', 'Veces']) +
         tabla(Object.keys(franjas).filter(function (k) { return franjas[k]; }).map(function (k) { return [k, String(franjas[k])]; }), ['Momento del día', 'Momentos difíciles']) +
-        tabla(PP.ranking(dificiles, 'causas', 6).map(function (x) { return [x[0], String(x[1])]; }), ['Posibles desencadenantes', 'Veces']) +
-        tabla(PP.ranking(dificiles, 'ayudo', 6).map(function (x) { return [x[0], String(x[1])]; }), ['Lo que ayudó', 'Veces']) +
+        (params.dias === 7 && PP.barrasDias ? '<h4>Momentos difíciles por día</h4>' + PP.barrasDias(entradas, 7) : '') +
+        '<h4>Posibles desencadenantes</h4>' + PP.barrasRanking(PP.ranking(dificiles, 'causas', 6)) +
+        '<h4>Lo que ayudó</h4>' + PP.barrasRanking(PP.ranking(dificiles, 'ayudo', 6)) +
         (params.notas ? '<h4>Notas</h4>' + tabla(entradas.map(function (e) {
           return [new Date(e.fecha).toLocaleString('es', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }), PP.tipoDe(e.tipo).texto + (e.intensidad ? ' (' + INT[e.intensidad] + ')' : ''), e.nota || '—'];
         }), ['Cuándo', 'Qué', 'Nota']) : '') +
@@ -101,6 +104,7 @@ window.PP = window.PP || {};
       };
       main.oninput = function (e) { if (e.target.id === 'inf-com') params.comentarios = e.target.value; };
       main.onclick = function (e) {
+        if (e.target.closest('[data-sin-ejemplos]')) { params.comentarios = $('#inf-com').value; PP.borrarEjemplosDiario(); return; }
         if (!e.target.closest('[data-imprimir]')) return;
         try { window.print(); } catch (x) { PP.avisar('Usa la opción Imprimir del navegador.'); }
       };
