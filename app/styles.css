@@ -617,6 +617,20 @@ html.calma .picto-espacio { filter: saturate(.45); }
 .comentarios { font: inherit; width: 100%; border: 1.5px solid var(--borde); border-radius: 12px; padding: 10px; background: var(--superficie); color: inherit; }
 .pie-informe { font-size: .8rem; color: var(--tinta-suave); }
 
+/* Movimiento: respuesta al toque y entrada escalonada (lo apagan "Modo calma" y "reducir movimiento") */
+:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .boton-espacio, .menu button) {
+  transition: transform .12s ease-out, background-color .2s, border-color .2s, box-shadow .2s;
+}
+:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .boton-espacio, .menu button):active:not(:disabled) { transform: scale(.97); }
+@keyframes entrar { from { opacity: 0; transform: translateY(8px); } }
+.entrando > * { animation: entrar .32s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--i, 0) * 60ms); }
+.rejilla-espacio > * { animation: entrar .32s cubic-bezier(.2, .7, .2, 1) both; }
+.rejilla-espacio > :nth-child(2) { animation-delay: 60ms; } .rejilla-espacio > :nth-child(3) { animation-delay: 120ms; }
+.rejilla-espacio > :nth-child(4) { animation-delay: 180ms; } .rejilla-espacio > :nth-child(5) { animation-delay: 240ms; }
+.rejilla-espacio > :nth-child(6) { animation-delay: 300ms; }
+@keyframes marcar { 50% { transform: scale(1.06); } }
+.chip-op.activo, .tipo-op.activo { animation: marcar .2s ease-out; }
+
 @media print {
   .barra, .menu, .no-imprimir, #aviso, #nino, #pin { display: none !important; }
   body, #app { background: #fff; color: #000; }

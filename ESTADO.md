@@ -1,7 +1,7 @@
 # ESTADO — Paso a Paso
 Última actualización: 2026-10-21 | Sesión actual: 1 (Flujo C: mejorar app existente) | Panel de administración construido, en revisión visual
 
-⏸️ CHECKPOINT — Última acción completada: auditoría senior, capa 3 (diseño) aplicada y verificada / Siguiente acción exacta: capa 4 (animaciones: respuesta al toque, entrada escalonada, reduced-motion). Reporte completo: /mnt/project-files/auditoria-paso-a-paso/REPORTE-AUDITORIA.md
+⏸️ CHECKPOINT — Última acción completada: auditoría senior, capa 4 (animaciones) aplicada y verificada / Siguiente acción exacta: capa 5 (retención: texto de la garantía, plan de recordatorios y correos; confirmar alcance del onboarding/paywall con la usuaria). Reporte completo: /mnt/project-files/auditoria-paso-a-paso/REPORTE-AUDITORIA.md
 
 ## Qué es esta app (3 líneas máximo)
 PWA para madres/padres de niños autistas de 2 a 12 años (ejemplo: Mateo, 6). Dos zonas: "Espacio de Mateo" (niño, bloqueado con PIN) y zona de la familia (agenda visual, tablero de comunicación, temporizador, kit de calma con música, historias sociales, diario de crisis cifrado, logros, informe para profesionales, guía).
@@ -104,3 +104,6 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Verificado: typecheck ✓ · build ✓ · servidor ✓ · node --check en todos los JS · sin errores de página · interruptor del informe cambia el texto · "Borrarlas" desde el informe deja 0 ejemplos · capturas auditoria-paso-a-paso/capturas/L3-*.png. Puntaje del revisor: en la capa 6.
 - Para decidir: los eventos "diario_nota_guardada" y "calma_usada" siguen (la privacidad los declara y se pueden apagar); agruparlos requiere cambiar la base de producción.
 - Textos guardados con nombres viejos en rutinas/historias de familias existentes no se renombran (solo hay datos de ejemplo; "Volver a los datos de ejemplo" los actualiza).
+### Capa 4: animaciones (2026-10-21) ✅
+- Hecho: todos los botones y tarjetas tocables se encogen un poco al tocarlos (0,12 s) · cada pantalla nueva entra escalonada (60 ms entre bloques) y los 6 botones del modo niño también · opciones del diario hacen un pequeño "pop" al marcarse · al cambiar algo dentro de la misma pantalla (elegir tipo, Ver más) ya no salta arriba ni se repite la animación · todo se apaga con "Modo calma" y con "reducir movimiento" del teléfono · sw.js v12.
+- Verificado: typecheck ✓ · build ✓ · servidor ✓ · sin errores de página · con movimiento: animación "entrar" con 0/60/120 ms · con reducir movimiento: none · repintar conserva el scroll (400 → 400) y navegar vuelve arriba (0) · captura L4-entrada-80ms.png.

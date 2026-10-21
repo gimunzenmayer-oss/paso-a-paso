@@ -81,7 +81,10 @@ window.PP = window.PP || {};
     pintar();
   };
 
-  function pintar() {
+  // pintar(): pantalla nueva (empieza arriba y entra escalonada).
+  // PP.repintar(): la misma pantalla cambió; se queda donde estaba, sin animar.
+  function pintar(opciones) {
+    var mantener = opciones && opciones.mantener, y = window.scrollY;
     var p = PP.pantallas[PP.actual.nombre] || PP.pantallas.inicio;
     var main = $('#contenido');
     $('#titulo').textContent = typeof p.titulo === 'function' ? p.titulo(PP.actual.params) : p.titulo;
@@ -95,12 +98,17 @@ window.PP = window.PP || {};
     });
     main.innerHTML = '';
     main.onclick = main.onchange = main.oninput = null; // cada pantalla pone los suyos
+    main.classList.remove('entrando');
     p.pintar(main, PP.actual.params);
+    if (mantener) { window.scrollTo(0, y); return; }
+    Array.prototype.slice.call(main.children, 0, 8).forEach(function (h, i) { h.style.setProperty('--i', i); });
+    void main.offsetWidth; // reinicia la animación de entrada
+    main.classList.add('entrando');
     main.scrollTop = 0;
     window.scrollTo(0, 0); // cada pantalla nueva empieza arriba
     main.focus({ preventScroll: true });
   }
-  PP.repintar = pintar;
+  PP.repintar = function () { pintar({ mantener: true }); };
 
   // ---------- MODO NIÑO ----------
   // El "Espacio de Mateo": pantalla completa, sin menú de adultos.
