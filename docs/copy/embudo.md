@@ -253,6 +253,8 @@ El mensaje es el mismo exista o no el correo, para no revelar quién tiene cuent
 - Reenviar, ya disponible: Reenviar código
 - Aviso al reenviar (aria-live): Te mandamos otro código. Usa el más nuevo.
 - Enlace: Usar otro correo
+- Aviso, si el enlace del correo no sirvió (llega desde `/auth/callback`): Ese enlace ya se usó o venció. Pide un código nuevo aquí. (pendiente de aprobar)
+- Aviso, después de cerrar sesión en `/cuenta`: Cerraste sesión.
 
 #### Errores del código
 | Caso | Texto |
@@ -303,6 +305,11 @@ Estos mensajes salen solo después de que la persona demostró que el correo es 
 | `refunded` | Reembolsada | Te devolvimos el pago. Tus datos siguen en este teléfono. |
 | No se pudo verificar | Sin verificar | No pudimos revisar tu acceso ahora. Toca Reintentar. |
 | Sin compra | Sin compra con este correo | ¿Compraste con otro correo? Escríbenos a hadaapps@gmail.com. |
+| `cancelled` o `expired` sin fecha guardada | Terminada | Tu acceso terminó. Tus datos siguen en este teléfono. (pendiente de aprobar) |
+| `admin` (la dueña) | Acceso de administradora | Siempre tienes acceso, para probar la app y dar soporte. (pendiente de aprobar) |
+
+- `expired` usa la fila "Terminada" y `chargeback` la fila "Reembolsada". (pendiente de aprobar)
+- Si llega desde `?compra=1` y todavía no hay compra, en lugar de "Sin compra" sale "Tu compra está en camino" (§3.3) con "Revisar de nuevo".
 
 - Botón: Gestionar o cancelar en Hotmart
 - Ayuda: Se abre Hotmart. Ahí cambias tu tarjeta o cancelas.

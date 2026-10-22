@@ -17,6 +17,7 @@ import { CtaFinal } from '@/components/landing/CtaFinal';
 import { FooterLegal } from '@/components/landing/FooterLegal';
 import { StickyCtaMobile } from '@/components/landing/ui';
 import { Medicion } from '@/components/landing/Medicion';
+import { Logo } from '@/components/landing/Logo';
 import Image from 'next/image';
 import { MotionConfig } from 'motion/react';
 import { SOPORTE_EMAIL } from '@/lib/marca';
@@ -24,15 +25,6 @@ import { SOPORTE_EMAIL } from '@/lib/marca';
 // Modelo 2 (onboarding primero): la mamá prueba antes de pagar. Nunca al pago desde aquí.
 const CTA_HREF = '/onboarding';
 const CTA_LABEL = 'Probar gratis con mi peque';
-
-function Logo() {
-  return (
-    <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
-      <rect width="32" height="32" rx="9" fill="var(--accent)" />
-      <path d="M8 21h5v-5h5v-5h6" fill="none" stroke="var(--surface)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 function VisualHero() {
   return (

@@ -7,3 +7,8 @@ export function configSupabase() {
   }
   return { url, llave };
 }
+
+// Sin lanzar error: para las páginas de clientas que deben responder aunque falte la configuración.
+export function hayConfigSupabase(): boolean {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+}

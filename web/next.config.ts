@@ -47,6 +47,9 @@ const nextConfig: NextConfig = {
     return [
       { source: "/app", destination: "/app/index.html", permanent: false },
       { source: "/app/", destination: "/app/index.html", permanent: false },
+      // Entrada de las clientas (entrada de pago, paso 7): /login es el nombre que la gente prueba.
+      // No toca /admin/entrar (el panel tiene su propia entrada).
+      { source: "/login", destination: "/entrar", permanent: false },
     ];
   },
   // Encabezados de seguridad para todo el sitio (09/27).

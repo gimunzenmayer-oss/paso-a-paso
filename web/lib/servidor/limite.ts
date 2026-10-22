@@ -19,3 +19,10 @@ export function permitido(clave: string, maximo: number, ventanaMs: number): boo
 export function ipDe(req: Request): string {
   return req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'sin-ip';
 }
+
+// Minutos que faltan para que `clave` vuelva a estar permitida (mínimo 1), para decírselo a la persona.
+export function minutosDeEspera(clave: string, ventanaMs: number): number {
+  const v = ventanas.get(clave);
+  if (!v) return 1;
+  return Math.max(1, Math.ceil((ventanaMs - (Date.now() - v.inicio)) / 60_000));
+}

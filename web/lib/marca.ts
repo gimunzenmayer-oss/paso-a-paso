@@ -6,3 +6,5 @@ export const SOPORTE_EMAIL = 'hadaapps@gmail.com';
 export const ACTUALIZADO = '21 de octubre de 2026';
 export const GARANTIA_DIAS = 30;
 export const PRUEBA_DIAS = 7;
+// Área de compras de Hotmart ("Mis compras"): ahí la clienta cambia su tarjeta o cancela.
+export const HOTMART_MIS_COMPRAS = 'https://consumer.hotmart.com/purchase';
