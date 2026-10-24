@@ -362,6 +362,7 @@ window.PP = window.PP || {};
         if (b.hasAttribute('data-espacio')) PP.abrirEspacio();
         if (b.dataset.empezar) PP.empezarRutina(b.dataset.empezar);
         if (b.hasAttribute('data-instalar')) instalar(b);
+        if (b.hasAttribute('data-revisar')) PP.acceso.revisarDesdeBoton(); // "Revisar ahora" del aviso sin conexión (bloqueo.js)
         if (b.hasAttribute('data-primer-foto')) PP.ir('editarRutina', { id: PP.estado.perfil.rutinaInicial });
         if (b.hasAttribute('data-primer-pin')) PP.ir('ajustes');
         if (b.hasAttribute('data-instalar-no')) { try { localStorage.setItem('pp_aviso_instalar', 'no'); } catch (err) { } PP.repintar(); }

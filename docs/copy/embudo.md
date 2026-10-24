@@ -329,15 +329,23 @@ Estos mensajes salen solo después de que la persona demostró que el correo es 
 ### 5.1 Pantalla de bloqueo
 Sale solo con `acceso:false` explícito.
 - Título: Tu acceso está en pausa
+- Motivo, debajo del título, según el estado que guardó la app (lo devuelve `/api/acceso`): (pendiente de aprobar) · antes: sin motivo
+  - `cancelled` (también la prueba cancelada; la base no las distingue): La prueba o la suscripción se canceló, y el acceso terminó.
+  - `expired` (pago rechazado): Hotmart no pudo cobrar el pago.
+  - `refunded` o `chargeback`: Te devolvimos el pago.
+  - sin compra (`none`): No vemos una compra con este correo.
+  - otro estado: sin motivo
 - Texto: No borramos nada. Las rutinas, las fotos y el diario de {nombre} siguen en este teléfono.
 - Bloque destacado:
   - título: Esto sigue abierto, siempre
   - texto: La guía "¿Momento difícil?" y el kit de calma son para cuando más se necesitan. No se cierran nunca.
   - botones: ¿Momento difícil? · Kit de calma
+  - cada botón igual que en el inicio de la app, con su ícono y su descripción: ¿Momento difícil? Qué hacer ahora mismo · Kit de calma: Respirar, contar, música y lo que le ayuda
 - Botón principal: Volver a activar (→ `/paywall`)
 - Enlace: Ya pagué: revisar de nuevo
 - Enlace, mientras revisa: Revisando…
 - Si al revisar la base sigue sin ver el pago (aria-live): Todavía no vemos el pago. A veces Hotmart tarda unos minutos en avisarnos: revisa de nuevo en un momento. (pendiente de aprobar)
+  - debajo, enlace a `/entrar`: Si pagaste con otro correo, entra con ese. (pendiente de aprobar) · antes: sin esta línea
 - Enlace: Entrar con otro correo (→ `/entrar`)
 - Pie: ¿Dudas? hadaapps@gmail.com
 
@@ -345,17 +353,23 @@ Sale solo con `acceso:false` explícito.
 - Título: Entra para abrir tu app
 - Texto: Usa el correo de tu compra. La guía "¿Momento difícil?" y el kit de calma están abiertos mientras tanto.
 - Botón: Entrar (→ `/entrar`)
+- Pie: ¿Dudas? hadaapps@gmail.com (el de §5.1) (pendiente de aprobar) · antes: sin pie
 - Si se cerró la sesión pero el pase de 7 días sigue vigente (la app sigue abierta; tarjeta en el inicio con el botón Entrar): Tu sesión se cerró en este teléfono. Entra antes del {fecha_fin} para seguir sin cortes. (pendiente de aprobar)
 
 ### 5.3 Modo sin internet (gracia de 7 días)
 - Aviso discreto (días 1 a 4): Sin internet: la app funciona igual.
 - Aviso (días 5 a 7): Llevas {dias} días sin conexión. Conéctate un momento antes del {fecha_fin} para seguir sin cortes.
+  - botón dentro del aviso: Revisar ahora (si falla: el texto de "Revisión fallida" y el botón pasa a Reintentar) (pendiente de aprobar) · antes: sin botón
 - Gracia vencida (el acceso no está negado, falta revisarlo):
   - título: Conéctate un momento
   - texto: Hace más de 7 días que no revisamos tu acceso. Con internet, se revisa solo en segundos.
+  - debajo del texto, la frase de §5.1: No borramos nada. Las rutinas, las fotos y el diario de {nombre} siguen en este teléfono. (pendiente de aprobar) · antes: sin esta frase
   - botón: Revisar ahora
-  - la guía y el kit siguen abiertos
-- Revisión fallida: No pudimos revisar tu acceso. Toca Reintentar cuando tengas internet.
+  - la guía y el kit siguen abiertos, en el bloque destacado de §5.1 «Esto sigue abierto, siempre» (título, texto y los dos botones) (pendiente de aprobar) · antes: los dos botones sueltos, sin título ni texto
+  - Pie: ¿Dudas? hadaapps@gmail.com (el de §5.1) (pendiente de aprobar) · antes: sin pie
+- Revisión fallida: No pudimos revisar tu acceso. Toca Reintentar cuando tengas internet. (sale en la pantalla de gracia vencida, con su bloque destacado y su pie)
+- Al volver internet con la app abierta, se revisa sola (sin tocar nada).
+- Al abrir sin un pase vigente, mientras espera la respuesta (hasta 8 s sin internet): Revisando… (con un círculo que gira; texto de §5.1)
 - Al reconectar y confirmar (aviso que dura poco): Listo, tu acceso está al día.
 
 ---

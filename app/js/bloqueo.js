@@ -26,11 +26,18 @@ window.PP = window.PP || {};
   var TXT = {
     // §5.1
     pausaT: 'Tu acceso está en pausa',
+    // (pendiente de aprobar) por qué está en pausa, según el estado que guardó el pase
+    motivoCancelada: 'La prueba o la suscripción se canceló, y el acceso terminó.',
+    motivoPago: 'Hotmart no pudo cobrar el pago.',
+    motivoReembolso: 'Te devolvimos el pago.',
+    motivoSinCompra: 'No vemos una compra con este correo.',
     pausaX: 'No borramos nada. Las rutinas, las fotos y el diario de {nombre} siguen en este teléfono.',
     abiertoT: 'Esto sigue abierto, siempre',
     abiertoX: 'La guía "¿Momento difícil?" y el kit de calma son para cuando más se necesitan. No se cierran nunca.',
     guia: '¿Momento difícil?',
+    guiaD: 'Qué hacer ahora mismo',
     calma: 'Kit de calma',
+    calmaD: 'Respirar, contar, música y lo que le ayuda',
     reactivar: 'Volver a activar',
     yaPague: 'Ya pagué: revisar de nuevo',
     revisando: 'Revisando…',
@@ -38,6 +45,8 @@ window.PP = window.PP || {};
     dudas: '¿Dudas?',
     // (pendiente de aprobar) tras "Ya pagué" la base sigue diciendo que no
     sinPago: 'Todavía no vemos el pago. A veces Hotmart tarda unos minutos en avisarnos: revisa de nuevo en un momento.',
+    // (pendiente de aprobar) debajo, enlace a /entrar
+    otroCorreoPago: 'Si pagaste con otro correo, entra con ese.',
     // §5.2
     entrarT: 'Entra para abrir tu app',
     entrarX: 'Usa el correo de tu compra. La guía "¿Momento difícil?" y el kit de calma están abiertos mientras tanto.',
@@ -88,16 +97,26 @@ window.PP = window.PP || {};
       .then(function (res) { clearTimeout(reloj); return res; });
   }
 
-  function revisar() {
+  // desdeBoton: la familia tocó "Ya pagué" / "Revisar ahora" / "Reintentar" (en el bloqueo
+  // o en el aviso del inicio): la respuesta se dice en el mismo lugar y el foco vuelve al botón.
+  // Si no (al abrir, al volver a la app, al volver internet), la pantalla se actualiza sola.
+  function revisar(desdeBoton) {
     st.revisando = true;
     st.ultimoIntento = Date.now();
+    marcarBotones();
     return preguntar().then(function (res) {
       st.revisando = false;
       st.fallo = res.tipo === 'red';
+      var motivoAntes = st.decision ? st.decision.motivo : null;
       var d = A.decidir(st.decision ? st.decision.pase : null, Date.now(), res);
       // El pase solo cambia con una respuesta clara de la base; nunca se borra.
       if (res.tipo === 'ok') PP.guardar('pase', d.pase);
+      if (desdeBoton) {
+        st.falloBoton = st.fallo;
+        st.sinPago = d.motivo === 'sin_acceso' && !st.fallo;
+      }
       aplicar(d);
+      if (d.motivo === motivoAntes) refrescar(desdeBoton);
       return d;
     });
   }
@@ -144,6 +163,32 @@ window.PP = window.PP || {};
     if (!PP.enModoNino && PP.actual.nombre === 'inicio') PP.repintar(); // la tarjeta de aviso pudo cambiar
   }
 
+  // Mientras pregunta, los botones de revisar dicen "Revisando…" y no se pueden tocar.
+  function marcarBotones() {
+    if (!st.decision) return;
+    var bs = document.querySelectorAll('#contenido [data-revisar]');
+    for (var i = 0; i < bs.length; i++) {
+      bs[i].disabled = st.revisando;
+      bs[i].textContent = etiquetaRevisar(st.decision.motivo);
+    }
+  }
+
+  // Misma pantalla después de revisar: con el botón, la respuesta en el mismo lugar y el foco
+  // de vuelta; sola, el bloqueo se vuelve a pintar (el inicio ya lo repintó aplicar()).
+  function refrescar(desdeBoton) {
+    if (!PP.actual || PP.enModoNino) return;
+    if (PP.actual.nombre === 'bloqueo') {
+      if (!desdeBoton) { PP.repintar(); return; }
+      marcarBotones();
+      var msg = document.getElementById('bloqueo-msg');
+      if (msg) msg.innerHTML = mensajeRevision(st.decision.motivo);
+    }
+    if (desdeBoton) {
+      var b = document.querySelector('#contenido [data-revisar]');
+      if (b) b.focus();
+    }
+  }
+
   // ---------- Arranque (lo llama PP.iniciar) ----------
   // Con un pase vigente la app abre ya y la pregunta sigue de fondo; sin él, espera la respuesta.
   A.arrancar = function () {
@@ -152,6 +197,12 @@ window.PP = window.PP || {};
     return PP.leer('pase').then(function (pase) {
       st.decision = A.decidir(pase, Date.now(), null);
       ajustarMarco();
+      if (!st.decision.abierta) {
+        // Sin pase vigente espera la respuesta (hasta 8 s sin internet): mientras, "Revisando…".
+        if (PP.aplicarPreferencias) PP.aplicarPreferencias(); // modo calma: sin giro
+        document.getElementById('contenido').innerHTML =
+          '<p class="bloqueo-espera" role="status"><span class="girando" aria-hidden="true"></span>' + TXT.revisando + '</p>';
+      }
       var respuesta = revisar();
       return st.decision.abierta ? st.decision : respuesta;
     });
@@ -164,6 +215,12 @@ window.PP = window.PP || {};
     if (Date.now() - st.ultimoIntento >= espera) revisar();
   });
 
+  // Al volver internet con la app abierta, si la última pregunta no tuvo respuesta:
+  // "Con internet, se revisa solo en segundos" (§5.3).
+  window.addEventListener('online', function () {
+    if (st.fallo && !st.revisando && st.decision) revisar();
+  });
+
   // ---------- Tarjeta en el inicio (días 5 a 7 sin conexión, o sesión cerrada) ----------
   A.tarjetaInicio = function () {
     var d = st.decision;
@@ -172,22 +229,43 @@ window.PP = window.PP || {};
     if (d.motivo === 'sin_conexion' && st.fallo && g.dias >= 5) texto = TXT.diasSinRed.replace('{dias}', g.dias).replace('{fecha_fin}', fin);
     else if (d.motivo === 'entrar_pronto') texto = TXT.sesionCerrada.replace('{fecha_fin}', fin);
     else return '';
-    return '<section class="aviso-acceso" role="status"><p>' + PP.esc(texto) + '</p>' +
-      (d.motivo === 'entrar_pronto' ? '<a class="btn ancho" href="/entrar">' + TXT.entrar + '</a>' : '') + '</section>';
+    var accion = d.motivo === 'entrar_pronto'
+      ? '<a class="btn" href="/entrar">' + TXT.entrar + '</a>'
+      : '<button class="btn" data-revisar' + (st.revisando ? ' disabled' : '') + '>' + etiquetaRevisar(d.motivo) + '</button>';
+    var msg = d.motivo === 'sin_conexion' && st.falloBoton ? '<p class="aviso-acceso-msg">' + TXT.fallo + '</p>' : '';
+    return '<section class="aviso-acceso" role="status"><p>' + PP.esc(texto) + '</p>' + accion + msg + '</section>';
   };
+  // "Revisar ahora" del aviso del inicio (app.js lo llama desde su pantalla)
+  A.revisarDesdeBoton = function () { if (!st.revisando) revisar(true); };
 
   // ---------- Pantalla de bloqueo ----------
+  // Las dos puertas abiertas, iguales a la del inicio (ícono, nombre y descripción).
   function botonesAbiertos() {
-    return '<div class="bloqueo-abiertas">' +
-      '<button class="bloqueo-abierta" data-abrir="guia"><strong class="crece">' + PP.esc(TXT.guia) + '</strong><span aria-hidden="true">›</span></button>' +
-      '<button class="bloqueo-abierta" data-abrir="calma"><strong class="crece">' + TXT.calma + '</strong><span aria-hidden="true">›</span></button>' +
-      '</div>';
+    function fila(abrir, picto, nombre, desc) {
+      return '<button class="fila-urgente bloqueo-abierta" data-abrir="' + abrir + '"><span aria-hidden="true">' + picto + '</span>' +
+        '<span class="crece"><strong>' + PP.esc(nombre) + '</strong> ' + PP.esc(desc) + '</span><span aria-hidden="true">›</span></button>';
+    }
+    return '<div class="bloqueo-abiertas">' + fila('guia', '🧭', TXT.guia, TXT.guiaD) + fila('calma', '🫧', TXT.calma, TXT.calmaD) + '</div>';
+  }
+  // "Esto sigue abierto, siempre" con sus dos puertas (§5.1; también con la gracia vencida, §5.3)
+  function tarjetaAbierta() {
+    return '<section class="tarjeta destacada" aria-labelledby="abierto-t"><h3 id="abierto-t">' + TXT.abiertoT + '</h3><p>' + PP.esc(TXT.abiertoX) + '</p>' + botonesAbiertos() + '</section>';
+  }
+  function pie() {
+    return '<p class="suave bloqueo-pie">' + TXT.dudas + ' <a href="mailto:' + CORREO + '">' + CORREO + '</a></p>';
+  }
+  // Por qué está en pausa, según el estado que guardó el pase (lo devuelve /api/acceso)
+  var MOTIVOS = { cancelled: 'motivoCancelada', expired: 'motivoPago', refunded: 'motivoReembolso', chargeback: 'motivoReembolso', none: 'motivoSinCompra' };
+  function motivoPausa(d) {
+    var clave = d.pase && MOTIVOS[d.pase.estado];
+    return clave ? '<p class="bloqueo-motivo">' + TXT[clave] + '</p>' : '';
   }
   // En "Entra para abrir tu app" el fallo de la pregunta automática también se dice (si no,
   // pediría entrar a quien quizá ya entró); en las otras pantallas, solo el del botón.
+  // Devuelve HTML (textos fijos de TXT).
   function mensajeRevision(motivo) {
     if (motivo === 'entrar' ? st.fallo : st.falloBoton) return TXT.fallo;
-    return st.sinPago ? TXT.sinPago : '';
+    return st.sinPago ? TXT.sinPago + '<a class="enlace" href="/entrar">' + TXT.otroCorreoPago + '</a>' : '';
   }
   function etiquetaRevisar(motivo) {
     if (st.revisando) return TXT.revisando;
@@ -196,9 +274,13 @@ window.PP = window.PP || {};
   }
   // Siempre en la página (aunque vacío) para que el lector de pantalla lea el cambio.
   function estadoRevision(motivo) {
-    return '<p class="bloqueo-msg" id="bloqueo-msg" role="status" aria-live="polite">' + PP.esc(mensajeRevision(motivo)) + '</p>';
+    return '<p class="bloqueo-msg" id="bloqueo-msg" role="status" aria-live="polite">' + mensajeRevision(motivo) + '</p>';
+  }
+  function botonRevisar(clase, motivo) {
+    return '<button class="' + clase + '" data-revisar' + (st.revisando ? ' disabled' : '') + '>' + etiquetaRevisar(motivo) + '</button>';
   }
 
+  // Cada bloque va directo en #contenido para que entre escalonado (pintar() de app.js).
   PP.pantallas.bloqueo = {
     titulo: 'Paso a Paso',
     pintar: function (main) {
@@ -207,52 +289,39 @@ window.PP = window.PP || {};
       var html = '';
       if (d.motivo === 'sin_acceso') {
         html =
-          '<section class="bloque"><h2 class="titular">' + TXT.pausaT + '</h2><p>' + PP.esc(TXT.pausaX.replace('{nombre}', nombre)) + '</p></section>' +
-          '<section class="tarjeta destacada" aria-labelledby="abierto-t"><h3 id="abierto-t">' + TXT.abiertoT + '</h3><p>' + PP.esc(TXT.abiertoX) + '</p>' + botonesAbiertos() + '</section>' +
+          '<section class="bloque bloqueo-cab"><h2 class="titular">' + TXT.pausaT + '</h2>' + motivoPausa(d) + '<p>' + PP.esc(TXT.pausaX.replace('{nombre}', nombre)) + '</p></section>' +
+          tarjetaAbierta() +
           '<a class="btn principal grande ancho" href="/paywall">' + TXT.reactivar + '</a>' +
           '<div class="bloqueo-enlaces">' +
-          '<button class="enlace" data-revisar>' + etiquetaRevisar(d.motivo) + '</button>' +
+          botonRevisar('enlace', d.motivo) +
           estadoRevision(d.motivo) +
           '<a class="enlace" href="/entrar">' + TXT.otroCorreo + '</a>' +
           '</div>' +
-          '<p class="suave bloqueo-pie">' + TXT.dudas + ' <a href="mailto:' + CORREO + '">' + CORREO + '</a></p>';
+          pie();
       } else if (d.motivo === 'vencido_sin_conexion') {
         html =
-          '<section class="bloque"><h2 class="titular">' + TXT.vencidoT + '</h2><p>' + PP.esc(TXT.vencidoX) + '</p></section>' +
-          '<button class="btn principal grande ancho" data-revisar>' + etiquetaRevisar(d.motivo) + '</button>' +
-          estadoRevision(d.motivo) +
-          botonesAbiertos();
+          '<section class="bloque bloqueo-cab"><h2 class="titular">' + TXT.vencidoT + '</h2><p>' + PP.esc(TXT.vencidoX) + '</p>' +
+          '<p>' + PP.esc(TXT.pausaX.replace('{nombre}', nombre)) + '</p></section>' +
+          '<div class="bloqueo-accion">' + botonRevisar('btn principal grande ancho', d.motivo) + estadoRevision(d.motivo) + '</div>' +
+          tarjetaAbierta() +
+          pie();
       } else { // 'entrar': sin sesión en este teléfono (y sin pase vigente)
         html =
-          '<section class="bloque"><h2 class="titular">' + TXT.entrarT + '</h2><p>' + PP.esc(TXT.entrarX) + '</p></section>' +
+          '<section class="bloque bloqueo-cab"><h2 class="titular">' + TXT.entrarT + '</h2><p>' + PP.esc(TXT.entrarX) + '</p></section>' +
+          '<div class="bloqueo-accion">' +
           '<a class="btn principal grande ancho" href="/entrar">' + TXT.entrar + '</a>' +
-          (st.fallo ? '<button class="btn ancho" data-revisar>' + etiquetaRevisar(d.motivo) + '</button>' : '') + estadoRevision(d.motivo) +
-          botonesAbiertos();
+          (st.fallo ? botonRevisar('btn ancho', d.motivo) : '') + estadoRevision(d.motivo) +
+          '</div>' +
+          botonesAbiertos() +
+          pie();
       }
-      main.innerHTML = '<div class="bloqueo">' + html + '</div>';
+      main.innerHTML = html;
 
       main.onclick = function (e) {
         var b = e.target.closest('button'); if (!b) return;
         if (b.dataset.abrir) PP.ir(b.dataset.abrir);
-        if (b.hasAttribute('data-revisar') && !st.revisando) revisarDesdeBoton(b);
+        if (b.hasAttribute('data-revisar') && !st.revisando) revisar(true);
       };
     }
   };
-
-  // "Ya pagué: revisar de nuevo" / "Revisar ahora" / "Reintentar": la respuesta se muestra
-  // en el mismo lugar (si cambia de pantalla, aplicar() ya la pintó).
-  function revisarDesdeBoton(b) {
-    var motivoAntes = st.decision.motivo;
-    b.textContent = TXT.revisando;
-    b.disabled = true;
-    revisar().then(function (d) {
-      if (d.motivo !== motivoAntes || !PP.actual || PP.actual.nombre !== 'bloqueo') return;
-      st.falloBoton = st.fallo;
-      st.sinPago = d.motivo === 'sin_acceso' && !st.fallo;
-      b.disabled = false;
-      b.textContent = etiquetaRevisar(d.motivo);
-      document.getElementById('bloqueo-msg').textContent = mensajeRevision(d.motivo);
-      b.focus();
-    });
-  }
 })(window.PP);
