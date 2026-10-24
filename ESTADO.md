@@ -71,6 +71,14 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - ⚠️ Vercel Hobby no permite uso comercial: pasar a Pro (US$20/mes) antes de la primera venta.
 - La primera publicación es la página de ventas + app de ejemplo. Aún NO cobra: falta onboarding, paywall, login, webhook de Hotmart y correos (Resend). Gate de seguridad pendiente.
 
+## 🚀 EN VIVO (2026-10-24)
+- Producción: https://paso-a-paso-sigma.vercel.app (Vercel Hobby, proyecto prj_KQIVMVm2JIyQTgdYGDx01ZbsMWWp, raíz web/, Next.js). Repo privado: github.com/gimunzenmayer-oss/paso-a-paso (main 22d1a24). Cada push a main publica solo.
+- Comprobado: /, /admin/entrar y /paywall→/onboarding responden 200 con contenido correcto. Consola del navegador NO revisada (este entorno no llega a *.vercel.app y el plan Hobby no da registros de errores por API).
+- Variables: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, NEXT_PUBLIC_SITE_URL=https://paso-a-paso-sigma.vercel.app, INGEST_KEY (sensible, rotada el 22-10; hash en private.app_secrets). Faltan: HOTMART_HOTTOK, NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL/_ANUAL. NO poner CODIGO_SIMULADO ni ACCESO_SIMULADO.
+- Supabase: 14 migraciones (se aplicó acceso_clientas el 22-10).
+- Pendientes de la dueña: ⚠ Supabase → Authentication → URL Configuration: Site URL = la de producción y Redirect URLs = /auth/callback y /admin/auth/callback · hottok y links de checkout de Hotmart · webhook en Hotmart → https://paso-a-paso-sigma.vercel.app/api/webhooks/hotmart · ⚠ Vercel Pro US$20/mes antes de vender · Resend para correos.
+- Cambios sin guardar de otro hilo (entrada de pago) siguen en el árbol de trabajo: se publicarán cuando ese hilo haga commit y alguien haga push a main.
+
 ## Publicación — intento 2 (2026-10-21)
 - Pre-vuelo OK: tsc limpio · next build OK (16 rutas) · npm audit 0 · sin secretos en código · solo NEXT_PUBLIC_ públicos (URL y publishable de Supabase).
 - Supabase uvubnzymrkqirdvneeds: 13 migraciones aplicadas · RLS en todas las tablas public · advisors: sin ERROR; WARN de funciones SECURITY DEFINER es intencional (ingesta exige llave, admin exige private.assert_admin) · performance solo INFO (índices sin uso, aún no hay datos).
