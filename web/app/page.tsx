@@ -214,6 +214,7 @@ export default function PaginaDeVentas() {
           { label: 'Privacidad', href: '/privacidad' },
           { label: 'Términos', href: '/terminos' },
           { label: 'Reembolsos', href: '/reembolsos' },
+          { label: 'Cómo cancelar', href: '/cancelar' },
           { label: 'Aviso importante', href: '/aviso' },
         ]}
       />

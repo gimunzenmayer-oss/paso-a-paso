@@ -133,3 +133,11 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Espera decisión de la dueña: «Las comidas» abre la rutina de noche; uso de la pregunta de edad; ~40 textos «(pendiente de aprobar)» en docs/copy/embudo.md.
 - Bloquea vender: correo del Día 5 (prometido en /paywall) sin crear; garantía 30 días sin configurar en Hotmart; links de checkout en Vercel; fotos reales de baño y pijama.
 - Falta: /entrar, /auth/callback, /cuenta (paso 7); /api/acceso y bloqueo en la PWA (paso 8); punta a punta en Vercel (paso 9).
+
+## Auditoría legal (2026-10-24)
+- Hecho: /privacidad, /terminos, /reembolsos y /aviso reescritas contra el 47 y el código real; nueva /cancelar (pasos + enlace a Hotmart); las 5 páginas se enlazan entre sí y "Cómo cancelar" está en el footer de la landing. Versión legal 2 (web/lib/marca.ts: VERSION_LEGAL, RESPONSABLE_LEGAL, EDAD_MINIMA = 18). Reporte: /mnt/project-files/auditoria-paso-a-paso/AUDITORIA-LEGAL.md.
+- Hechos verificados: sin IA · sin cookies ni píxeles de terceros · datos del peque solo en el teléfono · Supabase en São Paulo (sa-east-1) · el nombre del comprador llega de Hotmart.
+- Verificado: typecheck ✓ · build ✓ (rutas /cancelar y legales estáticas) · capturas 375px sin desborde (auditoria-paso-a-paso/capturas/legal-*.png).
+- Migración 20261024120000_retencion_estadisticas.sql (borra estadísticas y errores a los 24 meses, lo que promete /privacidad) escrita, NO aplicada: espera permiso de la dueña.
+- Pendiente en el embudo (pedido al hilo del embudo): eventos web que respeten "Compartir estadísticas" apagado · paywall con "se renueva automáticamente" y enlaces a Términos/Privacidad · botón "Eliminar mi cuenta" en /cuenta · correo del Día 5.
+- Pendiente de la dueña: nombre legal y tipo (persona natural o empresa) · garantía 30 días en Hotmart y confirmar desde cuándo cuenta.

@@ -4,6 +4,7 @@ import { APP } from '@/lib/marca';
 
 export const metadata: Metadata = { title: `Aviso importante · ${APP}` };
 
+// El mismo mensaje vive en la app, al pie de Inicio y de la Guía (app/js/app.js, .aviso-legal).
 export default function Aviso() {
   return (
     <PaginaLegal titulo="Aviso importante">
@@ -12,8 +13,13 @@ export default function Aviso() {
         el consejo de profesionales de la salud, la educación o la psicología.
       </p>
       <p>
-        La guía para familias reúne recomendaciones generales. Cada niño y cada niña es diferente: consulta con su equipo
-        de profesionales antes de cambiar su tratamiento o sus apoyos.
+        La guía para familias y la ficha «Ahora mismo» reúnen recomendaciones generales. Cada niño y cada niña es diferente:
+        consulta con su equipo de profesionales antes de cambiar su tratamiento o sus apoyos. Las decisiones sobre tu peque
+        las tomas tú, junto a ese equipo.
+      </p>
+      <p>
+        El informe resume lo que tú anotaste en el diario. No es un diagnóstico ni una evaluación: sirve para conversar con
+        sus profesionales.
       </p>
       <p>
         <strong>Si hay riesgo para la seguridad</strong> de tu peque o de otra persona (lesiones, golpes en la cabeza,
