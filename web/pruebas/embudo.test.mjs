@@ -234,3 +234,14 @@ test('copy: espacios duros donde el revisor vio cortes (carga y garantía)', asy
   assert.equal(OPCIONES_CRISIS.find((o) => o.id === 'llora').corto, 'llora o\u00a0grita');
   assert.ok(PAYWALL_PRUEBA.debajo.includes('si\u00a0no\u00a0te\u00a0ayuda'));
 });
+
+test('copy 2.3: renovación y términos junto al botón, literales de docs/copy/embudo.md', async () => {
+  const { PAYWALL_PRECIO } = await import('../components/embudo/textos.ts');
+  const md = readFileSync(new URL('../../docs/copy/embudo.md', import.meta.url), 'utf8');
+  assert.equal(PAYWALL_PRECIO.renovacion.mensual, 'Se renueva automáticamente cada mes hasta que canceles.');
+  assert.equal(PAYWALL_PRECIO.renovacion.anual, 'Se renueva automáticamente cada año hasta que canceles.');
+  for (const t of Object.values(PAYWALL_PRECIO.renovacion)) assert.ok(md.includes(t), `falta en embudo.md: ${t}`);
+  const { texto, terminos, privacidad } = PAYWALL_PRECIO.terminos;
+  const enMd = texto.replace('{terminos}', `[${terminos}](/terminos)`).replace('{privacidad}', `[${privacidad}](/privacidad)`);
+  assert.ok(md.includes(enMd), `falta en embudo.md: ${enMd}`);
+});

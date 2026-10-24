@@ -21,7 +21,9 @@
 // El pie fijo es corto a propósito (≈130px): SOLO el botón y una línea de garantía
 // (con el único escudo de la página), para que la tarjeta elegida se vea entera
 // encima. Si Hotmart no abre, el error REEMPLAZA a esa línea (no se suma). En el
-// flujo, debajo: la condición de la garantía (sin ícono ni nombre: el pie ya los
+// flujo, junto al botón: la renovación del plan elegido y los términos (con enlaces a
+// /terminos y /privacidad); van bajo el pie, así no empujan la tarjeta elegida. Luego:
+// la condición de la garantía (sin ícono ni nombre: el pie ya los
 // dice), la ayuda de Hotmart, la verdad del puente (2 líneas con check) y "Pago
 // seguro" con un candado, no otro escudo.
 //
@@ -35,12 +37,12 @@
 
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { motion } from 'motion/react';
-import { CircleAlert, Info, LoaderCircle, Lock, ShieldCheck } from 'lucide-react';
+import { CircleAlert, Info, Lock, ShieldCheck } from 'lucide-react';
 import { MarkedCopy } from '@/components/landing/MarkedCopy';
 import type { Plan } from '@/lib/embudo/checkout';
 import { pasosConFoto, type PasoRutina } from '@/lib/embudo/rutinas';
 import { enviarEvento } from '@/lib/eventos-cliente';
-import { Ayuda, BotonPrincipal, CheckQueSeLlena, EnlacePrincipal, EnlaceTexto, entrada, Miniatura, PieFijo, Titulo } from './ui';
+import { Ayuda, BotonPrincipal, CheckQueSeLlena, EnlacePrincipal, EnlaceTexto, entrada, Miniatura, PieFijo, TextoOcupado, Titulo } from './ui';
 import { llenar, PAYWALL_COMUN, PAYWALL_PRECIO, PAYWALL_SIN_CHECKOUT, type Variables, type VariablesPaywall } from './textos';
 
 /** Fracción de las tarjetas que debe verse para contar paywall_visto (36/60: ≥35 %). */
@@ -54,6 +56,14 @@ let vistoContado = false;
 const ID_AYUDA = 'ayuda-checkout';
 const ID_NOTA = 'nota-sin-checkout';
 const ID_INCLUYE = 'incluye-plan';
+const ID_RENOVACION = 'renovacion-plan';
+
+// «Al empezar la prueba aceptas los {terminos} y la {privacidad}.»: los dos nombres son enlaces.
+const [antesTerminos, restoTerminos] = PAYWALL_PRECIO.terminos.texto.split('{terminos}');
+const [entreTerminos, despuesTerminos] = restoTerminos.split('{privacidad}');
+// En línea con el texto; py-3 da el alto táctil sin mover el interlineado (en un elemento en línea
+// el relleno vertical no cambia la línea).
+const CLASE_ENLACE_LEGAL = 'py-3 font-semibold text-[var(--text-primary)] underline underline-offset-4';
 
 function TarjetaPlan({
   plan,
@@ -260,15 +270,8 @@ export function PaywallPrecio({
       <PieFijo fondo="solido">
         {checkout ? (
           <>
-            <EnlacePrincipal href={checkout[plan]} onClick={abrir} ariaDescribedBy={ID_AYUDA} ariaBusy={abriendo}>
-              {abriendo ? (
-                <span className="inline-flex items-center gap-2">
-                  <LoaderCircle size={18} strokeWidth={2.5} aria-hidden="true" className="shrink-0 motion-safe:animate-spin" />
-                  {PAYWALL_PRECIO.abriendo}
-                </span>
-              ) : (
-                PAYWALL_PRECIO.boton
-              )}
+            <EnlacePrincipal href={checkout[plan]} onClick={abrir} ariaDescribedBy={`${ID_RENOVACION} ${ID_AYUDA}`} ariaBusy={abriendo}>
+              {abriendo ? <TextoOcupado>{PAYWALL_PRECIO.abriendo}</TextoOcupado> : PAYWALL_PRECIO.boton}
             </EnlacePrincipal>
             {/* Una sola línea bajo el botón: la garantía, o el error que la reemplaza. */}
             <p aria-live="polite" className="mt-2 flex items-start justify-center gap-2 text-center text-[16px] leading-snug">
@@ -301,9 +304,25 @@ export function PaywallPrecio({
 
       {checkout ? (
         <>
+          {/* Junto al botón, en el flujo (el pie sigue siendo botón + 1 línea): la renovación del plan
+              elegido y los términos que acepta al empezar. Debajo del pie: no empujan la tarjeta elegida. */}
+          <p id={ID_RENOVACION} className="mt-3 text-[16px] leading-snug text-pretty text-[var(--text-primary)]">
+            {PAYWALL_PRECIO.renovacion[plan]}
+          </p>
+          <p className="mt-2 text-[16px] leading-snug text-pretty text-[var(--text-secondary)]">
+            {antesTerminos}
+            <a href="/terminos" className={CLASE_ENLACE_LEGAL}>
+              {PAYWALL_PRECIO.terminos.terminos}
+            </a>
+            {entreTerminos}
+            <a href="/privacidad" className={CLASE_ENLACE_LEGAL}>
+              {PAYWALL_PRECIO.terminos.privacidad}
+            </a>
+            {despuesTerminos}
+          </p>
           {/* Lo que el pie ya no carga: la condición de la garantía (sin ícono ni nombre: el pie
               los lleva) y la ayuda de Hotmart. */}
-          <p className="mt-3 text-[16px] leading-snug text-pretty text-[var(--text-primary)]">{PAYWALL_PRECIO.garantia}</p>
+          <p className="mt-4 text-[16px] leading-snug text-pretty text-[var(--text-primary)]">{PAYWALL_PRECIO.garantia}</p>
           <p id={ID_AYUDA} className="mt-3 flex items-start gap-2 text-[16px] leading-snug text-[var(--text-secondary)]">
             <Info size={20} strokeWidth={2} color="var(--accent-2)" aria-hidden="true" className="mt-px shrink-0" />
             <span>{PAYWALL_PRECIO.ayuda}</span>

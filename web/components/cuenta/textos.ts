@@ -20,14 +20,19 @@ export const ENTRAR = {
     boton: 'Enviarme el código',
     enviando: 'Enviando…',
     errorFormato: 'Revisa tu correo: parece que le falta algo (ej. ana@gmail.com).',
+    /** Salida para quien llegó sin comprar (solo sin ?compra=1): pregunta · enlace → /paywall. (pendiente de aprobar) */
+    sinCuenta: '¿Todavía no tienes Paso a Paso?',
+    verPlanes: 'Ver planes',
   },
   compra: {
     titulo: 'Ya casi. [acento]Entra con el correo de tu compra[/acento]',
     ayuda: 'Usa el mismo correo que pusiste en Hotmart. Ahí llega tu código.',
   },
   codigo: {
-    titulo: 'Revisa tu correo',
+    /** (pendiente de aprobar) · antes: Revisa tu correo (sin acento) */
+    titulo: 'Revisa tu [acento]correo[/acento]',
     texto: 'Si {correo} tiene acceso, te llega un código de 6 dígitos. Vence en 10 minutos.',
+    /** El aviso de Spam va una sola vez en este paso: aquí, y el rescate no lo repite. (pendiente de aprobar) */
     ayuda: '¿No lo ves? Busca también en Spam y Promociones.',
     label: 'Código de 6 dígitos',
     ariaCampo: 'Código de 6 dígitos que te llegó por correo',
@@ -40,10 +45,9 @@ export const ENTRAR = {
   },
   rescate: {
     titulo: '¿Compraste y no te llega el acceso?',
-    pasos: [
-      'Busca el código en Spam y Promociones.',
-      'Usa el correo exacto de tu compra (está en el recibo de Hotmart).',
-    ],
+    /** El paso del Spam (spam) no se repite en el paso código, que ya lo dice bajo el texto. */
+    spam: 'Busca el código en Spam y Promociones.',
+    pasos: ['Usa el correo exacto de tu compra (está en el recibo de Hotmart).'],
     /** El 3.º paso lleva el correo de soporte como enlace: antes · correo · después. */
     ultimoAntes: 'Si compraste con otro correo o nada funciona, escríbenos a ',
     ultimoDespues: ' con el correo de tu compra. Lo resolvemos contigo.',
@@ -55,7 +59,8 @@ export const ENTRAR = {
 };
 
 export const ERRORES_ENVIO: Record<ErrorEnvio, string> = {
-  red: 'No pudimos enviar el código. Revisa tu internet y toca "Enviarme el código" otra vez.',
+  /** Comillas tipográficas. (pendiente de aprobar) · antes: comillas rectas */
+  red: 'No pudimos enviar el código. Revisa tu internet y toca «Enviarme el código» otra vez.',
   demasiados: 'Ya te mandamos varios códigos. Espera unos minutos y revisa tu correo.',
 };
 
@@ -68,14 +73,22 @@ export const ERRORES_CODIGO: Record<ErrorCodigo, string> = {
 };
 
 export const CUENTA = {
-  titulo: 'Tu cuenta',
+  /** (pendiente de aprobar) · antes: Tu cuenta (sin acento) */
+  titulo: 'Tu [acento]cuenta[/acento]',
   linea: 'Entraste con {correo}',
   bloque: 'Tu acceso',
   /** §3.3: aviso al llegar después de entrar. */
   listo: 'Listo, ya entraste.',
   hotmart: 'Gestionar o cancelar en Hotmart',
   hotmartAyuda: 'Se abre Hotmart. Ahí cambias tu tarjeta o cancelas.',
+  /** Cancelada con días: ya no hay nada que cancelar. (pendiente de aprobar) · antes: Gestionar o cancelar en Hotmart */
+  hotmartCancelada: 'Ver mi compra en Hotmart',
+  abriendo: 'Abriendo Hotmart…',
   reactivar: 'Volver a activar',
+  /** Sin compra (§3.3): nunca compró, no hay nada que «volver» a activar. (pendiente de aprobar) · antes: Volver a activar */
+  verPlanes: 'Ver planes',
+  /** Sin compra (§3.3): cierra la sesión en este teléfono y lleva a /entrar. (pendiente de aprobar) */
+  otroCorreo: 'Entrar con otro correo',
   volverApp: 'Volver a la app',
   reintentar: 'Reintentar',
   revisando: 'Revisando…',
@@ -89,7 +102,8 @@ export const CUENTA = {
   /** §3.3, llegó desde ?compra=1 y Hotmart todavía no avisa. */
   enCamino: {
     titulo: 'Tu compra está en camino',
-    texto: 'A veces Hotmart tarda unos minutos en avisarnos. Toca "Revisar de nuevo" en un momento.',
+    /** Comillas tipográficas. (pendiente de aprobar) · antes: comillas rectas */
+    texto: 'A veces Hotmart tarda unos minutos en avisarnos. Toca «Revisar de nuevo» en un momento.',
     boton: 'Revisar de nuevo',
   },
 };
@@ -107,7 +121,8 @@ export const ESTADOS: Record<ClaveCuenta, { etiqueta: string; detalle: string; d
   },
   cancelada: {
     etiqueta: 'Cancelada',
-    detalle: 'Tienes acceso hasta el {fecha_fin}. Si cambias de idea, vuelve a activarla.',
+    /** (pendiente de aprobar) · antes: …Si cambias de idea, vuelve a activarla. */
+    detalle: 'Tienes acceso hasta el {fecha_fin}. Si cambias de idea, puedes volver a activarla en Hotmart.',
   },
   terminada: {
     etiqueta: 'Terminada',
@@ -117,9 +132,11 @@ export const ESTADOS: Record<ClaveCuenta, { etiqueta: string; detalle: string; d
   },
   refunded: { etiqueta: 'Reembolsada', detalle: 'Te devolvimos el pago. Tus datos siguen en este teléfono.' },
   sin_verificar: { etiqueta: 'Sin verificar', detalle: 'No pudimos revisar tu acceso ahora. Toca Reintentar.' },
+  /** El copy de §3.3 (el mismo estado tenía dos textos; la dueña eligió uno). (pendiente de aprobar)
+   *  antes: Sin compra con este correo · ¿Compraste con otro correo? Escríbenos a hadaapps@gmail.com. */
   sin_compra: {
-    etiqueta: 'Sin compra con este correo',
-    detalle: '¿Compraste con otro correo? Escríbenos a hadaapps@gmail.com.',
+    etiqueta: 'No vemos una compra con {correo}',
+    detalle: 'Quizás compraste con otro correo. Revisa el recibo de Hotmart.',
   },
   /** mi_acceso() responde 'admin' a la dueña. (pendiente de aprobar) */
   admin: { etiqueta: 'Acceso de administradora', detalle: 'Siempre tienes acceso, para probar la app y dar soporte.' },

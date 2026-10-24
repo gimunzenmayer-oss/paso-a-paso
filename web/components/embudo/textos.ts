@@ -2,6 +2,7 @@
 // [acento]…[/acento] y [b]…[/b] se pintan con parseMarkedCopy del kit de landing.
 // Variables: {nombre}, {momento}, {crisis}, {n_pasos}, {paso_1}, {n}, {N}, {fecha_cobro}, {monto}.
 
+import type { Plan } from '@/lib/embudo/checkout';
 import type { Edad, Momento, Respuestas } from '@/lib/embudo/estado';
 import { rutinaDe } from '@/lib/embudo/rutinas';
 
@@ -242,6 +243,17 @@ export const PAYWALL_PRECIO = {
     detalle: 'Se cobra cada mes · cancelas cuando quieras',
   },
   ayuda: 'En Hotmart, completa tus datos y elige «Quiero un periodo gratis».',
+  /** En el flujo, junto al botón (no en el pie): la renovación del plan elegido. (pendiente de aprobar) */
+  renovacion: {
+    mensual: 'Se renueva automáticamente cada mes hasta que canceles.',
+    anual: 'Se renueva automáticamente cada año hasta que canceles.',
+  } satisfies Record<Plan, string>,
+  /** Debajo de la renovación; {terminos} y {privacidad} son enlaces a /terminos y /privacidad. (pendiente de aprobar) */
+  terminos: {
+    texto: 'Al empezar la prueba aceptas los {terminos} y la {privacidad}.',
+    terminos: 'Términos',
+    privacidad: 'Política de privacidad',
+  },
   /** El mismo CTA de la oferta de la landing (§6). */
   boton: 'Empezar mis 7 días gratis',
   abriendo: 'Abriendo Hotmart…',

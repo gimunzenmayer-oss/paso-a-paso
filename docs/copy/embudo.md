@@ -196,7 +196,9 @@ Elementos comunes a las 3 páginas:
 - Botón: Empezar mis 7 días gratis (el CTA de la oferta de la landing §6)
 - Botón, mientras abre: Abriendo Hotmart…
 - Pie fijo: SOLO el botón y una línea bajo él: [b]Garantía del Día Tranquilo[/b] · 30 días (pendiente de aprobar) · antes: el pie llevaba la garantía completa y la ayuda de Hotmart.
-- En el flujo, justo debajo del pie: la condición de la garantía, sin ícono ni nombre (el pie ya los lleva: un solo escudo en la página): Si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo. (pendiente de aprobar) · antes: [b]Garantía del Día Tranquilo[/b]: si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo.
+- En el flujo, justo debajo del pie (junto al botón, no dentro del pie, que sigue siendo botón + 1 línea), la renovación del plan elegido: Se renueva automáticamente cada mes hasta que canceles. (mensual) · Se renueva automáticamente cada año hasta que canceles. (anual) (pendiente de aprobar) · antes: (no había)
+- Debajo de la renovación, con los dos nombres como enlaces: Al empezar la prueba aceptas los [Términos](/terminos) y la [Política de privacidad](/privacidad). (pendiente de aprobar) · antes: (no había)
+- En el flujo, debajo de los términos: la condición de la garantía, sin ícono ni nombre (el pie ya los lleva: un solo escudo en la página): Si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo. (pendiente de aprobar) · antes: [b]Garantía del Día Tranquilo[/b]: si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo.
 - Ayuda, en el flujo, con ícono de información: En Hotmart, completa tus datos y elige «Quiero un periodo gratis». (pendiente de aprobar) · antes: debajo del botón, en el pie.
 - 2 líneas de confianza, con check:
   1. Hoy no pagas nada · primer cobro el {fecha_cobro} ({fecha_cobro} no se parte)
@@ -232,19 +234,20 @@ Se usa mientras no existan los links de Hotmart.
 - Botón: Enviarme el código
 - Botón, mientras envía: Enviando…
 - Error de formato: Revisa tu correo: parece que le falta algo (ej. ana@gmail.com).
-- Error de red: No pudimos enviar el código. Revisa tu internet y toca "Enviarme el código" otra vez.
+- Error de red: No pudimos enviar el código. Revisa tu internet y toca «Enviarme el código» otra vez. (pendiente de aprobar) · antes: con comillas rectas ("Enviarme el código")
 - Error, pidió demasiados códigos: Ya te mandamos varios códigos. Espera unos minutos y revisa tu correo.
+- Al final, bajo el rescate (para quien llegó sin comprar): ¿Todavía no tienes Paso a Paso? Ver planes («Ver planes» es el enlace → `/paywall`) (pendiente de aprobar) · antes: (no había: solo el logo)
 
 #### Variante `?compra=1` (llega desde Hotmart)
 - Título: Ya casi. [acento]Entra con el correo de tu compra[/acento]
 - Ayuda: Usa el mismo correo que pusiste en Hotmart. Ahí llega tu código.
-- El resto es igual.
+- El resto es igual, sin «¿Todavía no tienes Paso a Paso? Ver planes» (ya compró).
 
 ### 3.2 Paso código
 El mensaje es el mismo exista o no el correo, para no revelar quién tiene cuenta.
-- Título: Revisa tu correo
+- Título: Revisa tu [acento]correo[/acento] (pendiente de aprobar) · antes: Revisa tu correo (sin acento)
 - Texto: Si {correo} tiene acceso, te llega un código de 6 dígitos. Vence en 10 minutos.
-- Ayuda: ¿No lo ves? Busca también en Spam y Promociones.
+- Ayuda: ¿No lo ves? Busca también en Spam y Promociones. (el aviso de Spam va una sola vez en este paso: el rescate de este paso no repite su punto 1) (pendiente de aprobar) · antes: el aviso salía aquí y otra vez en el rescate
 - Label: Código de 6 dígitos
 - Campo (aria-label): Código de 6 dígitos que te llegó por correo
 - Botón: Entrar
@@ -270,20 +273,20 @@ Estos mensajes salen solo después de que la persona demostró que el correo es 
 - Con acceso, entra a la app. Aviso: Listo, ya entraste.
 - Todavía sin acceso (por ejemplo, llegó desde `?compra=1` y Hotmart aún no avisa):
   - título: Tu compra está en camino
-  - texto: A veces Hotmart tarda unos minutos en avisarnos. Toca "Revisar de nuevo" en un momento.
+  - texto: A veces Hotmart tarda unos minutos en avisarnos. Toca «Revisar de nuevo» en un momento. (pendiente de aprobar) · antes: con comillas rectas ("Revisar de nuevo")
   - botón: Revisar de nuevo
   - botón, mientras revisa: Revisando…
-- Sin compra con ese correo:
+- Sin compra con ese correo (es también la fila «Sin compra» de `/cuenta`, §4):
   - título: No vemos una compra con {correo}
   - texto: Quizás compraste con otro correo. Revisa el recibo de Hotmart.
-  - botones: Entrar con otro correo · Ver planes (→ `/paywall`)
+  - botones: Ver planes (→ `/paywall`, el principal) · Entrar con otro correo (enlace: cierra la sesión en este teléfono y lleva a `/entrar`)
 - No se pudo verificar (red o error del servidor). Nunca se dice "no compraste":
   - texto: No pudimos revisar tu acceso ahora. Toca Reintentar.
   - botón: Reintentar
 
 ### 3.4 Rescate (siempre visible abajo, plegable)
 - Título: ¿Compraste y no te llega el acceso?
-- 1. Busca el código en Spam y Promociones.
+- 1. Busca el código en Spam y Promociones. (no sale en el paso código, que ya lo dice bajo el texto) (pendiente de aprobar)
 - 2. Usa el correo exacto de tu compra (está en el recibo de Hotmart).
 - 3. Si compraste con otro correo o nada funciona, escríbenos a **hadaapps@gmail.com** con el correo de tu compra. Lo resolvemos contigo.
 - Enlace (aria-label): Escribir a soporte, hadaapps@gmail.com
@@ -291,7 +294,7 @@ Estos mensajes salen solo después de que la persona demostró que el correo es 
 ---
 
 ## 4. Tu cuenta (`/cuenta`)
-- Título: Tu cuenta
+- Título: Tu [acento]cuenta[/acento] (pendiente de aprobar) · antes: Tu cuenta (sin acento)
 - Línea: Entraste con {correo}
 - Etiqueta del bloque: Tu acceso
 
@@ -300,11 +303,11 @@ Estos mensajes salen solo después de que la persona demostró que el correo es 
 | `trialing` | Prueba gratis activa | Primer cobro el {fecha_cobro}. Si cancelas antes, no pagas nada. |
 | `active` | Suscripción activa | Próximo cobro el {fecha_cobro}. |
 | `past_due` | Hay un problema con el pago | Tu acceso sigue abierto. Revisa tu tarjeta en Hotmart para no perderlo. |
-| `cancelled` (con días restantes) | Cancelada | Tienes acceso hasta el {fecha_fin}. Si cambias de idea, vuelve a activarla. |
+| `cancelled` (con días restantes) | Cancelada | Tienes acceso hasta el {fecha_fin}. Si cambias de idea, puedes volver a activarla en Hotmart. (pendiente de aprobar) · antes: …Si cambias de idea, vuelve a activarla. |
 | `cancelled` (vencida) | Terminada | Tu acceso terminó el {fecha_fin}. Tus datos siguen en este teléfono. |
 | `refunded` | Reembolsada | Te devolvimos el pago. Tus datos siguen en este teléfono. |
 | No se pudo verificar | Sin verificar | No pudimos revisar tu acceso ahora. Toca Reintentar. |
-| Sin compra | Sin compra con este correo | ¿Compraste con otro correo? Escríbenos a hadaapps@gmail.com. |
+| Sin compra | No vemos una compra con {correo} | Quizás compraste con otro correo. Revisa el recibo de Hotmart. (el copy de §3.3; pendiente de aprobar) · antes: Sin compra con este correo · ¿Compraste con otro correo? Escríbenos a hadaapps@gmail.com. |
 | `cancelled` o `expired` sin fecha guardada | Terminada | Tu acceso terminó. Tus datos siguen en este teléfono. (pendiente de aprobar) |
 | `admin` (la dueña) | Acceso de administradora | Siempre tienes acceso, para probar la app y dar soporte. (pendiente de aprobar) |
 
@@ -313,7 +316,10 @@ Estos mensajes salen solo después de que la persona demostró que el correo es 
 
 - Botón: Gestionar o cancelar en Hotmart
 - Ayuda: Se abre Hotmart. Ahí cambias tu tarjeta o cancelas.
-- Botón (estados terminada, reembolsada o sin compra): Volver a activar (→ `/paywall`)
+- Botón, mientras abre: Abriendo Hotmart… (el mismo del paywall, §2.3)
+- Botón (estado Cancelada, con días): Ver mi compra en Hotmart, sin la ayuda de arriba (pendiente de aprobar) · antes: Gestionar o cancelar en Hotmart + «Se abre Hotmart. Ahí cambias tu tarjeta o cancelas.»
+- Botón (estados terminada o reembolsada): Volver a activar (→ `/paywall`)
+- Sin compra: los botones de §3.3, Ver planes (→ `/paywall`) · Entrar con otro correo (pendiente de aprobar) · antes: Volver a activar (→ `/paywall`)
 - Enlace: Volver a la app
 - Botón: Cerrar sesión
 - Confirmación:

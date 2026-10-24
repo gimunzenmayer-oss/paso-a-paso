@@ -130,12 +130,25 @@ test('copy: cada texto de /entrar y /cuenta está en docs/copy/embudo.md', () =>
     ENTRAR.errorEnlace,
     ...Object.values(ERRORES_ENVIO),
     ...Object.values(ERRORES_CODIGO),
+    ENTRAR.correo.sinCuenta,
+    ENTRAR.codigo.titulo,
+    ENTRAR.codigo.ayuda,
+    ENTRAR.rescate.spam,
+    ...ENTRAR.rescate.pasos,
+    CUENTA.titulo,
+    CUENTA.hotmart,
     CUENTA.hotmartAyuda,
+    CUENTA.hotmartCancelada,
+    CUENTA.abriendo,
+    CUENTA.verPlanes,
+    CUENTA.otroCorreo,
     CUENTA.confirmar.titulo,
     CUENTA.enCamino.texto,
     ...Object.values(ESTADOS).flatMap((e) => [e.etiqueta, e.detalle, ...(e.detalleSinFecha ? [e.detalleSinFecha] : [])]),
   ];
   for (const t of textos) assert.ok(md.includes(t), `falta en embudo.md: ${t}`);
+  // Comillas tipográficas, nunca rectas, en lo que se ve.
+  for (const t of [...Object.values(ERRORES_ENVIO), CUENTA.enCamino.texto]) assert.ok(!t.includes('"'), `comillas rectas: ${t}`);
 });
 
 // Paso 8: GET /api/acceso y adónde va después de entrar.

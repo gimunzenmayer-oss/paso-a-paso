@@ -8,7 +8,7 @@
 import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { Check, ChevronLeft, Shirt } from 'lucide-react';
+import { Check, ChevronLeft, LoaderCircle, Shirt } from 'lucide-react';
 import { MarkedCopy } from '@/components/landing/MarkedCopy';
 import { pasosConFoto, type PasoRutina } from '@/lib/embudo/rutinas';
 
@@ -49,6 +49,7 @@ export function BotonPrincipal({
   disabled = false,
   resaltado = false,
   ariaDescribedBy,
+  ariaBusy,
 }: {
   children: ReactNode;
   onClick?: () => void;
@@ -57,6 +58,8 @@ export function BotonPrincipal({
   /** Pulso suave una vez (p. ej. tras el "¡Hecho!"); se apaga con reducir movimiento. */
   resaltado?: boolean;
   ariaDescribedBy?: string;
+  /** true mientras la acción corre ("Enviando…", "Revisando…"). */
+  ariaBusy?: boolean;
 }) {
   return (
     <motion.button
@@ -64,6 +67,7 @@ export function BotonPrincipal({
       onClick={onClick}
       disabled={disabled}
       aria-describedby={ariaDescribedBy}
+      aria-busy={ariaBusy}
       whileTap={disabled ? undefined : { scale: 0.97 }}
       animate={resaltado ? { scale: [1, 1.03, 1] } : { scale: 1 }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -75,6 +79,17 @@ export function BotonPrincipal({
     >
       {children}
     </motion.button>
+  );
+}
+
+/* ── <TextoOcupado> — el texto de un CTA mientras trabaja ("Enviando…", "Revisando…",
+   "Abriendo Hotmart…"): el mismo spinner del paywall. Con reducir movimiento no gira. ── */
+export function TextoOcupado({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-2">
+      <LoaderCircle size={18} strokeWidth={2.5} aria-hidden="true" className="shrink-0 motion-safe:animate-spin" />
+      {children}
+    </span>
   );
 }
 

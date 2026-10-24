@@ -1,14 +1,31 @@
 'use client';
 
 // Piezas con interacción de /cuenta: la fecha en la hora del teléfono, "Reintentar" /
-// "Revisar de nuevo" (vuelve a preguntar a la base) y la confirmación de cerrar sesión.
+// "Revisar de nuevo" (vuelve a preguntar a la base), el enlace a Hotmart con su
+// "Abriendo Hotmart…", "Entrar con otro correo", la confirmación de cerrar sesión y el
+// movimiento de la página (MotionConfig + entrada escalonada), que la página del servidor
+// no puede poner por sí misma.
 
-import { useState, useSyncExternalStore, useTransition } from 'react';
+import { useEffect, useState, useSyncExternalStore, useTransition, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { AnimatePresence, motion } from 'motion/react';
-import { BotonPrincipal } from '@/components/embudo/ui';
-import { cerrarSesion } from '@/app/cuenta/acciones';
+import { AnimatePresence, MotionConfig, motion } from 'motion/react';
+import { BotonPrincipal, BotonTexto, EnlacePrincipal, entrada, TextoOcupado } from '@/components/embudo/ui';
+import { cerrarSesion, entrarConOtroCorreo } from '@/app/cuenta/acciones';
 import { CUENTA } from './textos';
+
+/** Toda la página respeta "reducir movimiento" del teléfono (la entrada y la confirmación quedan en fundido). */
+export function Escena({ children }: { children: ReactNode }) {
+  return <MotionConfig reducedMotion="user">{children}</MotionConfig>;
+}
+
+/** Un bloque de la página que entra en su turno del escalonado (entrada(i): 60 ms, 300 ms). */
+export function Entra({ i, className, children }: { i: number; className?: string; children: ReactNode }) {
+  return (
+    <motion.div {...entrada(i)} className={className}>
+      {children}
+    </motion.div>
+  );
+}
 
 const FORMATO_DIA = new Intl.DateTimeFormat('es', { day: 'numeric', month: 'long' });
 const sinSuscripcion = () => () => {};
@@ -23,17 +40,82 @@ export function FechaLocal({ iso }: { iso: string }) {
   return <span className="font-semibold text-[var(--text-primary)]">{texto}</span>;
 }
 
-const CLASE_SECUNDARIO =
-  'flex h-14 w-full items-center justify-center rounded-[var(--radius-button)] border-2 border-[var(--accent)] bg-[var(--surface)] px-5 text-center text-[18px] leading-tight font-semibold text-[var(--accent)] transition-colors duration-200 [touch-action:manipulation] hover:bg-[color-mix(in_oklab,var(--accent)_8%,var(--surface))] disabled:opacity-65';
-
-/** Vuelve a pedir la página al servidor (otra llamada a mi_acceso) sin recargar todo. */
+/** Vuelve a pedir la página al servidor (otra llamada a mi_acceso) sin recargar todo. Es la
+ *  acción principal donde aparece ("Reintentar", "Revisar de nuevo"): botón lleno. */
 export function BotonRevisar({ texto }: { texto: string }) {
   const router = useRouter();
   const [pendiente, iniciar] = useTransition();
   return (
-    <button type="button" disabled={pendiente} aria-busy={pendiente} onClick={() => iniciar(() => router.refresh())} className={CLASE_SECUNDARIO}>
-      {pendiente ? CUENTA.revisando : texto}
-    </button>
+    <BotonPrincipal disabled={pendiente} ariaBusy={pendiente} onClick={() => iniciar(() => router.refresh())}>
+      {pendiente ? <TextoOcupado>{CUENTA.revisando}</TextoOcupado> : texto}
+    </BotonPrincipal>
+  );
+}
+
+/** Si después de esto la página sigue a la vista, Hotmart no abrió: el botón vuelve a su texto. */
+const ESPERA_HOTMART_MS = 6_000;
+
+/** El enlace a "Mis compras" de Hotmart con "Abriendo Hotmart…" mientras sale (como en el paywall). */
+export function EnlaceHotmart({
+  href,
+  texto,
+  secundario,
+  ariaDescribedBy,
+}: {
+  href: string;
+  texto: string;
+  secundario: boolean;
+  ariaDescribedBy?: string;
+}) {
+  const [abriendo, setAbriendo] = useState(false);
+
+  useEffect(() => {
+    if (!abriendo) return;
+    const t = setTimeout(() => {
+      if (document.visibilityState === 'visible') setAbriendo(false);
+    }, ESPERA_HOTMART_MS);
+    return () => clearTimeout(t);
+  }, [abriendo]);
+
+  // Volver con "atrás" desde Hotmart restaura la página guardada: el botón vuelve a su texto.
+  useEffect(() => {
+    const alVolver = (e: PageTransitionEvent) => {
+      if (e.persisted) setAbriendo(false);
+    };
+    window.addEventListener('pageshow', alVolver);
+    return () => window.removeEventListener('pageshow', alVolver);
+  }, []);
+
+  return (
+    <EnlacePrincipal
+      href={href}
+      secundario={secundario}
+      ariaDescribedBy={ariaDescribedBy}
+      ariaBusy={abriendo}
+      onClick={(e) => {
+        if (abriendo) {
+          e.preventDefault();
+          return;
+        }
+        setAbriendo(true);
+      }}
+    >
+      {abriendo ? <TextoOcupado>{CUENTA.abriendo}</TextoOcupado> : texto}
+    </EnlacePrincipal>
+  );
+}
+
+/** Sin compra (§3.3): cierra la sesión en este teléfono y vuelve al paso correo de /entrar. */
+export function OtroCorreo() {
+  const [pendiente, iniciar] = useTransition();
+  return (
+    <BotonTexto
+      onClick={() => {
+        if (!pendiente) iniciar(() => entrarConOtroCorreo());
+      }}
+    >
+      {CUENTA.otroCorreo}
+    </BotonTexto>
   );
 }
 
