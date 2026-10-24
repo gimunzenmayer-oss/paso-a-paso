@@ -69,3 +69,43 @@ export function seReactiva(clave: ClaveCuenta): boolean {
 export function seGestionaEnHotmart(clave: ClaveCuenta): boolean {
   return clave === 'trialing' || clave === 'active' || clave === 'past_due' || clave === 'cancelada' || clave === 'sin_verificar';
 }
+
+/** Lo que responde GET /api/acceso a la app (app/js/acceso.js lo lee con PP.acceso.leerRespuesta). */
+export type CuerpoApiAcceso =
+  | { acceso: boolean; estado: string; hasta: string | null }
+  | { sin_sesion: true }
+  | { sin_verificar: true };
+
+export interface RespuestaApiAcceso {
+  status: 200 | 401 | 503;
+  cuerpo: CuerpoApiAcceso;
+}
+
+/**
+ * Plan, decisión 6: solo un `acceso:false` explícito de la base cierra la app. Por eso:
+ * · sin sesión → 401 `sin_sesion` (la app pide entrar, respetando el pase vigente);
+ * · la base no respondió, respondió algo raro, o no vio la sesión que Auth sí vio
+ *   (estado 'sin_sesion' dentro de mi_acceso) → 503: la app lo trata como sin conexión;
+ * · si no, 200 con lo que dijo la base.
+ */
+export function respuestaApiAcceso(lectura: { tipo: 'sin_sesion' } | { tipo: 'sin_verificar' } | { tipo: 'acceso'; acceso: MiAcceso | null }): RespuestaApiAcceso {
+  if (lectura.tipo === 'sin_sesion') return { status: 401, cuerpo: { sin_sesion: true } };
+  if (lectura.tipo === 'sin_verificar' || !lectura.acceso || lectura.acceso.estado === 'sin_sesion') {
+    return { status: 503, cuerpo: { sin_verificar: true } };
+  }
+  const { acceso, estado, hasta } = lectura.acceso;
+  return { status: 200, cuerpo: { acceso, estado, hasta } };
+}
+
+/** La app, con el aviso "Listo, ya entraste." (docs/copy/embudo.md §3.3). */
+export const APP_TRAS_ENTRAR = '/app/index.html?hola=1';
+
+/**
+ * Adónde va después de demostrar que el correo es suyo (§3.3): con un `acceso:true` claro
+ * de la base, a la app; si no (sin acceso, sin compra o sin verificar), a /cuenta, que
+ * explica su caso. /cuenta sigue abierta desde la app ("Volver a la app" / enlaces).
+ */
+export function destinoTrasEntrar(a: MiAcceso | null, compra: boolean): string {
+  if (a?.acceso === true) return APP_TRAS_ENTRAR;
+  return compra ? '/cuenta?hola=1&compra=1' : '/cuenta?hola=1';
+}

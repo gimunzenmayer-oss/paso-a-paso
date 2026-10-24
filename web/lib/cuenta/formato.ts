@@ -39,7 +39,8 @@ function esLimite(f: FalloAuth): boolean {
   return f.status === 429 || (typeof f.code === 'string' && f.code.startsWith('over_'));
 }
 
-function esRed(f: FalloAuth): boolean {
+/** Sin red o servidor caído (status 0, ausente o 5xx): no dice nada de la sesión ni del correo. */
+export function esRed(f: FalloAuth): boolean {
   return f.status === undefined || f.status === 0 || f.status >= 500;
 }
 

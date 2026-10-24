@@ -66,6 +66,68 @@ test('acceso: sin sesión pide entrar, pero respeta un pase vigente', () => {
   assert.equal(r.motivo, 'entrar_pronto');
 });
 
+// Paso 8: lo que la app hace con la respuesta de /api/acceso (plan, decisión 6).
+test('acceso: solo un 200 con acceso true/false es respuesta; 401 sin_sesion es sin sesión; el resto, sin conexión', () => {
+  const { leerRespuesta } = cargarAcceso();
+  assert.deepEqual({ ...leerRespuesta(200, { acceso: true, estado: 'active', hasta: null }) }, { tipo: 'ok', acceso: true, estado: 'active' });
+  assert.deepEqual({ ...leerRespuesta(200, { acceso: false, estado: 'refunded', hasta: null }) }, { tipo: 'ok', acceso: false, estado: 'refunded' });
+  assert.equal(leerRespuesta(401, { sin_sesion: true }).tipo, 'sin_sesion');
+  for (const [status, cuerpo] of [
+    [0, null], // sin internet
+    [503, { sin_verificar: true }], // la base no respondió
+    [500, null],
+    [502, null], // una página de error en HTML
+    [404, null], // ruta que no existe
+    [200, null], // un wifi público que responde su propia página
+    [200, { acceso: 'false', estado: 'none' }], // forma rara: nunca se lee como un "no"
+    [200, { estado: 'none' }],
+    [401, null], // 401 sin el cuerpo de la API
+  ]) {
+    assert.equal(leerRespuesta(status, cuerpo).tipo, 'red', `${status} ${JSON.stringify(cuerpo)}`);
+  }
+});
+
+test('acceso: un 5xx o sin red nunca cierra una app con pase vigente, ni convierte un pase bueno en "sin acceso"', () => {
+  const { decidir, leerRespuesta, GRACIA_MS } = cargarAcceso();
+  const dia = 24 * 60 * 60 * 1000;
+  const pase = { acceso: true, estado: 'active', verificado_en: 0 };
+  const caida = leerRespuesta(503, { sin_verificar: true });
+  const r = decidir(pase, 3 * dia, caida);
+  assert.equal(r.abierta, true);
+  assert.equal(r.motivo, 'sin_conexion');
+  assert.equal(r.pase, pase, 'el pase no se toca');
+  // Justo en el límite de la gracia sigue abierta; un instante después pide conectarse (no "sin acceso").
+  assert.equal(decidir(pase, GRACIA_MS, caida).abierta, true);
+  assert.equal(decidir(pase, GRACIA_MS + 1, caida).motivo, 'vencido_sin_conexion');
+  // Un "no" guardado sigue siendo "no" sin internet (no se reabre por falta de red).
+  assert.equal(decidir({ acceso: false, estado: 'refunded', verificado_en: 0 }, dia, caida).motivo, 'sin_acceso');
+  // Y un sí del servidor reabre una app cerrada.
+  const reabre = decidir({ acceso: false, estado: 'refunded', verificado_en: 0 }, dia, leerRespuesta(200, { acceso: true, estado: 'active', hasta: null }));
+  assert.equal(reabre.abierta, true);
+  assert.equal(reabre.pase.verificado_en, dia);
+});
+
+test('acceso: días sin conexión y fin de la gracia para los avisos de §5.3', () => {
+  const { gracia, fechaHumana, GRACIA_MS } = cargarAcceso();
+  const dia = 24 * 60 * 60 * 1000;
+  const t0 = new Date(2026, 9, 21, 9, 0).getTime();
+  const pase = { acceso: true, estado: 'active', verificado_en: t0 };
+  assert.deepEqual({ ...gracia(pase, t0 + 2 * 3600e3) }, { dias: 0, fin: t0 + GRACIA_MS });
+  assert.equal(gracia(pase, t0 + 5 * dia + 1).dias, 5);
+  assert.equal(gracia(pase, t0 - 1000).dias, 0, 'un reloj atrasado no da días negativos');
+  assert.equal(fechaHumana(gracia(pase, t0).fin), '28 de octubre');
+  assert.equal(fechaHumana(new Date(2026, 11, 31).getTime()), '31 de diciembre');
+});
+
+test('copy: cada texto de la pantalla de bloqueo de la app está en docs/copy/embudo.md', () => {
+  const js = readFileSync(new URL('../../app/js/bloqueo.js', import.meta.url), 'utf8');
+  const md = readFileSync(new URL('../../docs/copy/embudo.md', import.meta.url), 'utf8');
+  const bloque = js.slice(js.indexOf('var TXT = {'), js.indexOf('};', js.indexOf('var TXT = {')));
+  const textos = [...bloque.matchAll(/^\s+\w+: '(.+)',?$/gm)].map((m) => m[1]);
+  assert.ok(textos.length >= 25, `se leyeron ${textos.length} textos`);
+  for (const t of textos) assert.ok(md.includes(t), `falta en embudo.md: ${t}`);
+});
+
 // Paso 5: fecha del primer cobro y respuestas contadas en el paywall.
 import { fechaCobro, contarRespuestas, DIAS_PRUEBA } from '../lib/embudo/prueba.ts';
 

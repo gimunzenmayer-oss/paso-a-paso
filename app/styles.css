@@ -627,10 +627,10 @@ html.calma .picto-espacio { filter: saturate(.45); }
 .pie-informe { font-size: .8rem; color: var(--tinta-suave); }
 
 /* Movimiento: respuesta al toque y entrada escalonada (lo apagan "Modo calma" y "reducir movimiento") */
-:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .paso-fila, .boton-espacio, .menu button, .segmentado span, .pista) {
+:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .bloqueo-abierta, .paso-fila, .boton-espacio, .menu button, .segmentado span, .pista) {
   transition: transform .12s ease-out, background-color .2s, border-color .2s, box-shadow .2s;
 }
-:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .paso-fila, .boton-espacio, .menu button, .segmentado span, .pista):active:not(:disabled) { transform: scale(.97); }
+:is(.btn, .mod, .fila-lista, .tipo-op, .chip-op, .fila-urgente, .bloqueo-abierta, .paso-fila, .boton-espacio, .menu button, .segmentado span, .pista):active:not(:disabled) { transform: scale(.97); }
 .detalles > summary { min-height: var(--toque); display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--salvia); cursor: pointer; list-style: none; }
 .detalles > summary::-webkit-details-marker { display: none; }
 .detalles > summary::before { content: "+"; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--cat-salvia-borde); }
@@ -656,3 +656,21 @@ html.calma .picto-espacio { filter: saturate(.45); }
   .comentarios { border: 1px solid #999; }
 }
 .nino-marco > fieldset, .nino-marco > .campo { width: 100%; }
+
+/* Sin acceso (bloqueo.js): explica con calma y deja abiertos la guía y el kit de calma */
+.bloqueo { display: flex; flex-direction: column; gap: 20px; }
+.bloqueo .titular { font-size: 1.75rem; }
+.bloqueo-abiertas { display: flex; flex-direction: column; gap: 10px; }
+.bloqueo-abierta {
+  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 12px 16px; text-align: left;
+  border-radius: var(--radio); border: 1px solid var(--cat-niebla-borde); background: var(--cat-niebla); color: var(--tinta); font: inherit;
+}
+.bloqueo-abierta > span { font-size: 1.6rem; color: var(--tinta-suave); }
+.bloqueo-enlaces { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.bloqueo .enlace { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; padding-inline: 8px; }
+.bloqueo .enlace:disabled { opacity: .6; }
+.bloqueo-msg { color: var(--tinta-suave); text-align: center; }
+.bloqueo-pie { text-align: center; }
+.bloqueo-pie a { color: var(--niebla); font-weight: 700; }
+a.btn { text-decoration: none; }
+.aviso-acceso { display: flex; flex-direction: column; gap: 12px; padding: 14px 16px; border-radius: 14px; background: var(--arena); color: var(--arena-tinta); }

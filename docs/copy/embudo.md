@@ -337,6 +337,7 @@ Sale solo con `acceso:false` explícito.
 - Botón principal: Volver a activar (→ `/paywall`)
 - Enlace: Ya pagué: revisar de nuevo
 - Enlace, mientras revisa: Revisando…
+- Si al revisar la base sigue sin ver el pago (aria-live): Todavía no vemos el pago. A veces Hotmart tarda unos minutos en avisarnos: revisa de nuevo en un momento. (pendiente de aprobar)
 - Enlace: Entrar con otro correo (→ `/entrar`)
 - Pie: ¿Dudas? hadaapps@gmail.com
 
@@ -344,6 +345,7 @@ Sale solo con `acceso:false` explícito.
 - Título: Entra para abrir tu app
 - Texto: Usa el correo de tu compra. La guía "¿Momento difícil?" y el kit de calma están abiertos mientras tanto.
 - Botón: Entrar (→ `/entrar`)
+- Si se cerró la sesión pero el pase de 7 días sigue vigente (la app sigue abierta; tarjeta en el inicio con el botón Entrar): Tu sesión se cerró en este teléfono. Entra antes del {fecha_fin} para seguir sin cortes. (pendiente de aprobar)
 
 ### 5.3 Modo sin internet (gracia de 7 días)
 - Aviso discreto (días 1 a 4): Sin internet: la app funciona igual.

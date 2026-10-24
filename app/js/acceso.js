@@ -30,5 +30,32 @@
     return { abierta: false, motivo: 'entrar', pase: null };
   }
 
-  PP.acceso = { decidir: decidir, GRACIA_MS: GRACIA_MS };
+  // Lo que respondió GET /api/acceso → la "respuesta" que entiende decidir().
+  // status: código HTTP (0 = no hubo respuesta: sin internet o se cortó); cuerpo: el JSON o null.
+  // Solo un 200 con acceso true/false es una respuesta; un 401 con sin_sesion es "sin sesión".
+  // Todo lo demás (sin red, 5xx, 404, la página de un wifi público...) cuenta como sin conexión.
+  function leerRespuesta(status, cuerpo) {
+    var c = cuerpo && typeof cuerpo === 'object' ? cuerpo : {};
+    if (status === 200 && typeof c.acceso === 'boolean' && typeof c.estado === 'string') {
+      return { tipo: 'ok', acceso: c.acceso, estado: c.estado };
+    }
+    if (status === 401 && c.sin_sesion === true) return { tipo: 'sin_sesion' };
+    return { tipo: 'red' };
+  }
+
+  // Para los avisos sin internet (docs/copy/embudo.md §5.3): días desde la última
+  // comprobación buena y el momento en que se acaba la gracia.
+  var DIA_MS = 24 * 60 * 60 * 1000;
+  function gracia(pase, ahora) {
+    return { dias: Math.max(0, Math.floor((ahora - pase.verificado_en) / DIA_MS)), fin: pase.verificado_en + GRACIA_MS };
+  }
+
+  // "28 de octubre", en la hora del teléfono
+  var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  function fechaHumana(ms) {
+    var d = new Date(ms);
+    return d.getDate() + ' de ' + MESES[d.getMonth()];
+  }
+
+  PP.acceso = { decidir: decidir, GRACIA_MS: GRACIA_MS, leerRespuesta: leerRespuesta, gracia: gracia, fechaHumana: fechaHumana };
 })(typeof window !== 'undefined' ? window : globalThis);

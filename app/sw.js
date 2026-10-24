@@ -2,10 +2,10 @@
    teléfono para que funcione sin internet. La primera vez que
    se abre con conexión, copia estos archivos; después los sirve
    desde el propio teléfono. */
-var VERSION = 'paso-a-paso-v15';
+var VERSION = 'paso-a-paso-v16';
 var ARCHIVOS = ['./index.html', './styles.css', './manifest.webmanifest', './icono.svg',
   './fonts/atkinson-400-latin.woff2', './fonts/atkinson-400-latin-ext.woff2', './fonts/atkinson-700-latin.woff2', './fonts/atkinson-700-latin-ext.woff2', './fonts/lexend-latin.woff2', './fonts/lexend-latin-ext.woff2',
-  './js/medicion.js', './js/datos.js', './js/voz.js', './js/app.js', './js/agenda.js', './js/tablero.js', './js/guia-datos.js', './js/guia.js', './js/cifrado.js', './js/nino.js', './js/temporizador.js', './js/calma.js', './js/historias.js', './js/diario.js', './js/logros.js', './js/informe.js',
+  './js/acceso.js', './js/medicion.js', './js/datos.js', './js/voz.js', './js/app.js', './js/agenda.js', './js/tablero.js', './js/guia-datos.js', './js/guia.js', './js/cifrado.js', './js/nino.js', './js/temporizador.js', './js/calma.js', './js/historias.js', './js/diario.js', './js/logros.js', './js/informe.js', './js/bloqueo.js',
   './img/agua.jpg', './img/despertar.jpg', './img/bano.jpg', './img/desayunar.jpg',
   './img/vestirse.jpg', './img/dientes.jpg', './img/zapatos.jpg', './img/mochila.jpg', './img/abrazo.jpg', './img/abuela.jpg', './img/amigo.jpg', './img/ayuda.jpg', './img/banarse.jpg', './img/calor.jpg', './img/cansado.jpg', './img/cascos.jpg', './img/cenar.jpg', './img/contento.jpg', './img/cuento.jpg', './img/descanso.jpg', './img/dormir.jpg', './img/duele.jpg', './img/enfadado.jpg', './img/espacio.jpg', './img/espera.jpg', './img/frio.jpg', './img/galleta.jpg', './img/jugar.jpg', './img/leche.jpg', './img/mama.jpg', './img/manana.jpg', './img/manos.jpg', './img/manzana.jpg', './img/miedo.jpg', './img/musica.jpg', './img/no.jpg', './img/noche.jpg', './img/pan.jpg', './img/papa.jpg', './img/para.jpg', './img/parque.jpg', './img/platano.jpg', './img/ruido.jpg', './img/salir.jpg', './img/seno.jpg', './img/si.jpg', './img/silencio.jpg', './img/tarde.jpg', './img/tranquilo.jpg', './img/triste.jpg', './img/yo.jpg', './img/zumo.jpg'];
 

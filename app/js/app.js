@@ -85,6 +85,8 @@ window.PP = window.PP || {};
   // PP.repintar(): la misma pantalla cambió; se queda donde estaba, sin animar.
   function pintar(opciones) {
     var mantener = opciones && opciones.mantener, y = window.scrollY;
+    // Sin acceso solo quedan abiertas la guía y el kit de calma (bloqueo.js). Nada se borra.
+    if (PP.acceso.cerrada(PP.actual.nombre)) { PP.actual = { nombre: 'bloqueo', params: {} }; historial = []; mantener = false; }
     var p = PP.pantallas[PP.actual.nombre] || PP.pantallas.inicio;
     var main = $('#contenido');
     $('#titulo').textContent = typeof p.titulo === 'function' ? p.titulo(PP.actual.params) : p.titulo;
@@ -327,6 +329,7 @@ window.PP = window.PP || {};
         '  <h2 class="titular">Zona de la familia</h2>' +
         '  <button class="fila-urgente" data-ir-a="guia"><span aria-hidden="true">🧭</span><span class="crece"><strong>¿Momento difícil?</strong> Qué hacer ahora mismo</span><span aria-hidden="true">›</span></button>' +
         '</section>' +
+        PP.acceso.tarjetaInicio() +
         tarjetaPrimerosPasos() +
         // 1) La puerta al espacio del niño, bien visible
         '<section class="tarjeta puerta-nino" aria-labelledby="esp-t">' +
@@ -551,6 +554,9 @@ window.PP = window.PP || {};
       PP.estado = guardado || (onboarding ? PP.datosDesdeOnboarding(onboarding) : PP.datosEjemplo());
       return PP.prepararDatos();
     }).then(function () {
+      // ¿Tiene acceso? (bloqueo.js): con un pase vigente sigue enseguida; si no, espera al servidor
+      return PP.acceso.arrancar();
+    }).then(function () {
       PP.aplicarPreferencias();
       prepararCandado();
       $('#btn-atras').onclick = PP.atras;
@@ -560,9 +566,9 @@ window.PP = window.PP || {};
         PP.ir(b.dataset.ir, null, { raiz: true });
       };
       PP.actual = null;
-      PP.ir('inicio', null, { raiz: true });
+      PP.ir('inicio', null, { raiz: true }); // sin acceso, la puerta de pintar() la cambia por 'bloqueo'
       pedirAlmacenamientoFijo();
-      if (PP.estado.perfil.abrirEnEspacio) PP.abrirEspacio();
+      if (PP.estado.perfil.abrirEnEspacio && !PP.acceso.cerrada('espacio')) PP.abrirEspacio();
     });
 
     // Funcionar sin internet: solo cuando la app está instalada en su propia web

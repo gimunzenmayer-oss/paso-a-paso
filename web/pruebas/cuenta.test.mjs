@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { normalizarCorreo, limpiarCodigo, codigoCompleto, errorDeEnvio, errorDeVerificacion, VIGENCIA_CODIGO_MS } from '../lib/cuenta/formato.ts';
-import { leerMiAcceso, claveCuenta, seReactiva, seGestionaEnHotmart } from '../lib/cuenta/acceso.ts';
+import { leerMiAcceso, claveCuenta, seReactiva, seGestionaEnHotmart, respuestaApiAcceso, destinoTrasEntrar, APP_TRAS_ENTRAR } from '../lib/cuenta/acceso.ts';
 import { accesoSimulado, codigoSimulado, correoSimulado, ESTADOS_SIMULADOS } from '../lib/cuenta/simulacion.ts';
 import { ESTADOS, ERRORES_CODIGO, ERRORES_ENVIO, ENTRAR, CUENTA } from '../components/cuenta/textos.ts';
 
@@ -136,4 +136,35 @@ test('copy: cada texto de /entrar y /cuenta está en docs/copy/embudo.md', () =>
     ...Object.values(ESTADOS).flatMap((e) => [e.etiqueta, e.detalle, ...(e.detalleSinFecha ? [e.detalleSinFecha] : [])]),
   ];
   for (const t of textos) assert.ok(md.includes(t), `falta en embudo.md: ${t}`);
+});
+
+// Paso 8: GET /api/acceso y adónde va después de entrar.
+test('/api/acceso: solo la base dice sí o no; sin sesión es 401; cualquier duda es 503 (sin conexión para la app)', () => {
+  assert.deepEqual(respuestaApiAcceso({ tipo: 'sin_sesion' }), { status: 401, cuerpo: { sin_sesion: true } });
+  assert.deepEqual(respuestaApiAcceso({ tipo: 'sin_verificar' }), { status: 503, cuerpo: { sin_verificar: true } });
+  assert.deepEqual(respuestaApiAcceso({ tipo: 'acceso', acceso: null }), { status: 503, cuerpo: { sin_verificar: true } });
+  // La base no vio la sesión que Auth sí vio: no es un "no", es "no se pudo verificar".
+  assert.equal(respuestaApiAcceso({ tipo: 'acceso', acceso: { acceso: false, estado: 'sin_sesion', hasta: null } }).status, 503);
+  const si = { acceso: true, estado: 'trialing', hasta: '2026-10-28T12:00:00.000Z' };
+  assert.deepEqual(respuestaApiAcceso({ tipo: 'acceso', acceso: si }), { status: 200, cuerpo: si });
+  const no = { acceso: false, estado: 'refunded', hasta: null };
+  assert.deepEqual(respuestaApiAcceso({ tipo: 'acceso', acceso: no }), { status: 200, cuerpo: no });
+});
+
+test('/api/acceso: con la simulación de desarrollo responde lo mismo que respondería la base', () => {
+  for (const v of ESTADOS_SIMULADOS) {
+    const s = accesoSimulado({ nodeEnv: 'development', acceso: v, codigo: undefined }, AHORA);
+    const r = respuestaApiAcceso({ tipo: 'acceso', acceso: s.acceso });
+    if (v === 'error') assert.equal(r.status, 503, v);
+    else assert.deepEqual(r, { status: 200, cuerpo: s.acceso }, v);
+  }
+});
+
+test('después de entrar: con acceso va a la app; si no, a /cuenta', () => {
+  assert.equal(APP_TRAS_ENTRAR, '/app/index.html?hola=1');
+  assert.equal(destinoTrasEntrar({ acceso: true, estado: 'active', hasta: null }, false), APP_TRAS_ENTRAR);
+  assert.equal(destinoTrasEntrar({ acceso: true, estado: 'trialing', hasta: null }, true), APP_TRAS_ENTRAR);
+  assert.equal(destinoTrasEntrar({ acceso: false, estado: 'none', hasta: null }, false), '/cuenta?hola=1');
+  assert.equal(destinoTrasEntrar({ acceso: false, estado: 'none', hasta: null }, true), '/cuenta?hola=1&compra=1');
+  assert.equal(destinoTrasEntrar(null, false), '/cuenta?hola=1', 'sin verificar: /cuenta lo explica');
 });

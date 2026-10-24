@@ -22,6 +22,8 @@ window.PP = window.PP || {};
   ];
 
   PP.abrirEspacio = function () {
+    // Sin acceso, el espacio del niño solo ofrece el kit de calma (bloqueo.js)
+    if (PP.acceso.cerrada('espacio')) return PP.abrirCalma();
     var p = PP.estado.perfil;
     var visibles = BOTONES.filter(function (b) { return p.espacio[b.id] !== false; });
     var abriendo = false;

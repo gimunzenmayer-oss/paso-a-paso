@@ -14,6 +14,8 @@ import {
   type ErrorEnvio,
 } from '@/lib/cuenta/formato';
 import { codigoSimulado, COOKIE_SIMULADA, entornoDeProceso } from '@/lib/cuenta/simulacion';
+import { destinoTrasEntrar } from '@/lib/cuenta/acceso';
+import { accesoRecienEntrada } from '@/lib/cuenta/sesion';
 
 // /entrar (plan docs/planes/entrada-de-pago.md, paso 7): correo → código de 6 dígitos.
 // Sin contraseñas y sin llave service-role: todo con la llave pública y la sesión de ella.
@@ -92,13 +94,11 @@ async function revisarCodigo(correo: string, codigo: string, enviadoEn: number |
   if (!permitido(clave, MAX_INTENTOS, VENTANA_MS)) {
     return { ...base, error: 'muchos', minutos: minutosDeEspera(clave, VENTANA_MS) };
   }
-  const destino = compra ? '/cuenta?hola=1&compra=1' : '/cuenta?hola=1';
-
   const simulado = codigoSimulado(entornoDeProceso());
   if (simulado !== null) {
     if (codigo !== simulado) return { ...base, error: errorDeVerificacion({ status: 403, code: 'otp_expired' }, enviadoEn, Date.now()) };
     (await cookies()).set(COOKIE_SIMULADA, correo, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 });
-    return { paso: 'listo', destino };
+    return { paso: 'listo', destino: destinoTrasEntrar(await accesoRecienEntrada(null), compra) };
   }
   if (!hayConfigSupabase()) return { ...base, error: 'red' };
 
@@ -108,7 +108,8 @@ async function revisarCodigo(correo: string, codigo: string, enviadoEn: number |
     console.error('[entrar] código no aceptado', error.status, error.code);
     return { ...base, error: errorDeVerificacion({ status: error.status, code: error.code }, enviadoEn, Date.now()) };
   }
-  return { paso: 'listo', destino };
+  // Con acceso va directo a la app (§3.3); si no, /cuenta le explica su caso.
+  return { paso: 'listo', destino: destinoTrasEntrar(await accesoRecienEntrada(supabase), compra) };
 }
 
 // Una sola acción para los tres formularios de /entrar (campo "accion").
