@@ -182,6 +182,8 @@ window.PP = window.PP || {};
       marcarBotones();
       var msg = document.getElementById('bloqueo-msg');
       if (msg) msg.innerHTML = mensajeRevision(st.decision.motivo);
+      var otro = document.getElementById('bloqueo-otro-correo');
+      if (otro) otro.hidden = st.sinPago;
     }
     if (desdeBoton) {
       var b = document.querySelector('#contenido [data-revisar]');
@@ -199,9 +201,17 @@ window.PP = window.PP || {};
       ajustarMarco();
       if (!st.decision.abierta) {
         // Sin pase vigente espera la respuesta (hasta 8 s sin internet): mientras, "Revisando…".
+        // La guía y el kit de calma no se cierran nunca: sus puertas ya están debajo mientras espera.
         if (PP.aplicarPreferencias) PP.aplicarPreferencias(); // modo calma: sin giro
-        document.getElementById('contenido').innerHTML =
-          '<p class="bloqueo-espera" role="status"><span class="girando" aria-hidden="true"></span>' + TXT.revisando + '</p>';
+        var main = document.getElementById('contenido');
+        main.innerHTML =
+          '<p class="bloqueo-espera" role="status"><span class="girando" aria-hidden="true"></span>' + TXT.revisando + '</p>' +
+          botonesAbiertos();
+        // Si abre una, app.js la deja abierta al terminar de arrancar (Atrás lleva al inicio).
+        main.onclick = function (e) {
+          var b = e.target.closest('button[data-abrir]');
+          if (b) PP.ir(b.dataset.abrir);
+        };
       }
       var respuesta = revisar();
       return st.decision.abierta ? st.decision : respuesta;
@@ -222,27 +232,60 @@ window.PP = window.PP || {};
   });
 
   // ---------- Tarjeta en el inicio (días 5 a 7 sin conexión, o sesión cerrada) ----------
+  // El inicio se repinta entero (PP.repintar) cada vez que llega una respuesta: lo que ya se
+  // veía no vuelve a entrar; solo entra con fundido lo nuevo (la tarjeta o su mensaje de fallo).
+  var avisoVisto = { texto: '', msg: false };
   A.tarjetaInicio = function () {
-    var d = st.decision;
-    if (!d || !d.abierta || !d.pase) return '';
-    var g = A.gracia(d.pase, Date.now()), fin = A.fechaHumana(g.fin), texto;
-    if (d.motivo === 'sin_conexion' && st.fallo && g.dias >= 5) texto = TXT.diasSinRed.replace('{dias}', g.dias).replace('{fecha_fin}', fin);
-    else if (d.motivo === 'entrar_pronto') texto = TXT.sesionCerrada.replace('{fecha_fin}', fin);
-    else return '';
+    var d = st.decision, texto = '';
+    if (d && d.abierta && d.pase) {
+      var g = A.gracia(d.pase, Date.now()), fin = A.fechaHumana(g.fin);
+      if (d.motivo === 'sin_conexion' && st.fallo && g.dias >= 5) texto = TXT.diasSinRed.replace('{dias}', g.dias).replace('{fecha_fin}', fin);
+      else if (d.motivo === 'entrar_pronto') texto = TXT.sesionCerrada.replace('{fecha_fin}', fin);
+    }
+    var conMsg = !!texto && d.motivo === 'sin_conexion' && st.falloBoton;
+    var nueva = texto !== avisoVisto.texto, msgNuevo = conMsg && !avisoVisto.msg;
+    avisoVisto = { texto: texto, msg: conMsg };
+    if (!texto) return '';
     var accion = d.motivo === 'entrar_pronto'
       ? '<a class="btn" href="/entrar">' + TXT.entrar + '</a>'
       : '<button class="btn" data-revisar' + (st.revisando ? ' disabled' : '') + '>' + etiquetaRevisar(d.motivo) + '</button>';
-    var msg = d.motivo === 'sin_conexion' && st.falloBoton ? '<p class="aviso-acceso-msg">' + TXT.fallo + '</p>' : '';
-    return '<section class="aviso-acceso" role="status"><p>' + PP.esc(texto) + '</p>' + accion + msg + '</section>';
+    var msg = conMsg ? '<p class="aviso-acceso-msg' + (msgNuevo ? ' aparece' : '') + '">' + TXT.fallo + '</p>' : '';
+    // La baldosa arena de la guía («¿Está pasando ahora?»): 📶 sin conexión, 🔑 sesión cerrada
+    var picto = d.motivo === 'entrar_pronto' ? '🔑' : '📶';
+    return '<section class="aviso-acceso' + (nueva ? ' aparece' : '') + '" role="status"><span class="picto-xs" aria-hidden="true">' + picto + '</span>' +
+      '<p>' + PP.esc(texto) + '</p>' + accion + msg + '</section>';
   };
   // "Revisar ahora" del aviso del inicio (app.js lo llama desde su pantalla)
   A.revisarDesdeBoton = function () { if (!st.revisando) revisar(true); };
 
   // ---------- Pantalla de bloqueo ----------
-  // Las dos puertas abiertas, iguales a la del inicio (ícono, nombre y descripción).
+  // La rutina guardada de {nombre} (la de ahora, como en el inicio), si hay alguna con pasos.
+  function rutinaGuardada() {
+    var conPasos = (PP.estado.rutinas || []).filter(function (r) { return r.pasos && r.pasos.length; });
+    if (!conPasos.length) return null;
+    var r = PP.rutinaDeAhora();
+    return r && r.pasos && r.pasos.length ? r : conPasos[0];
+  }
+  // Sus primeros pasos con su foto o pictograma en baldosa, como la tira de la agenda (con el
+  // check en los que ya hizo hoy): prueba tranquila de que todo sigue en este teléfono.
+  // Solo lee: no toca el progreso guardado.
+  function tiraRutina() {
+    var r = rutinaGuardada();
+    if (!r) return '';
+    var pr = PP.estado.progreso && PP.estado.progreso[r.id];
+    var hechos = pr && pr.fecha === PP.hoy() ? pr.hechos : [];
+    return '<ol class="tira bloqueo-tira" aria-label="' + PP.esc(r.nombre) + '">' + r.pasos.slice(0, 4).map(function (p) {
+      var hecho = hechos.indexOf(p.id) >= 0;
+      return '<li' + (hecho ? ' class="hecho"' : '') + '>' + PP.picto(p, 'picto-xs') +
+        (hecho ? '<span class="marca" aria-hidden="true">✓</span>' : '') + '<span class="sr">' + PP.esc(p.texto) + '</span></li>';
+    }).join('') + '</ol>';
+  }
+  // Las dos puertas abiertas, iguales a la del inicio (ícono, nombre y descripción). Sin rutina
+  // guardada que mostrar, el ícono va en la baldosa arena de la guía.
   function botonesAbiertos() {
+    var baldosa = !rutinaGuardada();
     function fila(abrir, picto, nombre, desc) {
-      return '<button class="fila-urgente bloqueo-abierta" data-abrir="' + abrir + '"><span aria-hidden="true">' + picto + '</span>' +
+      return '<button class="fila-urgente bloqueo-abierta" data-abrir="' + abrir + '"><span' + (baldosa ? ' class="picto-xs"' : '') + ' aria-hidden="true">' + picto + '</span>' +
         '<span class="crece"><strong>' + PP.esc(nombre) + '</strong> ' + PP.esc(desc) + '</span><span aria-hidden="true">›</span></button>';
     }
     return '<div class="bloqueo-abiertas">' + fila('guia', '🧭', TXT.guia, TXT.guiaD) + fila('calma', '🫧', TXT.calma, TXT.calmaD) + '</div>';
@@ -267,6 +310,10 @@ window.PP = window.PP || {};
     if (motivo === 'entrar' ? st.fallo : st.falloBoton) return TXT.fallo;
     return st.sinPago ? TXT.sinPago + '<a class="enlace" href="/entrar">' + TXT.otroCorreoPago + '</a>' : '';
   }
+  // «Entrar con otro correo» no se repite cuando el mensaje ya lleva a /entrar.
+  function enlaceOtroCorreo() {
+    return '<a class="enlace" id="bloqueo-otro-correo" href="/entrar"' + (st.sinPago ? ' hidden' : '') + '>' + TXT.otroCorreo + '</a>';
+  }
   function etiquetaRevisar(motivo) {
     if (st.revisando) return TXT.revisando;
     if (motivo === 'entrar' || st.falloBoton) return TXT.reintentar;
@@ -289,30 +336,30 @@ window.PP = window.PP || {};
       var html = '';
       if (d.motivo === 'sin_acceso') {
         html =
-          '<section class="bloque bloqueo-cab"><h2 class="titular">' + TXT.pausaT + '</h2>' + motivoPausa(d) + '<p>' + PP.esc(TXT.pausaX.replace('{nombre}', nombre)) + '</p></section>' +
+          '<section class="bloque bloqueo-cab"><h2 class="titular">' + TXT.pausaT + '</h2>' + motivoPausa(d) + '<p>' + PP.esc(TXT.pausaX.replace('{nombre}', nombre)) + '</p>' + tiraRutina() + '</section>' +
           tarjetaAbierta() +
           '<a class="btn principal grande ancho" href="/paywall">' + TXT.reactivar + '</a>' +
           '<div class="bloqueo-enlaces">' +
           botonRevisar('enlace', d.motivo) +
           estadoRevision(d.motivo) +
-          '<a class="enlace" href="/entrar">' + TXT.otroCorreo + '</a>' +
+          enlaceOtroCorreo() +
           '</div>' +
           pie();
       } else if (d.motivo === 'vencido_sin_conexion') {
         html =
           '<section class="bloque bloqueo-cab"><h2 class="titular">' + TXT.vencidoT + '</h2><p>' + PP.esc(TXT.vencidoX) + '</p>' +
-          '<p>' + PP.esc(TXT.pausaX.replace('{nombre}', nombre)) + '</p></section>' +
+          '<p>' + PP.esc(TXT.pausaX.replace('{nombre}', nombre)) + '</p>' + tiraRutina() + '</section>' +
           '<div class="bloqueo-accion">' + botonRevisar('btn principal grande ancho', d.motivo) + estadoRevision(d.motivo) + '</div>' +
           tarjetaAbierta() +
           pie();
       } else { // 'entrar': sin sesión en este teléfono (y sin pase vigente)
         html =
-          '<section class="bloque bloqueo-cab"><h2 class="titular">' + TXT.entrarT + '</h2><p>' + PP.esc(TXT.entrarX) + '</p></section>' +
+          '<section class="bloque bloqueo-cab"><h2 class="titular">' + TXT.entrarT + '</h2><p>' + PP.esc(TXT.entrarX) + '</p>' + tiraRutina() + '</section>' +
           '<div class="bloqueo-accion">' +
           '<a class="btn principal grande ancho" href="/entrar">' + TXT.entrar + '</a>' +
           (st.fallo ? botonRevisar('btn ancho', d.motivo) : '') + estadoRevision(d.motivo) +
           '</div>' +
-          botonesAbiertos() +
+          tarjetaAbierta() +
           pie();
       }
       main.innerHTML = html;

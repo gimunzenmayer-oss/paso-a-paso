@@ -555,18 +555,27 @@ window.PP = window.PP || {};
       PP.estado = guardado || (onboarding ? PP.datosDesdeOnboarding(onboarding) : PP.datosEjemplo());
       return PP.prepararDatos();
     }).then(function () {
+      // Atrás y el candado ya sirven mientras espera: la guía y el kit de calma se pueden abrir
+      // desde «Revisando…» (bloqueo.js), y el kit se le puede dar al niño.
+      prepararCandado();
+      $('#btn-atras').onclick = PP.atras;
       // ¿Tiene acceso? (bloqueo.js): con un pase vigente sigue enseguida; si no, espera al servidor
       return PP.acceso.arrancar();
     }).then(function () {
       PP.aplicarPreferencias();
-      prepararCandado();
-      $('#btn-atras').onclick = PP.atras;
       $('#btn-ajustes').onclick = function () { PP.ir('ajustes'); };
       document.querySelector('.menu').onclick = function (e) {
         var b = e.target.closest('button'); if (!b) return;
         PP.ir(b.dataset.ir, null, { raiz: true });
       };
-      PP.actual = null;
+      if (PP.actual) {
+        // Abrió la guía o el kit de calma mientras esperaba: se queda ahí, y Atrás lleva al inicio
+        // (que sin acceso es el bloqueo).
+        historial.unshift({ nombre: 'inicio', params: {} });
+        $('#btn-atras').hidden = false;
+        pedirAlmacenamientoFijo();
+        return;
+      }
       PP.ir('inicio', null, { raiz: true }); // sin acceso, la puerta de pintar() la cambia por 'bloqueo'
       pedirAlmacenamientoFijo();
       if (PP.estado.perfil.abrirEnEspacio && !PP.acceso.cerrada('espacio')) PP.abrirEspacio();

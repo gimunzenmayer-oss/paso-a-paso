@@ -342,6 +342,7 @@ Sale solo con `acceso:false` explícito.
   - sin compra (`none`): No vemos una compra con este correo.
   - otro estado: sin motivo
 - Texto: No borramos nada. Las rutinas, las fotos y el diario de {nombre} siguen en este teléfono.
+- Debajo, sin texto nuevo: la tira con los primeros 4 pasos de la rutina de {nombre} guardada en el teléfono (su foto o pictograma en baldosa, con el check en los que ya hizo hoy; el lector de pantalla lee el nombre de la rutina y de cada paso). Sin rutina guardada no sale, y el ícono de los dos botones del bloque destacado va en baldosa. (pendiente de aprobar) · antes: sin tira
 - Bloque destacado:
   - título: Esto sigue abierto, siempre
   - texto: La guía "¿Momento difícil?" y el kit de calma son para cuando más se necesitan. No se cierran nunca.
@@ -353,12 +354,15 @@ Sale solo con `acceso:false` explícito.
 - Si al revisar la base sigue sin ver el pago (aria-live): Todavía no vemos el pago. A veces Hotmart tarda unos minutos en avisarnos: revisa de nuevo en un momento. (pendiente de aprobar)
   - debajo, enlace a `/entrar`: Si pagaste con otro correo, entra con ese. (pendiente de aprobar) · antes: sin esta línea
 - Enlace: Entrar con otro correo (→ `/entrar`)
+  - no sale mientras se ve «Si pagaste con otro correo, entra con ese.», que ya lleva a `/entrar` (pendiente de aprobar) · antes: los dos enlaces seguidos
 - Pie: ¿Dudas? hadaapps@gmail.com
 
 ### 5.2 Sin sesión iniciada en este teléfono
 - Título: Entra para abrir tu app
 - Texto: Usa el correo de tu compra. La guía "¿Momento difícil?" y el kit de calma están abiertos mientras tanto.
+- Debajo del texto, la tira de la rutina de {nombre} de §5.1 si hay una guardada en el teléfono (pendiente de aprobar) · antes: sin tira
 - Botón: Entrar (→ `/entrar`)
+- La guía y el kit, en el bloque destacado de §5.1 «Esto sigue abierto, siempre» (título, texto y los dos botones) (pendiente de aprobar) · antes: los dos botones sueltos, sin título ni texto
 - Pie: ¿Dudas? hadaapps@gmail.com (el de §5.1) (pendiente de aprobar) · antes: sin pie
 - Si se cerró la sesión pero el pase de 7 días sigue vigente (la app sigue abierta; tarjeta en el inicio con el botón Entrar): Tu sesión se cerró en este teléfono. Entra antes del {fecha_fin} para seguir sin cortes. (pendiente de aprobar)
 
@@ -370,12 +374,14 @@ Sale solo con `acceso:false` explícito.
   - título: Conéctate un momento
   - texto: Hace más de 7 días que no revisamos tu acceso. Con internet, se revisa solo en segundos.
   - debajo del texto, la frase de §5.1: No borramos nada. Las rutinas, las fotos y el diario de {nombre} siguen en este teléfono. (pendiente de aprobar) · antes: sin esta frase
+  - debajo de la frase, la tira de la rutina de {nombre} de §5.1 (pendiente de aprobar) · antes: sin tira
   - botón: Revisar ahora
   - la guía y el kit siguen abiertos, en el bloque destacado de §5.1 «Esto sigue abierto, siempre» (título, texto y los dos botones) (pendiente de aprobar) · antes: los dos botones sueltos, sin título ni texto
   - Pie: ¿Dudas? hadaapps@gmail.com (el de §5.1) (pendiente de aprobar) · antes: sin pie
 - Revisión fallida: No pudimos revisar tu acceso. Toca Reintentar cuando tengas internet. (sale en la pantalla de gracia vencida, con su bloque destacado y su pie)
 - Al volver internet con la app abierta, se revisa sola (sin tocar nada).
 - Al abrir sin un pase vigente, mientras espera la respuesta (hasta 8 s sin internet): Revisando… (con un círculo que gira; texto de §5.1)
+  - debajo, los dos botones de §5.1 (¿Momento difícil? · Kit de calma), que ya abren la guía y el kit (pendiente de aprobar) · antes: solo «Revisando…»
 - Al reconectar y confirmar (aviso que dura poco): Listo, tu acceso está al día.
 
 ---
