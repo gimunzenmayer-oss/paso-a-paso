@@ -141,3 +141,12 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Migración 20261024120000_retencion_estadisticas.sql (borra estadísticas y errores a los 24 meses, lo que promete /privacidad) escrita, NO aplicada: espera permiso de la dueña.
 - Pendiente en el embudo (pedido al hilo del embudo): eventos web que respeten "Compartir estadísticas" apagado · paywall con "se renueva automáticamente" y enlaces a Términos/Privacidad · botón "Eliminar mi cuenta" en /cuenta · correo del Día 5.
 - Pendiente de la dueña: nombre legal y tipo (persona natural o empresa) · garantía 30 días en Hotmart y confirmar desde cuándo cuenta.
+
+### Entrada de pago: avance 2026-10-25
+- Hecho y verificado (sin push): /entrar con código, /auth/callback, /cuenta (d64f83d, a7fc55c); /api/acceso y bloqueo en la app con guía y kit de calma siempre abiertos, sin borrar datos (9fd213a, bbc6934, 6cadf47; SW v18). Eventos respetan el interruptor de estadísticas; el precio dice renovación automática y enlaza Términos y Privacidad.
+- Revisor visual: /entrar y /cuenta 9/9 LISTA (veredictos/cuenta-ronda2); bloqueo 7/7 LISTA (veredictos/bloqueo-ronda3).
+- Migración de acceso: aplicada en producción por el hilo de publicación.
+- NO publicado: el bloqueo cierra la app en vivo para quien no pagó; espera decisión de la dueña (recomendado: publicar cuando haya links de Hotmart).
+- El hilo legal tomó precio (US$4,99/mes), garantía (7 días, no 30), webhook de Hotmart y correos; textos.ts y embudo.md son suyos hasta su commit.
+- Pendiente de aprobar: «Las comidas»; «Eliminar mi cuenta» en /cuenta (función nueva propuesta por el hilo legal); textos «(pendiente de aprobar)» en docs/copy/embudo.md.
+- Producción: límite de intentos del código es por instancia (hace falta uno compartido); Supabase Auth: plantilla en español con código, URLs, SMTP con Resend.
