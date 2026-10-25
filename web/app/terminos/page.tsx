@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PaginaLegal } from '@/components/legal/PaginaLegal';
-import { APP, EDAD_MINIMA, GARANTIA_DIAS, PAIS, PRUEBA_DIAS, RESPONSABLE, RESPONSABLE_LEGAL, SOPORTE_EMAIL } from '@/lib/marca';
+import { APP, EDAD_MINIMA, PAIS, PRUEBA_DIAS, RESPONSABLE, RESPONSABLE_LEGAL, SOPORTE_EMAIL } from '@/lib/marca';
 
 export const metadata: Metadata = { title: `Términos · ${APP}` };
 
@@ -47,7 +47,7 @@ export default function Terminos() {
         <li>Empiezas con {PRUEBA_DIAS} días de prueba sin cobro. El día {PRUEBA_DIAS} se cobra el plan que elegiste.</li>
         <li><strong>La suscripción se renueva automáticamente</strong> cada mes o cada año, al mismo precio que aceptaste, hasta que la canceles. Si algún día cambiamos el precio, te avisaremos por correo antes del siguiente cobro.</li>
         <li>Puedes cancelar cuando quieras desde Hotmart, en pocos pasos y sin llamadas: <Link href="/cancelar">cómo cancelar</Link>. Mantienes el acceso hasta el final del periodo que ya pagaste.</li>
-        <li>Garantía de {GARANTIA_DIAS} días: ver la <Link href="/reembolsos">política de reembolsos</Link>.</li>
+        <li>Reembolsos: ver la <Link href="/reembolsos">política de reembolsos</Link>.</li>
       </ul>
 
       <h2>6. Qué pasa si se termina tu suscripción</h2>

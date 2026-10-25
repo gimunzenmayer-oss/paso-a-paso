@@ -232,7 +232,8 @@ test('copy: espacios duros donde el revisor vio cortes (carga y garantía)', asy
   assert.ok(textos.some((t) => t.endsWith('a\u00a0su\u00a0terapeuta')));
   // «llora o grita» llega a la línea 2 de la carga por {crisis}.
   assert.equal(OPCIONES_CRISIS.find((o) => o.id === 'llora').corto, 'llora o\u00a0grita');
-  assert.ok(PAYWALL_PRUEBA.debajo.includes('si\u00a0no\u00a0te\u00a0ayuda'));
+  assert.ok(PAYWALL_PRUEBA.debajo.includes('no\u00a0pagas\u00a0nada'));
+  assert.ok(!/30 días|Garantía/.test(PAYWALL_PRUEBA.debajo));
 });
 
 test('copy 2.3: renovación y términos junto al botón, literales de docs/copy/embudo.md', async () => {

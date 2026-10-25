@@ -22,7 +22,7 @@ Elegida: #11 recortada a 10 palabras (empate con #10 → gana la más útil: cub
 - H1: Días predecibles y, en la crisis, [acento]sabrás qué hacer[/acento] (9)
 - Sub: El [b]Método Antes, Durante y Después[/b]. Tu primera rutina, [b]lista en 2 minutos[/b]. (13) ← objeción #1 "no tengo tiempo" (revisor)
 - CTA: Probar gratis con mi peque
-- Prueba social día 1: "Prueba 7 días sin pagar · 30 días de garantía"
+- Prueba social día 1: "Prueba 7 días sin pagar · cancelas cuando quieras" (2026-10-25: sin garantía de 30 días)
 
 ## 2. Problema — ¿Te suena?
 1. ¿Las mañanas se tuercen en cuanto [b]algo cambia de orden[/b]? (10) ← "VIVO EN EL DÍA DE LA MARMOTA"
@@ -63,14 +63,16 @@ Título: Así se ve [acento]su día[/acento] en tu celular
   - Rutinas e historias listas: mañana, colegio, noche, médico, pelo, cumpleaños — $10 (packs para plastificar: $7-10) ← objeción "no tengo tiempo"
   - Total tachado: $116 (sin nota: la card anual ya dice el precio)
   - ⚠️ Desviación: el stack es ~2× el precio anual, no 5-10×. Se prefiere honestidad a inflar valores.
-- Anual: $4.99 USD/mes · "Se cobra US$59.90 al año" · "Ahorras 4 meses" · bajo el CTA: "Hoy no pagas nada · 30 días de garantía" (12 − 59.90/7.99 = 4.5 → se redondea hacia abajo) · "menos de $0.17 al día" · CTA "Empezar mis 7 días gratis"
+- Anual: $4.99 USD/mes · "Se cobra US$59.90 al año" · "Ahorras 4 meses" · bajo el CTA: "Hoy no pagas nada" (2026-10-25: sin garantía de 30 días) (12 − 59.90/7.99 = 4.5 → se redondea hacia abajo) · "menos de $0.17 al día" · CTA "Empezar mis 7 días gratis"
 - Mensual: $7.99 · CTA "Elegir mensual"
 - Features (≤12 palabras): Rutinas con fotos reales que puedes cambiar · Kit de calma con música suave · Diario con clave y su informe imprimible · Guía para los momentos difíciles · (mensual) Cancelas cuando quieras
 
 ## 7. Garantía
-- Nombre: la Garantía del Día Tranquilo
-- Condición: Si en 30 días Paso a Paso no te ayuda a tener [b]un día más predecible[/b], escribes a nuestro correo de soporte y te devolvemos todo. Sin preguntas. (27)
-- Piso legal: Respaldada por la garantía de Hotmart. ⚠️ REQUIERE configurar 30 días en Hotmart (la garantía debe durar más que la prueba de 7).
+- 2026-10-25: la dueña configuró 7 días de reembolso en Hotmart y pidió quitar la garantía de 30 días. Según los Términos de Compra de Hotmart (3.1), el plazo cuenta desde la compra, así que se solapa con la prueba: no se promete garantía de días.
+- Nombre: 7 días para probarla sin pagar
+- Condición: Úsala con tu peque [b]7 días gratis[/b]. Si no es para ustedes, cancelas en Hotmart antes del día 7 y [b]no pagas nada[/b]. (21)
+- Piso legal: Pago y cancelación seguros con Hotmart
+- antes: la Garantía del Día Tranquilo, 30 días, "te devolvemos todo".
 
 ## 8. FAQ (objeciones de la ficha, en orden de fuerza)
 1. ¿Y si no tengo tiempo para armar nada? → Ya trae rutinas e historias listas con fotos. Cambias lo que quieras en [b]un par de minutos[/b].
@@ -83,8 +85,8 @@ Título: Así se ve [acento]su día[/acento] en tu celular
 ## 9. CTA final
 - H2: Imagina mañana [acento]a las 7:30[/acento] (5)
 - Future pacing: Tu peque mira su día en el celular, toca "¡Hecho!" y tú tomas el café caliente. (17)
-- Recap: 7 días gratis · Garantía del Día Tranquilo de 30 días
-- PS: PS: Paso a Paso junta el [b]Método Antes, Durante y Después[/b] en tu celular. Empiezas con 7 días gratis, la guía «Ahora mismo» y la Garantía del Día Tranquilo. (29)
+- Recap: 7 días gratis · cancelas cuando quieras
+- PS: PS: Paso a Paso junta el [b]Método Antes, Durante y Después[/b] en tu celular. Empiezas con 7 días gratis y la guía «Ahora mismo», y si cancelas antes del día 7 no pagas nada. (31)
 
 ## 10. Footer
 Privacidad · Términos · Reembolsos · Aviso: no reemplaza a profesionales · contacto (PENDIENTE: correo real de soporte)

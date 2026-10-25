@@ -44,7 +44,7 @@ Aprobado por la dueña el 2026-10-21 ("Sí, constrúyela"). Sigue SECUENCIA-MAES
 ## Solo la dueña puede hacer esto
 - Repositorio en GitHub con la app de Claude, Vercel conectado y Vercel Pro antes de vender.
 - En Hotmart:
-  - producto de suscripción mensual US$7.99 y anual US$59.90, con 7 días de prueba y 30 días de garantía;
+  - producto de suscripción mensual US$7.99 y anual US$59.90, con 7 días de prueba y 30 días de garantía; (2026-10-25: superado. Hotmart tiene solo el plan mensual US$4,99, 7 días de prueba y 7 días de reembolso desde la compra; sin garantía de 30 días)
   - pasarnos los 2 links del checkout y el ID del producto;
   - página de gracias en `/entrar?compra=1`;
   - webhook en `/api/webhooks/hotmart` y el hottok en Vercel.

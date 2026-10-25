@@ -7,10 +7,12 @@ export const SOPORTE_EMAIL = 'hadaapps@gmail.com';
 // Pendiente de confirmar por la dueña: hoy es la marca.
 export const RESPONSABLE_LEGAL = 'HadaApps';
 export const EDAD_MINIMA = 18;
-export const ACTUALIZADO = '24 de octubre de 2026';
+export const ACTUALIZADO = '25 de octubre de 2026';
 // Versión de las páginas legales: súbela con cada cambio importante y avisa por correo (47 §2).
-export const VERSION_LEGAL = 2;
-export const GARANTIA_DIAS = 30;
+export const VERSION_LEGAL = 3;
+// Plazo de reembolso configurado en Hotmart (producto 8796204). Cuenta desde la compra,
+// por eso se solapa con la prueba: no se promete como "garantía" (decisión de la dueña 2026-10-25).
+export const REEMBOLSO_DIAS = 7;
 export const PRUEBA_DIAS = 7;
 // Área de compras de Hotmart ("Mis compras"): ahí la clienta cambia su tarjeta o cancela.
 export const HOTMART_MIS_COMPRAS = 'https://consumer.hotmart.com/purchase';

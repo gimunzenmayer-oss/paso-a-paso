@@ -212,8 +212,9 @@ export const PAYWALL_PRUEBA = {
     titulo: 'Empieza el cobro del plan que elijas',
     texto: `${sinCortes(MONTO.mensual)} o ${sinCortes(MONTO.anual)}. Solo si sigues. Cancelas antes desde Hotmart y no pagas nada`,
   },
-  /** «si\u00a0no\u00a0te\u00a0ayuda» con espacios duros: la condición de la garantía no se parte. */
-  debajo: 'Y después, 30 días de la [b]Garantía del Día Tranquilo[/b]: si\u00a0no\u00a0te\u00a0ayuda, te devolvemos todo.',
+  /** «no\u00a0pagas\u00a0nada» con espacios duros: la condición no se parte. Sin garantía de días:
+   *  Hotmart tiene 7 días de reembolso desde la compra, que se solapan con la prueba (auditoría 2026-10-25). */
+  debajo: 'Si no es para ustedes, cancelas en Hotmart antes del día 7 y [b]no\u00a0pagas\u00a0nada[/b].',
   /** {monto} del Día 7 según el plan elegido (precios de §2.3). */
   monto: MONTO,
   /** (pendiente de aprobar) · antes: Ver los planes de {nombre} */
@@ -258,9 +259,9 @@ export const PAYWALL_PRECIO = {
   boton: 'Empezar mis 7 días gratis',
   abriendo: 'Abriendo Hotmart…',
   /** En el pie fijo, bajo el botón: una sola línea (el error de Hotmart la reemplaza). */
-  garantiaCorta: '[b]Garantía del Día Tranquilo[/b] · 30 días',
-  /** En el flujo, justo debajo del pie: la condición de la garantía, sin ícono ni nombre (el pie ya los lleva). */
-  garantia: 'Si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo.',
+  garantiaCorta: '[b]Hoy no pagas nada[/b] · cancelas antes del día 7',
+  /** En el flujo, justo debajo del pie: la condición de la prueba, sin ícono ni nombre (el pie ya los lleva). */
+  garantia: 'Si no es para ustedes, cancelas en Hotmart antes del día 7 y no se te cobra nada.',
   confianza: ['Hoy no pagas nada · primer cobro el {fecha_cobro}', 'Cancelas en Hotmart cuando quieras'],
   pie: 'Pago seguro con Hotmart · tarjeta o medios locales',
   yaPagaste: '¿Ya pagaste? Entra aquí',

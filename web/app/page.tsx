@@ -58,7 +58,7 @@ export default function PaginaDeVentas() {
         subtitleMarked={'El [b]Método Antes, Durante y Después[/b]. Tu primera rutina, [b]lista\u00a0en\u00a02\u00a0minutos[/b].'}
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
-        socialProof={<span>Prueba 7 días sin pagar · 30 días de garantía</span>}
+        socialProof={<span>Prueba 7 días sin pagar · cancelas cuando quieras</span>}
         visual={<VisualHero />}
         visualSinMarco
       />
@@ -137,7 +137,7 @@ export default function PaginaDeVentas() {
           sufijo: 'USD/mes',
           totalAnual: 'Se cobra US$59.90 al año',
           ahorro: 'Ahorras 4 meses',
-          bajoCta: 'Hoy no pagas nada · Garantía\u00a0del\u00a0Día\u00a0Tranquilo',
+          bajoCta: 'Hoy no pagas nada · cancelas antes del día\u00a07',
           ctaLabel: 'Empezar mis 7 días gratis',
           ctaHref: `${CTA_HREF}?plan=anual`,
           features: [
@@ -163,9 +163,9 @@ export default function PaginaDeVentas() {
       />
 
       <Garantia
-        nombre="La Garantía del Día Tranquilo"
-        condicionMarked="Si en 30 días no tienes [b]un día más predecible[/b], escríbenos y te devolvemos todo. Sin preguntas."
-        pisoLegal="Respaldada por la garantía de Hotmart"
+        nombre="7 días para probarla sin pagar"
+        condicionMarked="Úsala con tu peque [b]7 días gratis[/b]. Si no es para ustedes, cancelas en Hotmart antes del día 7 y [b]no pagas nada[/b]."
+        pisoLegal="Pago y cancelación seguros con Hotmart"
       />
 
       <Faq
@@ -202,8 +202,8 @@ export default function PaginaDeVentas() {
         futurePacingMarked="Tu peque mira su día en el celular, toca [b]«¡Hecho!»[/b] y tú tomas el café caliente."
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
-        recap="7 días gratis · Garantía del Día Tranquilo de 30 días"
-        psMarked="PS: Paso a Paso junta el [b]Método Antes, Durante y Después[/b] en tu celular. Empiezas con 7 días gratis, la guía «Ahora mismo» y la Garantía del Día Tranquilo."
+        recap="7 días gratis · cancelas cuando quieras"
+        psMarked="PS: Paso a Paso junta el [b]Método Antes, Durante y Después[/b] en tu celular. Empiezas con 7 días gratis y la guía «Ahora mismo», y si cancelas antes del día 7 no pagas nada."
       />
 
       <FooterLegal

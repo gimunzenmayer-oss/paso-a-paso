@@ -173,7 +173,7 @@ Elementos comunes a las 3 páginas:
   - **Día 5**: Te avisamos por correo · 2 días antes de cualquier cobro
   - **Día 7 · {fecha_cobro}**, con un plan ya elegido (?plan=, plan guardado o elegido en la página 3): Empieza el cobro: {monto} (pendiente de aprobar) · Solo si sigues. Cancelas antes desde Hotmart y no pagas nada (pendiente de aprobar) · antes: Solo si sigues. Cancela antes y no pagas nada. ({monto} y {fecha_cobro} nunca se parten entre dos líneas.)
   - **Día 7 · {fecha_cobro}**, sin plan elegido: Empieza el cobro del plan que elijas · US$7.99 al mes o US$59.90 al año. Solo si sigues. Cancelas antes desde Hotmart y no pagas nada (pendiente de aprobar) · antes: Empieza el cobro: US$59.90 al año (el anual por defecto)
-- Debajo (bloque hundido con escudo): Y después, 30 días de la [b]Garantía del Día Tranquilo[/b]: si no te ayuda, te devolvemos todo. («si no te ayuda» con espacios duros: la condición no se parte) (pendiente de aprobar) · antes: Y después, 30 días de la [b]Garantía del Día Tranquilo[/b].
+- Debajo (bloque hundido con escudo): Si no es para ustedes, cancelas en Hotmart antes del día 7 y [b]no pagas nada[/b]. («no pagas nada» con espacios duros) (2026-10-25: se quitó la garantía de 30 días; Hotmart tiene 7 días de reembolso desde la compra, que se solapan con la prueba) · antes: Y después, 30 días de la [b]Garantía del Día Tranquilo[/b]: si no te ayuda, te devolvemos todo.
 - Botón: Quiero ver los planes de {nombre} (pendiente de aprobar) · antes: Ver los planes de {nombre} (y antes: Ver precios)
 - Salida: Ahora no, volver a su rutina (pendiente de aprobar) · antes: Ahora no
 
@@ -195,10 +195,10 @@ Elementos comunes a las 3 páginas:
   - detalle: Se cobra cada mes · cancelas cuando quieras
 - Botón: Empezar mis 7 días gratis (el CTA de la oferta de la landing §6)
 - Botón, mientras abre: Abriendo Hotmart…
-- Pie fijo: SOLO el botón y una línea bajo él: [b]Garantía del Día Tranquilo[/b] · 30 días (pendiente de aprobar) · antes: el pie llevaba la garantía completa y la ayuda de Hotmart.
+- Pie fijo: SOLO el botón y una línea bajo él: [b]Hoy no pagas nada[/b] · cancelas antes del día 7 (2026-10-25, sin garantía de 30 días) · antes: [b]Garantía del Día Tranquilo[/b] · 30 días.
 - En el flujo, justo debajo del pie (junto al botón, no dentro del pie, que sigue siendo botón + 1 línea), la renovación del plan elegido: Se renueva automáticamente cada mes hasta que canceles. (mensual) · Se renueva automáticamente cada año hasta que canceles. (anual) (pendiente de aprobar) · antes: (no había)
 - Debajo de la renovación, con los dos nombres como enlaces: Al empezar la prueba aceptas los [Términos](/terminos) y la [Política de privacidad](/privacidad). (pendiente de aprobar) · antes: (no había)
-- En el flujo, debajo de los términos: la condición de la garantía, sin ícono ni nombre (el pie ya los lleva: un solo escudo en la página): Si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo. (pendiente de aprobar) · antes: [b]Garantía del Día Tranquilo[/b]: si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo.
+- En el flujo, debajo de los términos: la condición de la prueba, sin ícono ni nombre: Si no es para ustedes, cancelas en Hotmart antes del día 7 y no se te cobra nada. (2026-10-25) · antes: Si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo.
 - Ayuda, en el flujo, con ícono de información: En Hotmart, completa tus datos y elige «Quiero un periodo gratis». (pendiente de aprobar) · antes: debajo del botón, en el pie.
 - 2 líneas de confianza, con check:
   1. Hoy no pagas nada · primer cobro el {fecha_cobro} ({fecha_cobro} no se parte)
@@ -420,7 +420,7 @@ Escríbenos a hadaapps@gmail.com con el correo de tu compra.
 ### C. Descripción corta del producto / oferta (la que se ve en el checkout)
 ```
 Paso a Paso: rutinas con fotos, kit de calma y diario para la terapeuta, con el Método Antes, Durante y Después. Para familias de peques autistas de 2 a 12 años.
-7 días gratis: elige "Quiero un periodo gratis". Hoy no pagas nada y cancelas cuando quieras. Garantía del Día Tranquilo de 30 días.
+7 días gratis: elige "Quiero un periodo gratis". Hoy no pagas nada y cancelas cuando quieras antes del día 7.
 ```
 
 ---
@@ -441,8 +441,8 @@ Paso a Paso: rutinas con fotos, kit de calma y diario para la terapeuta, con el 
 - [x] El título nombra su meta ({momento}) y el mecanismo, nunca "Elige tu plan" (50 C1, D; 02B).
 - [x] El anual se muestra como US$/mes, con el total anual visible y el ahorro en meses. El mensual es un precio real (50 C1, C5; 52 punto 2).
 - [x] La fecha exacta de cobro aparece en la línea de tiempo, bajo el botón y en /cuenta (02B; 50 C4).
-- [x] La verdad del puente bajo el botón: hoy no pagas, cancelas cuando quieras y 30 días de garantía (50 C4bis).
-- [x] La garantía (30 días) dura más que la prueba (7 días) (52 punto 3).
+- [x] La verdad del puente bajo el botón: hoy no pagas y cancelas antes del día 7 sin pagar (50 C4bis). Sin garantía de días: la de Hotmart (7 días desde la compra) se solapa con la prueba.
+- [ ] ~~La garantía (30 días) dura más que la prueba (7 días) (52 punto 3).~~ Se quitó el 2026-10-25 por decisión de la dueña: Hotmart quedó con 7 días de reembolso.
 - [x] Ningún aviso nombra un miedo nuevo ("no te asustes"): todo se dice en positivo junto al botón (52 punto 4).
 - [x] El botón usa el texto recomendado "Ir a Hotmart y activar mi prueba", con la ayuda "Quiero un periodo gratis" y sin pedir correo antes (50 C4ter).
 - [x] Salida limpia: ✕ visible, "Ahora no" sin culpa y enlace para quien ya pagó (50 C1, C5).
