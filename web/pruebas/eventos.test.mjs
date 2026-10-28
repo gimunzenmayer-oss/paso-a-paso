@@ -50,7 +50,7 @@ test('eventos: con el interruptor apagado (pp_sin_estadisticas = "1") no sale ni
   const ls = almacen({ [CLAVE_SIN_ESTADISTICAS]: '1' });
   ponerAlmacen(ls);
   assert.equal(estadisticasApagadas(), true);
-  for (const tipo of ['onboarding_iniciado', 'paywall_visto', 'checkout_iniciado']) enviarEvento(tipo, { plan: 'anual' });
+  for (const tipo of ['onboarding_iniciado', 'paywall_visto', 'checkout_iniciado']) enviarEvento(tipo, { plan: 'mensual' });
   assert.equal(enviados.length, 0);
   // Ni siquiera crea el número del teléfono: no se escribe nada.
   assert.equal(ls.getItem('pp_dispositivo'), null);

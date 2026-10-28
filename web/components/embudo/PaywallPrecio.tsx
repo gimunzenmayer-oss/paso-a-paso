@@ -1,9 +1,9 @@
 'use client';
 
 // 2.3 Página 3 del paywall: precio (50 C1-C5).
-// Orden: título, subtítulo y las 2 tarjetas de precio enseguida, para que la
-// elegida (también la mensual, y también con el error en el pie) se vea entera en
-// el primer pliegue a 375px. La tira con 3 fotos de SU rutina (el dispositivo de
+// UN SOLO PLAN (mensual US$4.99, decisión de la dueña 2026-10-25): una tarjeta, sin elección.
+// Orden: título, subtítulo y la tarjeta de precio enseguida, para que se vea entera
+// (también con el error en el pie) en el primer pliegue a 375px. La tira con 3 fotos de SU rutina (el dispositivo de
 // FICHA-ARTE) NO va entre el subtítulo y las tarjetas: sus ≈56px empujaban la
 // mensual elegida 27px bajo el pie (59px sin nombre y con el error; medido a
 // 375×812). Ronda 4: justo bajo las tarjetas caía a medias detrás del degradado del
@@ -15,9 +15,7 @@
 // dejar un hueco de ~90 pt para esquivarlo (el mt-20 de la ronda 4). La prioridad
 // sigue siendo la tarjeta elegida entera sobre el pie.
 // Tarjetas, etiqueta, cada chip y la tira entran escalonados (entrada(i), 60 ms).
-// Anual recomendado y marcado de inicio; el total anual siempre
-// visible; el mensual es un precio real. La tarjeta elegida es la más elevada
-// (superficie, borde de acento y sombra tintada); la otra queda plana.
+// La tarjeta va elevada (superficie, borde de acento y sombra tintada).
 // El pie fijo es corto a propósito (≈130px): SOLO el botón y una línea de garantía
 // (con el único escudo de la página), para que la tarjeta elegida se vea entera
 // encima. Si Hotmart no abre, el error REEMPLAZA a esa línea (no se suma). En el
@@ -65,72 +63,23 @@ const [entreTerminos, despuesTerminos] = restoTerminos.split('{privacidad}');
 // el relleno vertical no cambia la línea).
 const CLASE_ENLACE_LEGAL = 'py-3 font-semibold text-[var(--text-primary)] underline underline-offset-4';
 
-function TarjetaPlan({
-  plan,
-  elegido,
-  onElegir,
-}: {
-  plan: Plan;
-  elegido: boolean;
-  onElegir: (p: Plan) => void;
-}) {
-  const anual = plan === 'anual';
-  const t = anual ? PAYWALL_PRECIO.anual : PAYWALL_PRECIO.mensual;
-  const [cobro, ahorro] = t.detalle.split(' · ');
+/** El único plan a la venta (decisión de la dueña 2026-10-25): una tarjeta elevada, sin elección. */
+function TarjetaPlan() {
+  const t = PAYWALL_PRECIO.mensual;
   return (
-    <label
-      className={`relative block cursor-pointer rounded-[var(--radius-card)] [touch-action:manipulation] transition-[border-color,background-color,box-shadow] duration-200 has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-[var(--accent)] ${
-        // La elegida "sube": superficie, borde de acento y sombra tintada. La otra queda
-        // plana, a medio camino entre la superficie y el fondo, sin sombra. El borde de
-        // 2px de la elegida se compensa con 1px menos de relleno: el contenido no salta.
-        elegido
-          ? `border-2 border-[var(--accent)] bg-[var(--surface)] px-[15px] pb-[15px] shadow-[0_14px_32px_-10px_color-mix(in_oklab,var(--accent)_45%,transparent)] ${anual ? 'pt-[27px]' : 'pt-[15px]'}`
-          : `border border-[color-mix(in_oklab,var(--text-tertiary)_30%,transparent)] bg-[color-mix(in_oklab,var(--surface)_50%,var(--bg))] px-4 pb-4 ${anual ? 'pt-7' : 'pt-4'}`
-      } ${anual ? 'mt-3' : ''}`}
-    >
-      <input type="radio" name="plan" value={plan} checked={elegido} onChange={() => onElegir(plan)} className="sr-only" />
-      {anual && (
-        <span className="absolute -top-3 left-4 rounded-[8px] bg-[var(--accent)] px-2.5 py-1 text-[13px] leading-4 font-bold tracking-[0.04em] text-[var(--bg)]">
-          {PAYWALL_PRECIO.anual.etiqueta}
-        </span>
-      )}
-      <span className="flex items-start justify-between gap-3">
-        <span className="flex min-w-0 flex-col">
-          <span className="text-[18px] font-semibold text-[var(--text-primary)]">{t.nombre}</span>
-          <span className="mt-1 flex items-baseline gap-0.5">
-            <span className="text-[32px] leading-none font-bold text-[var(--text-primary)] tabular-nums [font-family:var(--font-display)]">
-              {t.precio}
-            </span>
-            <span className="text-[16px] text-[var(--text-secondary)]">{t.sufijo}</span>
+    <div className="rounded-[var(--radius-card)] border-2 border-[var(--accent)] bg-[var(--surface)] px-[15px] pt-[15px] pb-[15px] shadow-[0_14px_32px_-10px_color-mix(in_oklab,var(--accent)_45%,transparent)]">
+      <span className="flex min-w-0 flex-col">
+        <span className="text-[18px] font-semibold text-[var(--text-primary)]">{t.nombre}</span>
+        <span className="mt-1 flex items-baseline gap-0.5">
+          <span className="text-[32px] leading-none font-bold text-[var(--text-primary)] tabular-nums [font-family:var(--font-display)]">
+            {t.precio}
           </span>
-          <span className="mt-2 text-[16px] leading-snug text-[var(--text-secondary)]">
-            {cobro}
-            {ahorro && (
-              <>
-                {' · '}
-                <span className={`whitespace-nowrap ${anual ? 'font-bold text-[var(--accent)]' : ''}`}>{ahorro}</span>
-              </>
-            )}
-          </span>
-          {anual && <span className="mt-1 text-[16px] text-[var(--text-secondary)]">{PAYWALL_PRECIO.anual.nota}</span>}
+          <span className="text-[16px] text-[var(--text-secondary)]">{t.sufijo}</span>
         </span>
-        <span
-          aria-hidden="true"
-          className={`mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full border-2 ${
-            elegido ? 'border-[var(--accent)]' : 'border-[color-mix(in_oklab,var(--text-tertiary)_45%,transparent)]'
-          }`}
-        >
-          {elegido && (
-            <motion.span
-              initial={{ scale: 0.4 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-              className="size-3 rounded-full bg-[var(--accent)]"
-            />
-          )}
-        </span>
+        <span className="mt-2 text-[16px] leading-snug text-[var(--text-secondary)]">{t.detalle}</span>
+        <span className="mt-1 text-[16px] text-[var(--text-secondary)]">{t.nota}</span>
       </span>
-    </label>
+    </div>
   );
 }
 
@@ -138,7 +87,6 @@ export function PaywallPrecio({
   v,
   pasos,
   plan,
-  onElegir,
   checkout,
   hrefVolver,
   enfocar,
@@ -147,7 +95,6 @@ export function PaywallPrecio({
   /** Los pasos de su rutina (rutinaDe(momento)). */
   pasos: readonly PasoRutina[];
   plan: Plan;
-  onElegir: (p: Plan) => void;
   /** Links de Hotmart ya validados (urlCheckout) por plan; null = estado honesto. */
   checkout: Record<Plan, string> | null;
   hrefVolver: string;
@@ -155,7 +102,7 @@ export function PaywallPrecio({
 }) {
   const [abriendo, setAbriendo] = useState(false);
   const [fallo, setFallo] = useState(false);
-  const ofertaRef = useRef<HTMLFieldSetElement>(null);
+  const ofertaRef = useRef<HTMLDivElement>(null);
   const planRef = useRef(plan);
 
   useEffect(() => {
@@ -220,14 +167,11 @@ export function PaywallPrecio({
       <Titulo texto={llenar(PAYWALL_PRECIO.titulo, v)} enfocar={enfocar} />
       <Ayuda>{llenar(PAYWALL_PRECIO.subtitulo, v)}</Ayuda>
 
-      <fieldset ref={ofertaRef} aria-labelledby="titulo-paso" className="mt-4 flex flex-col gap-3">
+      <div ref={ofertaRef} className="mt-4 flex flex-col gap-3">
         <motion.div {...entrada(0)}>
-          <TarjetaPlan plan="anual" elegido={plan === 'anual'} onElegir={onElegir} />
+          <TarjetaPlan />
         </motion.div>
-        <motion.div {...entrada(1)}>
-          <TarjetaPlan plan="mensual" elegido={plan === 'mensual'} onElegir={onElegir} />
-        </motion.div>
-      </fieldset>
+      </div>
 
       {/* Qué incluye: chips con el check del embudo (ancla de conversión: chips en toda lista de beneficios).
           mt-8: el pie sólido corta lo que quede debajo con un borde limpio; ya no hace falta un hueco para

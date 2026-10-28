@@ -144,6 +144,8 @@ test('copy: cada texto de /entrar y /cuenta está en docs/copy/embudo.md', () =>
     CUENTA.otroCorreo,
     CUENTA.confirmar.titulo,
     CUENTA.enCamino.texto,
+    ...Object.values(CUENTA.eliminar),
+    ENTRAR.eliminada,
     ...Object.values(ESTADOS).flatMap((e) => [e.etiqueta, e.detalle, ...(e.detalleSinFecha ? [e.detalleSinFecha] : [])]),
   ];
   for (const t of textos) assert.ok(md.includes(t), `falta en embudo.md: ${t}`);

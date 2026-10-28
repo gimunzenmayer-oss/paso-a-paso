@@ -160,10 +160,10 @@ export const RESULTADO = {
 
 export const TOTAL_PAGINAS_PAYWALL = 3;
 
-/** Lo que se cobra el día 7 según el plan (precios de §2.3). */
-const MONTO = { anual: 'US$59.90 al año', mensual: 'US$7.99 al mes' } as const;
+/** Lo que se cobra el día 7 (precio de §2.3). Un solo plan: mensual (decisión de la dueña 2026-10-25). */
+const MONTO = { mensual: 'US$4.99 al mes' } as const satisfies Record<Plan, string>;
 
-/** Un monto o una fecha no se parten entre dos líneas ("28 de / octubre", "US$7.99 al / mes"): espacios duros. */
+/** Un monto o una fecha no se parten entre dos líneas ("28 de / octubre", "US$4.99 al / mes"): espacios duros. */
 export function sinCortes(texto: string): string {
   return texto.replace(/ /g, '\u00a0');
 }
@@ -206,48 +206,35 @@ export const PAYWALL_PRUEBA = {
     // texto: (pendiente de aprobar) · antes: Solo si sigues. Cancela antes y no pagas nada
     { cuando: 'Día 7 · {fecha_cobro}', titulo: 'Empieza el cobro: {monto}', texto: 'Solo si sigues. Cancelas antes desde Hotmart y no pagas nada' },
   ],
-  /** Día 7 cuando todavía no eligió plan (sin ?plan= ni plan guardado): no afirma un monto que ella no eligió.
-   *  (pendiente de aprobar) · antes: Empieza el cobro: US$59.90 al año (el anual por defecto) */
-  cobroSinPlan: {
-    titulo: 'Empieza el cobro del plan que elijas',
-    texto: `${sinCortes(MONTO.mensual)} o ${sinCortes(MONTO.anual)}. Solo si sigues. Cancelas antes desde Hotmart y no pagas nada`,
-  },
   /** «no\u00a0pagas\u00a0nada» con espacios duros: la condición no se parte. Sin garantía de días:
    *  Hotmart tiene 7 días de reembolso desde la compra, que se solapan con la prueba (auditoría 2026-10-25). */
   debajo: 'Si no es para ustedes, cancelas en Hotmart antes del día 7 y [b]no\u00a0pagas\u00a0nada[/b].',
-  /** {monto} del Día 7 según el plan elegido (precios de §2.3). */
+  /** {monto} del Día 7 (precio de §2.3). */
   monto: MONTO,
-  /** (pendiente de aprobar) · antes: Ver los planes de {nombre} */
-  boton: 'Quiero ver los planes de {nombre}',
+  /** (pendiente de aprobar) · antes: Quiero ver los planes de {nombre} (ya hay un solo plan) */
+  boton: 'Quiero ver el plan de {nombre}',
 };
 
 export const PAYWALL_PRECIO = {
   titulo: 'Días más [acento]predecibles[/acento] para {nombre}, desde hoy',
-  subtitulo: 'Mañana {nombre} ya sabe qué viene. Empiezas gratis y eliges cómo seguir después.',
+  /** (pendiente de aprobar) · antes: …Empiezas gratis y eliges cómo seguir después. (ya no hay 2 planes) */
+  subtitulo: 'Mañana {nombre} ya sabe qué viene. Empiezas gratis y decides después si sigues.',
   /** Junto a la tira de 3 fotos de su rutina, sobre "Incluye". */
   rutinaLista: 'Su rutina de {momento} ya está armada',
   /** Qué incluye el plan (nombres de la app y de la landing §6). */
   incluyeTitulo: 'Incluye:',
   incluye: ['Su rutina con fotos', 'Kit de calma', 'Guía «Ahora mismo»', 'Diario e informe'],
-  anual: {
-    etiqueta: 'Mejor precio',
-    nombre: 'Anual',
-    precio: 'US$4.99',
-    sufijo: '/mes',
-    detalle: 'Se cobra US$59.90 al año · ahorras 4 meses',
-    nota: 'Menos de US$0.17 al día',
-  },
   mensual: {
     nombre: 'Mensual',
-    precio: 'US$7.99',
+    precio: 'US$4.99',
     sufijo: '/mes',
     detalle: 'Se cobra cada mes · cancelas cuando quieras',
+    nota: 'Menos de US$0.17 al día',
   },
   ayuda: 'En Hotmart, completa tus datos y elige «Quiero un periodo gratis».',
   /** En el flujo, junto al botón (no en el pie): la renovación del plan elegido. (pendiente de aprobar) */
   renovacion: {
     mensual: 'Se renueva automáticamente cada mes hasta que canceles.',
-    anual: 'Se renueva automáticamente cada año hasta que canceles.',
   } satisfies Record<Plan, string>,
   /** Debajo de la renovación; {terminos} y {privacidad} son enlaces a /terminos y /privacidad. (pendiente de aprobar) */
   terminos: {

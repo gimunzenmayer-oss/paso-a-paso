@@ -179,6 +179,20 @@ test('checkout: sin variables NEXT_PUBLIC_HOTMART_* no hay checkout (el resultad
   assert.equal(checkoutDe('instagram'), null);
 });
 
+test('checkout: un solo plan, basta el link mensual para abrir los pagos', async () => {
+  const antes = process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL;
+  process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL = 'https://pay.hotmart.com/X123?off=abc';
+  try {
+    const { checkoutDe } = await import('../lib/embudo/checkout.ts?con-mensual');
+    const c = checkoutDe('instagram');
+    assert.deepEqual(Object.keys(c), ['mensual']);
+    assert.ok(c.mensual.startsWith('https://pay.hotmart.com/X123?off=abc&showOnlyTrial=1&sck=instagram'));
+  } finally {
+    if (antes === undefined) delete process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL;
+    else process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL = antes;
+  }
+});
+
 test('copy 1.3: «de 5 a 7 pasos» es verdad para todas las rutinas', async () => {
   const { RUTINAS } = await import('../lib/embudo/rutinas.ts');
   const { MOMENTO } = await import('../components/embudo/textos.ts');
@@ -204,8 +218,9 @@ test('paywall: chips con sus respuestas (momento · edad · 1.ª crisis), solo l
 test('paywall: un monto o una fecha no se parten (espacios duros)', async () => {
   const { sinCortes, PAYWALL_PRUEBA } = await import('../components/embudo/textos.ts');
   assert.equal(sinCortes('28 de octubre'), '28 de octubre');
-  // Sin plan elegido, el Día 7 nombra los 2 montos, cada uno entero.
-  assert.ok(PAYWALL_PRUEBA.cobroSinPlan.texto.startsWith('US$7.99 al mes o US$59.90 al año.'));
+  // Un solo plan (mensual US$4.99): el Día 7 nombra ese monto, entero.
+  assert.deepEqual(Object.keys(PAYWALL_PRUEBA.monto), ['mensual']);
+  assert.equal(sinCortes(PAYWALL_PRUEBA.monto.mensual), 'US$4.99\u00a0al\u00a0mes');
 });
 
 test('paywall: {N} de «tus {N} respuestas» es el número de chips visibles, en todos los casos', async () => {
@@ -240,7 +255,7 @@ test('copy 2.3: renovación y términos junto al botón, literales de docs/copy/
   const { PAYWALL_PRECIO } = await import('../components/embudo/textos.ts');
   const md = readFileSync(new URL('../../docs/copy/embudo.md', import.meta.url), 'utf8');
   assert.equal(PAYWALL_PRECIO.renovacion.mensual, 'Se renueva automáticamente cada mes hasta que canceles.');
-  assert.equal(PAYWALL_PRECIO.renovacion.anual, 'Se renueva automáticamente cada año hasta que canceles.');
+  assert.deepEqual(Object.keys(PAYWALL_PRECIO.renovacion), ['mensual']);
   for (const t of Object.values(PAYWALL_PRECIO.renovacion)) assert.ok(md.includes(t), `falta en embudo.md: ${t}`);
   const { texto, terminos, privacidad } = PAYWALL_PRECIO.terminos;
   const enMd = texto.replace('{terminos}', `[${terminos}](/terminos)`).replace('{privacidad}', `[${privacidad}](/privacidad)`);

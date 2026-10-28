@@ -22,7 +22,7 @@ export const ENTRAR = {
     errorFormato: 'Revisa tu correo: parece que le falta algo (ej. ana@gmail.com).',
     /** Salida para quien llegó sin comprar (solo sin ?compra=1): pregunta · enlace → /paywall. (pendiente de aprobar) */
     sinCuenta: '¿Todavía no tienes Paso a Paso?',
-    verPlanes: 'Ver planes',
+    verPlanes: 'Ver el plan',
   },
   compra: {
     titulo: 'Ya casi. [acento]Entra con el correo de tu compra[/acento]',
@@ -56,6 +56,8 @@ export const ENTRAR = {
   /** Llega desde /auth/callback cuando el enlace del correo no sirvió. (pendiente de aprobar) */
   errorEnlace: 'Ese enlace ya se usó o venció. Pide un código nuevo aquí.',
   salio: 'Cerraste sesión.',
+  /** Llega desde «Eliminar mi cuenta» en /cuenta. (pendiente de aprobar) */
+  eliminada: 'Eliminamos tu cuenta. Gracias por haber estado aquí.',
 };
 
 export const ERRORES_ENVIO: Record<ErrorEnvio, string> = {
@@ -86,7 +88,7 @@ export const CUENTA = {
   abriendo: 'Abriendo Hotmart…',
   reactivar: 'Volver a activar',
   /** Sin compra (§3.3): nunca compró, no hay nada que «volver» a activar. (pendiente de aprobar) · antes: Volver a activar */
-  verPlanes: 'Ver planes',
+  verPlanes: 'Ver el plan',
   /** Sin compra (§3.3): cierra la sesión en este teléfono y lleva a /entrar. (pendiente de aprobar) */
   otroCorreo: 'Entrar con otro correo',
   volverApp: 'Volver a la app',
@@ -98,6 +100,22 @@ export const CUENTA = {
     texto: 'Tus rutinas y tu diario se quedan aquí.',
     si: 'Sí, cerrar sesión',
     no: 'Quedarme',
+  },
+  /** «Eliminar mi cuenta» (decisión 28, 2026-10-25). Todo (pendiente de aprobar). */
+  eliminar: {
+    boton: 'Eliminar mi cuenta',
+    titulo: '¿Eliminar tu cuenta?',
+    seBorra: 'Se borran tu correo, tu nombre y el estado de tu suscripción. Ya no podrás entrar con este correo.',
+    seQueda:
+      'Tus rutinas y tu diario viven en este teléfono y no se borran con esto. Para borrarlos también: en la app, Ajustes → «Volver a los datos de ejemplo».',
+    pagos: 'Solo guardamos los registros de pago, sin tu correo, porque la ley tributaria lo exige.',
+    hotmart: 'Eliminar tu cuenta no cancela tu suscripción. Si no la cancelas en Hotmart, se te seguirá cobrando.',
+    cancelar: 'Cancelar primero en Hotmart',
+    comoCancelar: 'Ver cómo cancelar',
+    si: 'Sí, eliminar mi cuenta',
+    eliminando: 'Eliminando…',
+    no: 'No, volver',
+    error: 'No pudimos eliminar tu cuenta. Revisa tu internet y vuelve a intentar, o escríbenos a hadaapps@gmail.com.',
   },
   /** §3.3, llegó desde ?compra=1 y Hotmart todavía no avisa. */
   enCamino: {

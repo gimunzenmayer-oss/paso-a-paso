@@ -123,40 +123,25 @@ export default function PaginaDeVentas() {
         trialDias={7}
         stack={{
           lineas: [
-            { resultado: 'Paso a Paso con el Método Antes, Durante y Después (12 meses)', valor: '$96' },
+            { resultado: 'Paso a Paso con el Método Antes, Durante y Después (cada mes)', valor: '$8' },
             { resultado: 'Guía «Ahora mismo»: qué hacer en 12 momentos difíciles', valor: '$10' },
             { resultado: 'Rutinas e historias listas: mañana, colegio, noche, médico y más', valor: '$10' },
           ],
-          totalTachado: '$116',
-          nota: 'Tú pagas US$59.90 al año. Los primeros 7 días, nada.',
+          totalTachado: '$28',
+          nota: 'Tú pagas US$4.99 al mes. Los primeros 7 días, nada.',
         }}
-        anual={{
-          nombre: 'Anual',
-          badge: 'MEJOR VALOR',
+        plan={{
+          nombre: 'Mensual',
           precioMes: '$4.99',
           sufijo: 'USD/mes',
-          totalAnual: 'Se cobra US$59.90 al año',
-          ahorro: 'Ahorras 4 meses',
           bajoCta: 'Hoy no pagas nada · cancelas antes del día\u00a07',
           ctaLabel: 'Empezar mis 7 días gratis',
-          ctaHref: `${CTA_HREF}?plan=anual`,
+          ctaHref: CTA_HREF,
           features: [
             'Rutinas con fotos reales que puedes cambiar',
             'Kit de calma con música suave',
             'Diario con clave y su informe imprimible',
             'Guía para los momentos difíciles',
-          ],
-        }}
-        mensual={{
-          nombre: 'Mensual',
-          precioMes: '$7.99',
-          sufijo: 'USD/mes',
-          ctaLabel: 'Elegir mensual',
-          ctaHref: `${CTA_HREF}?plan=mensual`,
-          features: [
-            'Rutinas con fotos reales que puedes cambiar',
-            'Kit de calma con música suave',
-            'Diario con clave y su informe imprimible',
             'Cancelas cuando quieras',
           ],
         }}
@@ -180,7 +165,7 @@ export default function PaginaDeVentas() {
           },
           {
             pregunta: '¿Vale lo que cuesta?',
-            respuestaMarked: 'Son [b]menos de $0.17 al día[/b], menos que una hoja plastificada. Y si no te sirve, te devolvemos todo.',
+            respuestaMarked: 'Son [b]menos de $0.17 al día[/b], menos que una hoja plastificada. Y si no te sirve, cancelas antes del día 7 y no pagas nada.',
           },
           {
             pregunta: '¿Y los datos de mi hijo?',

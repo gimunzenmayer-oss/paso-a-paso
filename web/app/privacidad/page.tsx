@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PaginaLegal } from '@/components/legal/PaginaLegal';
-import { APP, EDAD_MINIMA, PAIS, RESPONSABLE, RESPONSABLE_LEGAL, SOPORTE_EMAIL } from '@/lib/marca';
+import { APP, EDAD_MINIMA, PAIS, RESPONSABLE, RESPONSABLE_LEGAL, RESPONSABLE_TIPO, SOPORTE_EMAIL } from '@/lib/marca';
 
 export const metadata: Metadata = { title: `Privacidad · ${APP}` };
 
@@ -19,8 +19,8 @@ export default function Privacidad() {
 
       <h2>1. Quién es responsable</h2>
       <p>
-        {APP} es un servicio de {RESPONSABLE_LEGAL}
-        {RESPONSABLE_LEGAL !== RESPONSABLE ? ` («${RESPONSABLE}»)` : ''}, con base en {PAIS}. Para cualquier tema de datos
+        {APP} es un servicio de {RESPONSABLE_LEGAL}, {RESPONSABLE_TIPO}, bajo la marca
+        «{RESPONSABLE}», con base en {PAIS}. Para cualquier tema de datos
         personales escríbenos a {correo}.
       </p>
 
@@ -110,8 +110,9 @@ export default function Privacidad() {
       <p>
         Puedes pedir en cualquier momento <strong>ver, corregir, llevarte o eliminar</strong> tus datos, u oponerte a que los
         usemos para estadísticas. Escríbenos a {correo} desde el correo de tu compra y te respondemos en un plazo máximo de
-        15 días. Para eliminar tu cuenta basta con decírnoslo así: la borramos y te confirmamos por correo. Antes, cancela la
-        suscripción en Hotmart para que no se te siga cobrando (<Link href="/cancelar">cómo cancelar</Link>).
+        15 días. Tu cuenta la puedes eliminar tú misma en <Link href="/cuenta">Tu cuenta</Link> → «Eliminar mi cuenta», o
+        pedírnoslo por correo. Eliminar la cuenta no cancela la suscripción: antes, cancélala en Hotmart para que no se te
+        siga cobrando (<Link href="/cancelar">cómo cancelar</Link>).
       </p>
       <p>
         Los datos que están solo en tu teléfono se borran desde ahí: en la app, Ajustes → «Volver a los datos de ejemplo», o

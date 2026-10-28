@@ -14,7 +14,7 @@ export default function Reembolsos() {
       <h2>Prueba gratis de {PRUEBA_DIAS} días</h2>
       <p>
         Durante la prueba no se cobra nada. <strong>Si cancelas antes de que termine, no pagas nunca.</strong> El día{' '}
-        {PRUEBA_DIAS} se cobra el plan que elegiste. Es la mejor forma de decidir sin riesgo: si no es para ustedes,
+        {PRUEBA_DIAS} se cobra el primer mes. Es la mejor forma de decidir sin riesgo: si no es para ustedes,
         cancela antes de ese día (<Link href="/cancelar">cómo cancelar</Link>).
       </p>
 

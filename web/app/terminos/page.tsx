@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PaginaLegal } from '@/components/legal/PaginaLegal';
-import { APP, EDAD_MINIMA, PAIS, PRUEBA_DIAS, RESPONSABLE, RESPONSABLE_LEGAL, SOPORTE_EMAIL } from '@/lib/marca';
+import { APP, EDAD_MINIMA, PAIS, PRECIO_MENSUAL, PRUEBA_DIAS, RESPONSABLE, RESPONSABLE_LEGAL, RESPONSABLE_TIPO, SOPORTE_EMAIL } from '@/lib/marca';
 
 export const metadata: Metadata = { title: `Términos · ${APP}` };
 
@@ -14,8 +14,8 @@ export default function Terminos() {
 
       <h2>1. Quién ofrece {APP}</h2>
       <p>
-        {APP} lo ofrece {RESPONSABLE_LEGAL}
-        {RESPONSABLE_LEGAL !== RESPONSABLE ? ` («${RESPONSABLE}»)` : ''}, con base en {PAIS}. Contacto:{' '}
+        {APP} lo ofrece {RESPONSABLE_LEGAL}, {RESPONSABLE_TIPO}, bajo la marca
+        «{RESPONSABLE}», con base en {PAIS}. Contacto:{' '}
         <a href={`mailto:${SOPORTE_EMAIL}`}>{SOPORTE_EMAIL}</a>.
       </p>
 
@@ -43,9 +43,9 @@ export default function Terminos() {
 
       <h2>5. Suscripción, prueba y renovación</h2>
       <ul>
-        <li>El acceso se vende como suscripción mensual o anual a través de Hotmart, que es quien cobra.</li>
-        <li>Empiezas con {PRUEBA_DIAS} días de prueba sin cobro. El día {PRUEBA_DIAS} se cobra el plan que elegiste.</li>
-        <li><strong>La suscripción se renueva automáticamente</strong> cada mes o cada año, al mismo precio que aceptaste, hasta que la canceles. Si algún día cambiamos el precio, te avisaremos por correo antes del siguiente cobro.</li>
+        <li>El acceso se vende como suscripción mensual de {PRECIO_MENSUAL} a través de Hotmart, que es quien cobra.</li>
+        <li>Empiezas con {PRUEBA_DIAS} días de prueba sin cobro. El día {PRUEBA_DIAS} se cobra el primer mes.</li>
+        <li><strong>La suscripción se renueva automáticamente</strong> cada mes, al mismo precio que aceptaste, hasta que la canceles. Si algún día cambiamos el precio, te avisaremos por correo antes del siguiente cobro.</li>
         <li>Puedes cancelar cuando quieras desde Hotmart, en pocos pasos y sin llamadas: <Link href="/cancelar">cómo cancelar</Link>. Mantienes el acceso hasta el final del periodo que ya pagaste.</li>
         <li>Reembolsos: ver la <Link href="/reembolsos">política de reembolsos</Link>.</li>
       </ul>
@@ -67,7 +67,7 @@ export default function Terminos() {
       <h2>8. Licencia de uso</h2>
       <p>
         Mientras tu suscripción esté activa te damos permiso para usar {APP} con tu familia, en tus dispositivos. La app, su
-        diseño, sus textos, la guía y el «Método Antes, Durante y Después» son de {RESPONSABLE}. Las fotos de ejemplo son de
+        diseño, sus textos, la guía y el «Método Antes, Durante y Después» son de {RESPONSABLE_LEGAL} («{RESPONSABLE}»). Las fotos de ejemplo son de
         sus autores en Unsplash (créditos en Ajustes). No está permitido copiar, revender ni compartir el acceso fuera de tu
         familia.
       </p>

@@ -27,7 +27,7 @@ import { llenar, PAYWALL_COMUN, PAYWALL_PRUEBA, type Variables, type VariablesPa
 /** Ritmo del riel: cada hito entra 0.3 s después del anterior. */
 const ritmo = (i: number) => 0.15 + i * 0.3;
 
-/** Llena un texto del copy con {monto} entero en una sola línea ("US$7.99 al mes" no se parte). */
+/** Llena un texto del copy con {monto} entero en una sola línea ("US$4.99 al mes" no se parte). */
 function conMontoEntero(texto: string, v: Variables & VariablesPaywall) {
   const [antes, despues] = texto.split('{monto}');
   if (despues === undefined || v.monto === undefined) return llenar(texto, v);
@@ -66,8 +66,7 @@ export function PaywallPrueba({
             const cobro = i === ultimo;
             // El Día 5 (aviso) y su tramo hasta el cobro van en la 2.ª nota.
             const aviso = i === ultimo - 1;
-            // Día 7 sin plan elegido (v.monto vacío): el cobro "del plan que elijas", con los 2 montos.
-            const { titulo, texto } = cobro && v.monto === undefined ? PAYWALL_PRUEBA.cobroSinPlan : hito;
+            const { titulo, texto } = hito;
             return (
               <li key={hito.cuando} className="relative flex gap-4">
                 {/* Riel: nodo + tramo hasta el siguiente hito. */}

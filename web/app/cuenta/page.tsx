@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Logo } from '@/components/landing/Logo';
 import { Ayuda, CheckQueSeLlena, EnlacePrincipal, EnlaceTexto, Titulo } from '@/components/embudo/ui';
-import { BotonRevisar, CerrarSesion, EnlaceHotmart, Entra, Escena, FechaLocal, OtroCorreo } from '@/components/cuenta/interacciones';
+import { BotonRevisar, CerrarSesion, EliminarCuenta, EnlaceHotmart, Entra, Escena, FechaLocal, OtroCorreo } from '@/components/cuenta/interacciones';
 import { CUENTA, ENTRAR, ESTADOS } from '@/components/cuenta/textos';
 import { seGestionaEnHotmart, seReactiva, type ClaveCuenta } from '@/lib/cuenta/acceso';
 import { estadoDeCuenta, sesionClienta } from '@/lib/cuenta/sesion';
@@ -157,6 +157,13 @@ export default async function PaginaCuenta({ searchParams }: PageProps<'/cuenta'
             <Entra i={t + 4} className="mt-auto flex flex-col pt-10">
               <EnlaceTexto href="/app">{CUENTA.volverApp}</EnlaceTexto>
               <CerrarSesion />
+              {/* La administradora no se elimina desde aquí (la RPC también lo impide). */}
+              {clave !== 'admin' && (
+                <EliminarCuenta
+                  conSuscripcion={seGestionaEnHotmart(clave) && clave !== 'cancelada'}
+                  error={q.eliminar === 'error'}
+                />
+              )}
             </Entra>
           </main>
         </div>

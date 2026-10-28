@@ -2,7 +2,8 @@
 
 // Piezas con interacción de /cuenta: la fecha en la hora del teléfono, "Reintentar" /
 // "Revisar de nuevo" (vuelve a preguntar a la base), el enlace a Hotmart con su
-// "Abriendo Hotmart…", "Entrar con otro correo", la confirmación de cerrar sesión y el
+// "Abriendo Hotmart…", "Entrar con otro correo", la confirmación de cerrar sesión, la de
+// "Eliminar mi cuenta" y el
 // movimiento de la página (MotionConfig + entrada escalonada), que la página del servidor
 // no puede poner por sí misma.
 
@@ -10,7 +11,8 @@ import { useEffect, useState, useSyncExternalStore, useTransition, type ReactNod
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { BotonPrincipal, BotonTexto, EnlacePrincipal, entrada, TextoOcupado } from '@/components/embudo/ui';
-import { cerrarSesion, entrarConOtroCorreo } from '@/app/cuenta/acciones';
+import { cerrarSesion, eliminarCuenta, entrarConOtroCorreo } from '@/app/cuenta/acciones';
+import { HOTMART_MIS_COMPRAS } from '@/lib/marca';
 import { CUENTA } from './textos';
 
 /** Toda la página respeta "reducir movimiento" del teléfono (la entrada y la confirmación quedan en fundido). */
@@ -161,6 +163,91 @@ export function CerrarSesion() {
                 className="mx-auto flex min-h-12 items-center justify-center px-4 text-[16px] font-semibold text-[var(--text-secondary)] underline underline-offset-4 [touch-action:manipulation]"
               >
                 {CUENTA.confirmar.no}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/**
+ * "Eliminar mi cuenta": enlace discreto al pie; al tocarlo abre la confirmación que explica
+ * qué se borra, qué se queda en el teléfono y que Hotmart sigue cobrando si no cancela.
+ * conSuscripcion: hay una compra que todavía cobra (prueba, activa, pago atrasado o sin verificar).
+ * error: la última vez no se pudo (?eliminar=error): se abre con el aviso.
+ */
+export function EliminarCuenta({ conSuscripcion, error }: { conSuscripcion: boolean; error: boolean }) {
+  const [abierto, setAbierto] = useState(error);
+  const [pendiente, iniciar] = useTransition();
+  const t = CUENTA.eliminar;
+  return (
+    <div className="mt-2">
+      {!abierto && (
+        <button
+          type="button"
+          onClick={() => setAbierto(true)}
+          className="mx-auto flex min-h-12 items-center justify-center px-4 text-[16px] font-semibold text-[var(--text-secondary)] underline decoration-[color-mix(in_oklab,var(--text-secondary)_45%,transparent)] underline-offset-4 [touch-action:manipulation]"
+        >
+          {t.boton}
+        </button>
+      )}
+      <AnimatePresence>
+        {abierto && (
+          <motion.div
+            role="alertdialog"
+            aria-labelledby="eliminar-titulo"
+            aria-describedby="eliminar-texto"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+            className="mt-2 rounded-[var(--radius-card)] bg-[var(--surface)] p-4 shadow-[var(--shadow-2)]"
+          >
+            <h2 id="eliminar-titulo" className="text-[18px] font-bold [font-family:var(--font-display)]">
+              {t.titulo}
+            </h2>
+            <div id="eliminar-texto" className="mt-1 flex flex-col gap-2 text-[16px] leading-[1.45] text-pretty text-[var(--text-secondary)]">
+              <p>{t.seBorra}</p>
+              <p>{t.seQueda}</p>
+              <p>{t.pagos}</p>
+              {conSuscripcion && <p className="font-semibold text-[var(--text-primary)]">{t.hotmart}</p>}
+            </div>
+            {error && (
+              <p role="alert" className="mt-3 text-[16px] font-semibold text-[var(--error)]">
+                {t.error}
+              </p>
+            )}
+            <div className="mt-4 flex flex-col gap-1">
+              {conSuscripcion && (
+                <>
+                  <EnlacePrincipal href={HOTMART_MIS_COMPRAS}>{t.cancelar}</EnlacePrincipal>
+                  <a
+                    href="/cancelar"
+                    className="mx-auto flex min-h-12 items-center justify-center px-4 text-[16px] font-semibold text-[var(--text-secondary)] underline underline-offset-4 [touch-action:manipulation]"
+                  >
+                    {t.comoCancelar}
+                  </a>
+                </>
+              )}
+              <button
+                type="button"
+                disabled={pendiente}
+                aria-busy={pendiente}
+                onClick={() => {
+                  if (!pendiente) iniciar(() => eliminarCuenta());
+                }}
+                className="flex min-h-12 w-full items-center justify-center rounded-[var(--radius-button)] border-2 border-[var(--error)] px-4 text-[16px] font-semibold text-[var(--error)] disabled:opacity-60 [touch-action:manipulation]"
+              >
+                {pendiente ? <TextoOcupado>{t.eliminando}</TextoOcupado> : t.si}
+              </button>
+              <button
+                type="button"
+                autoFocus
+                onClick={() => setAbierto(false)}
+                className="mx-auto flex min-h-12 items-center justify-center px-4 text-[16px] font-semibold text-[var(--text-secondary)] underline underline-offset-4 [touch-action:manipulation]"
+              >
+                {t.no}
               </button>
             </div>
           </motion.div>

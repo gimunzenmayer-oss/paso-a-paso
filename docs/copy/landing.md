@@ -57,15 +57,15 @@ Título: Así se ve [acento]su día[/acento] en tu celular
 
 ## 6. Oferta
 - Título: Empieza gratis. Luego, [acento]menos de $0.17 al día[/acento]
+- Un solo plan (decisión de la dueña 2026-10-25: mensual US$4.99 con 7 días de prueba; el anual queda para más adelante). Antes: card Anual $4.99/mes (US$59.90 al año) + card Mensual $7.99.
 - Stack (valores honestos, ver nota):
-  - Paso a Paso con el Método Antes, Durante y Después (12 meses) — $96 (12 × $7.99)
+  - Paso a Paso con el Método Antes, Durante y Después (cada mes) — $8 (antes: 12 meses, $96)
   - Guía "Ahora mismo": qué hacer en 12 momentos difíciles — $10 (guías equivalentes en Hotmart: ~$10) ← objeción "no sé qué hacer"
   - Rutinas e historias listas: mañana, colegio, noche, médico, pelo, cumpleaños — $10 (packs para plastificar: $7-10) ← objeción "no tengo tiempo"
-  - Total tachado: $116 (sin nota: la card anual ya dice el precio)
-  - ⚠️ Desviación: el stack es ~2× el precio anual, no 5-10×. Se prefiere honestidad a inflar valores.
-- Anual: $4.99 USD/mes · "Se cobra US$59.90 al año" · "Ahorras 4 meses" · bajo el CTA: "Hoy no pagas nada" (2026-10-25: sin garantía de 30 días) (12 − 59.90/7.99 = 4.5 → se redondea hacia abajo) · "menos de $0.17 al día" · CTA "Empezar mis 7 días gratis"
-- Mensual: $7.99 · CTA "Elegir mensual"
-- Features (≤12 palabras): Rutinas con fotos reales que puedes cambiar · Kit de calma con música suave · Diario con clave y su informe imprimible · Guía para los momentos difíciles · (mensual) Cancelas cuando quieras
+  - Total tachado: $28 · nota: "Tú pagas US$4.99 al mes. Los primeros 7 días, nada." (pendiente de aprobar)
+- Mensual: $4.99 USD/mes · bajo el CTA: "Hoy no pagas nada · cancelas antes del día 7" · "menos de $0.17 al día" (4.99 / 30 = 0.166) · CTA "Empezar mis 7 días gratis" (→ /onboarding)
+- Features (≤12 palabras): Rutinas con fotos reales que puedes cambiar · Kit de calma con música suave · Diario con clave y su informe imprimible · Guía para los momentos difíciles · Cancelas cuando quieras
+- FAQ «¿Vale lo que cuesta?»: …Y si no te sirve, cancelas antes del día 7 y no pagas nada. (2026-10-28) · antes: …te devolvemos todo. (prometía un reembolso que no existe)
 
 ## 7. Garantía
 - 2026-10-25: la dueña configuró 7 días de reembolso en Hotmart y pidió quitar la garantía de 30 días. Según los Términos de Compra de Hotmart (3.1), el plazo cuenta desde la compra, así que se solapa con la prueba: no se promete garantía de días.
@@ -92,4 +92,4 @@ Título: Así se ve [acento]su día[/acento] en tu celular
 Privacidad · Términos · Reembolsos · Aviso: no reemplaza a profesionales · contacto (PENDIENTE: correo real de soporte)
 
 ## Cambios tras revisor-visual ronda 1 (2026-10-20)
-Tira de pasos con foto + check que se llena en Solución; conteo del precio anual; CTA final en acento claro; footer 2×2; dots 44px; hero con captura del tablero sin card-en-card; planes con ?plan=; moneda USD.
+Tira de pasos con foto + check que se llena en Solución; conteo del precio; CTA final en acento claro; footer 2×2; dots 44px; hero con captura del tablero sin card-en-card; un solo plan (sin ?plan=); moneda USD.

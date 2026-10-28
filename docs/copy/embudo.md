@@ -14,7 +14,7 @@ Voz: español latino neutro, tuteo, cálido, sin culpa, sin "berrinche", sin "tr
   - `{crisis}`: texto corto de la pregunta 4.
   - `{n_pasos}`: pasos de su rutina.
   - `{N}`: respuestas que se ven como chips en el resumen del paywall (momento · edad · crisis respondidas; el nombre no tiene chip y no cuenta): el número cuadra con los chips. (pendiente de aprobar) · antes: preguntas respondidas (contaba el nombre: «tus 4 respuestas» con 3 chips)
-  - `{monto}`: lo que se cobra el día 7 según el plan elegido: "US$59.90 al año" o "US$7.99 al mes" (precios de §2.3). (pendiente de aprobar)
+  - `{monto}`: lo que se cobra el día 7: "US$4.99 al mes", el único plan (precio de §2.3; 2026-10-28, antes "US$59.90 al año" o "US$7.99 al mes"). (pendiente de aprobar)
   - `{fecha_fin}`: hasta cuándo dura el acceso.
   - `{s}`: segundos.
   - `{min}`: minutos.
@@ -171,32 +171,28 @@ Elementos comunes a las 3 páginas:
 - Línea de tiempo:
   - **Hoy** (nodo: el check del embudo; debajo, 3 fotos de su rutina): Su rutina de {momento}, con fotos · El kit de calma y la guía para cuando {crisis} (pendiente de aprobar) · antes: Hoy mismo, su rutina de {momento} · Con fotos, el kit de calma y la guía para cuando {crisis}
   - **Día 5**: Te avisamos por correo · 2 días antes de cualquier cobro
-  - **Día 7 · {fecha_cobro}**, con un plan ya elegido (?plan=, plan guardado o elegido en la página 3): Empieza el cobro: {monto} (pendiente de aprobar) · Solo si sigues. Cancelas antes desde Hotmart y no pagas nada (pendiente de aprobar) · antes: Solo si sigues. Cancela antes y no pagas nada. ({monto} y {fecha_cobro} nunca se parten entre dos líneas.)
-  - **Día 7 · {fecha_cobro}**, sin plan elegido: Empieza el cobro del plan que elijas · US$7.99 al mes o US$59.90 al año. Solo si sigues. Cancelas antes desde Hotmart y no pagas nada (pendiente de aprobar) · antes: Empieza el cobro: US$59.90 al año (el anual por defecto)
+  - **Día 7 · {fecha_cobro}** ({monto} = US$4.99 al mes, el único plan): Empieza el cobro: {monto} (pendiente de aprobar) · Solo si sigues. Cancelas antes desde Hotmart y no pagas nada (pendiente de aprobar) · antes: Solo si sigues. Cancela antes y no pagas nada. ({monto} y {fecha_cobro} nunca se parten entre dos líneas.)
+  - (2026-10-28: se quitó la variante «sin plan elegido» con los 2 montos: hay un solo plan.)
 - Debajo (bloque hundido con escudo): Si no es para ustedes, cancelas en Hotmart antes del día 7 y [b]no pagas nada[/b]. («no pagas nada» con espacios duros) (2026-10-25: se quitó la garantía de 30 días; Hotmart tiene 7 días de reembolso desde la compra, que se solapan con la prueba) · antes: Y después, 30 días de la [b]Garantía del Día Tranquilo[/b]: si no te ayuda, te devolvemos todo.
-- Botón: Quiero ver los planes de {nombre} (pendiente de aprobar) · antes: Ver los planes de {nombre} (y antes: Ver precios)
+- Botón: Quiero ver el plan de {nombre} (pendiente de aprobar) · antes: Quiero ver los planes de {nombre} (2026-10-28: un solo plan) · Ver los planes de {nombre} (y antes: Ver precios)
 - Salida: Ahora no, volver a su rutina (pendiente de aprobar) · antes: Ahora no
 
 ### 2.3 Página 3: precio
 - Título: Días más [acento]predecibles[/acento] para {nombre}, desde hoy
-- Subtítulo: Mañana {nombre} ya sabe qué viene. Empiezas gratis y eliges cómo seguir después. (pendiente de aprobar) · antes: Empiezas gratis. Eliges cómo seguir después.
-- Orden: las 2 tarjetas van justo después del subtítulo (la elegida se ve entera en el primer pliegue, también con el error en el pie); debajo, a 32px, "Incluye", y después la tira de su rutina. El pie fijo de esta página es sólido (fondo de la página con una línea fina arriba, sin degradado): lo que pasa por debajo se corta con un borde limpio. (pendiente de aprobar) · antes (ronda 4): "Incluye" separado 80px para no asomar bajo el degradado del pie (dejaba un hueco de ~90 pt) · antes (ronda 3): tarjetas → tira (32px) → "Incluye"; la tira asomaba a medias bajo el degradado del pie. Prioridad: la tarjeta elegida entera. · antes: "Incluye" en una línea sobre las tarjetas. Ronda 3: se probó la tira entre el subtítulo y las tarjetas y empujaba la mensual elegida bajo el pie (27px; 59px sin nombre y con el error): se dejó debajo para que la tarjeta elegida quede entera.
+- Subtítulo: Mañana {nombre} ya sabe qué viene. Empiezas gratis y decides después si sigues. (pendiente de aprobar) · antes: Mañana {nombre} ya sabe qué viene. Empiezas gratis y eliges cómo seguir después. (ya no hay 2 planes)
+- Orden: la tarjeta (antes, las 2 tarjetas) va justo después del subtítulo (se ve entera en el primer pliegue, también con el error en el pie); debajo, a 32px, "Incluye", y después la tira de su rutina. El pie fijo de esta página es sólido (fondo de la página con una línea fina arriba, sin degradado): lo que pasa por debajo se corta con un borde limpio. (pendiente de aprobar) · antes (ronda 4): "Incluye" separado 80px para no asomar bajo el degradado del pie (dejaba un hueco de ~90 pt) · antes (ronda 3): tarjetas → tira (32px) → "Incluye"; la tira asomaba a medias bajo el degradado del pie. Prioridad: la tarjeta elegida entera. · antes: "Incluye" en una línea sobre las tarjetas. Ronda 3: se probó la tira entre el subtítulo y las tarjetas y empujaba la mensual elegida bajo el pie (27px; 59px sin nombre y con el error): se dejó debajo para que la tarjeta elegida quede entera.
 - Junto a una tira de 3 fotos de su rutina: Su rutina de {momento} ya está armada (pendiente de aprobar)
 - Incluye (etiqueta en gris secundario —el acento queda para el CTA, la palabra que vende y el check— y 4 chips con el check del embudo; nombres de la app y de la landing §6): [b]Incluye:[/b] Su rutina con fotos · Kit de calma · Guía «Ahora mismo» · Diario e informe (pendiente de aprobar)
-- Tarjeta Anual (recomendada y marcada de inicio):
-  - etiqueta: Mejor precio
-  - nombre: Anual
-  - precio grande: US$4.99/mes
-  - detalle: Se cobra US$59.90 al año · ahorras 4 meses
-  - nota: Menos de US$0.17 al día
-- Tarjeta Mensual:
+- Una sola tarjeta, sin elección (decisión de la dueña 2026-10-25: solo plan mensual; el anual queda para más adelante):
   - nombre: Mensual
-  - precio grande: US$7.99/mes
+  - precio grande: US$4.99/mes
   - detalle: Se cobra cada mes · cancelas cuando quieras
+  - nota: Menos de US$0.17 al día
+  - antes: tarjeta Anual (US$4.99/mes, se cobra US$59.90 al año, recomendada) + tarjeta Mensual (US$7.99/mes)
 - Botón: Empezar mis 7 días gratis (el CTA de la oferta de la landing §6)
 - Botón, mientras abre: Abriendo Hotmart…
 - Pie fijo: SOLO el botón y una línea bajo él: [b]Hoy no pagas nada[/b] · cancelas antes del día 7 (2026-10-25, sin garantía de 30 días) · antes: [b]Garantía del Día Tranquilo[/b] · 30 días.
-- En el flujo, justo debajo del pie (junto al botón, no dentro del pie, que sigue siendo botón + 1 línea), la renovación del plan elegido: Se renueva automáticamente cada mes hasta que canceles. (mensual) · Se renueva automáticamente cada año hasta que canceles. (anual) (pendiente de aprobar) · antes: (no había)
+- En el flujo, justo debajo del pie (junto al botón, no dentro del pie, que sigue siendo botón + 1 línea), la renovación: Se renueva automáticamente cada mes hasta que canceles. (pendiente de aprobar) · antes: (no había)
 - Debajo de la renovación, con los dos nombres como enlaces: Al empezar la prueba aceptas los [Términos](/terminos) y la [Política de privacidad](/privacidad). (pendiente de aprobar) · antes: (no había)
 - En el flujo, debajo de los términos: la condición de la prueba, sin ícono ni nombre: Si no es para ustedes, cancelas en Hotmart antes del día 7 y no se te cobra nada. (2026-10-25) · antes: Si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo.
 - Ayuda, en el flujo, con ícono de información: En Hotmart, completa tus datos y elige «Quiero un periodo gratis». (pendiente de aprobar) · antes: debajo del botón, en el pie.
@@ -236,12 +232,12 @@ Se usa mientras no existan los links de Hotmart.
 - Error de formato: Revisa tu correo: parece que le falta algo (ej. ana@gmail.com).
 - Error de red: No pudimos enviar el código. Revisa tu internet y toca «Enviarme el código» otra vez. (pendiente de aprobar) · antes: con comillas rectas ("Enviarme el código")
 - Error, pidió demasiados códigos: Ya te mandamos varios códigos. Espera unos minutos y revisa tu correo.
-- Al final, bajo el rescate (para quien llegó sin comprar): ¿Todavía no tienes Paso a Paso? Ver planes («Ver planes» es el enlace → `/paywall`) (pendiente de aprobar) · antes: (no había: solo el logo)
+- Al final, bajo el rescate (para quien llegó sin comprar): ¿Todavía no tienes Paso a Paso? Ver el plan («Ver el plan» es el enlace; antes «Ver planes» → `/paywall`) (pendiente de aprobar) · antes: (no había: solo el logo)
 
 #### Variante `?compra=1` (llega desde Hotmart)
 - Título: Ya casi. [acento]Entra con el correo de tu compra[/acento]
 - Ayuda: Usa el mismo correo que pusiste en Hotmart. Ahí llega tu código.
-- El resto es igual, sin «¿Todavía no tienes Paso a Paso? Ver planes» (ya compró).
+- El resto es igual, sin «¿Todavía no tienes Paso a Paso? Ver el plan» (ya compró).
 
 ### 3.2 Paso código
 El mensaje es el mismo exista o no el correo, para no revelar quién tiene cuenta.
@@ -279,7 +275,7 @@ Estos mensajes salen solo después de que la persona demostró que el correo es 
 - Sin compra con ese correo (es también la fila «Sin compra» de `/cuenta`, §4):
   - título: No vemos una compra con {correo}
   - texto: Quizás compraste con otro correo. Revisa el recibo de Hotmart.
-  - botones: Ver planes (→ `/paywall`, el principal) · Entrar con otro correo (enlace: cierra la sesión en este teléfono y lleva a `/entrar`)
+  - botones: Ver el plan (→ `/paywall`, el principal) · Entrar con otro correo (enlace: cierra la sesión en este teléfono y lleva a `/entrar`)
 - No se pudo verificar (red o error del servidor). Nunca se dice "no compraste":
   - texto: No pudimos revisar tu acceso ahora. Toca Reintentar.
   - botón: Reintentar
@@ -319,7 +315,7 @@ Estos mensajes salen solo después de que la persona demostró que el correo es 
 - Botón, mientras abre: Abriendo Hotmart… (el mismo del paywall, §2.3)
 - Botón (estado Cancelada, con días): Ver mi compra en Hotmart, sin la ayuda de arriba (pendiente de aprobar) · antes: Gestionar o cancelar en Hotmart + «Se abre Hotmart. Ahí cambias tu tarjeta o cancelas.»
 - Botón (estados terminada o reembolsada): Volver a activar (→ `/paywall`)
-- Sin compra: los botones de §3.3, Ver planes (→ `/paywall`) · Entrar con otro correo (pendiente de aprobar) · antes: Volver a activar (→ `/paywall`)
+- Sin compra: los botones de §3.3, Ver el plan (→ `/paywall`) · Entrar con otro correo (pendiente de aprobar) · antes: Volver a activar (→ `/paywall`)
 - Enlace: Volver a la app
 - Botón: Cerrar sesión
 - Confirmación:
@@ -327,6 +323,20 @@ Estos mensajes salen solo después de que la persona demostró que el correo es 
   - texto: Tus rutinas y tu diario se quedan aquí.
   - botones: Sí, cerrar sesión · Quedarme
 - Aviso después: Cerraste sesión.
+
+#### Eliminar mi cuenta (decisión 28 de la dueña, 2026-10-25; todo pendiente de aprobar)
+Al pie, bajo «Cerrar sesión». No aparece para la administradora.
+- Enlace: Eliminar mi cuenta
+- Confirmación:
+  - título: ¿Eliminar tu cuenta?
+  - qué se borra: Se borran tu correo, tu nombre y el estado de tu suscripción. Ya no podrás entrar con este correo.
+  - qué se queda: Tus rutinas y tu diario viven en este teléfono y no se borran con esto. Para borrarlos también: en la app, Ajustes → «Volver a los datos de ejemplo».
+  - pagos: Solo guardamos los registros de pago, sin tu correo, porque la ley tributaria lo exige.
+  - con suscripción que cobra (prueba, activa, pago atrasado o sin verificar), en negrita: Eliminar tu cuenta no cancela tu suscripción. Si no la cancelas en Hotmart, se te seguirá cobrando.
+  - con suscripción: botón Cancelar primero en Hotmart (→ Mis compras de Hotmart) · enlace Ver cómo cancelar (→ `/cancelar`)
+  - botones: Sí, eliminar mi cuenta (mientras: Eliminando…) · No, volver
+  - error: No pudimos eliminar tu cuenta. Revisa tu internet y vuelve a intentar, o escríbenos a hadaapps@gmail.com.
+- Aviso después, en `/entrar`: Eliminamos tu cuenta. Gracias por haber estado aquí.
 
 ---
 
@@ -439,7 +449,7 @@ Paso a Paso: rutinas con fotos, kit de calma y diario para la terapeuta, con el 
 - [x] El paywall va en 3 páginas: resumen, línea de la prueba y precio (02B; 50 C0).
 - [x] La inversión se ve: "Hecho con tus {N} respuestas" (02B regla a; 50 D).
 - [x] El título nombra su meta ({momento}) y el mecanismo, nunca "Elige tu plan" (50 C1, D; 02B).
-- [x] El anual se muestra como US$/mes, con el total anual visible y el ahorro en meses. El mensual es un precio real (50 C1, C5; 52 punto 2).
+- [x] Un solo plan, mensual, con su precio real US$4.99/mes (decisión de la dueña 2026-10-25; antes: anual + mensual) (50 C1, C5; 52 punto 2).
 - [x] La fecha exacta de cobro aparece en la línea de tiempo, bajo el botón y en /cuenta (02B; 50 C4).
 - [x] La verdad del puente bajo el botón: hoy no pagas y cancelas antes del día 7 sin pagar (50 C4bis). Sin garantía de días: la de Hotmart (7 días desde la compra) se solapa con la prueba.
 - [ ] ~~La garantía (30 días) dura más que la prueba (7 días) (52 punto 3).~~ Se quitó el 2026-10-25 por decisión de la dueña: Hotmart quedó con 7 días de reembolso.

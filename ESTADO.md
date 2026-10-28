@@ -1,7 +1,7 @@
 # ESTADO — Paso a Paso
 Última actualización: 2026-10-21 | Sesión actual: 1 (Flujo C: mejorar app existente) | Panel de administración construido, en revisión visual
 
-⏸️ CHECKPOINT — Última acción completada: auditoría senior, capa 4 (animaciones) aplicada y verificada / Siguiente acción exacta: capa 5 (retención: texto de la garantía, plan de recordatorios y correos; confirmar alcance del onboarding/paywall con la usuaria). Reporte completo: /mnt/project-files/auditoria-paso-a-paso/REPORTE-AUDITORIA.md
+⏸️ CHECKPOINT (2026-10-28) — Paso A del cierre hecho en la rama traspaso (ver «Paso A» al final); sigue el Paso B (dominio, correo y Hotmart con la dueña presente). Checkpoint anterior: Última acción completada: auditoría senior, capa 4 (animaciones) aplicada y verificada / Siguiente acción exacta: capa 5 (retención: texto de la garantía, plan de recordatorios y correos; confirmar alcance del onboarding/paywall con la usuaria). Reporte completo: /mnt/project-files/auditoria-paso-a-paso/REPORTE-AUDITORIA.md
 
 ## Qué es esta app (3 líneas máximo)
 PWA para madres/padres de niños autistas de 2 a 12 años (ejemplo: Mateo, 6). Dos zonas: "Espacio de Mateo" (niño, bloqueado con PIN) y zona de la familia (agenda visual, tablero de comunicación, temporizador, kit de calma con música, historias sociales, diario de crisis cifrado, logros, informe para profesionales, guía).
@@ -159,3 +159,13 @@ Datos reales de Hotmart (confirmados por la dueña): producto 8796204 en BORRADO
 - Cambio fuera del código: hadaapps.com y www.hadaapps.com agregados al proyecto de Vercel (www redirige al dominio raíz). No apuntan aún: faltan en Porkbun A @ 76.76.21.21 y CNAME www → cname.vercel-dns.com, conservando MX fwd1/fwd2.porkbun.com y el TXT de SPF.
 - Nada tocado en Hotmart, correo, variables de Vercel ni Supabase.
 - Pendiente: decidir plan anual (en la web siguen US$7.99/mes y US$59.90/año; Hotmart solo tiene US$4,99/mes) · HOTMART_HOTTOK y links de checkout en Vercel · registrar webhook en Hotmart (v2, PURCHASE_*, SUBSCRIPTION_CANCELLATION, SWITCH_PLAN) · correo de envío: solo existe reenvío de Porkbun, no hay servicio SMTP ni Resend; el correo de Supabase Auth admite ~2 por hora · texto de bienvenida y acceso (método verificado: sitio → /entrar → correo de compra → código de 6 dígitos → /cuenta → /app) · correo del Día 5 prometido en /paywall sin crear · prueba punta a punta · nombre legal · retención 24 meses sin aplicar · Vercel Pro antes de vender.
+
+## Paso A: código listo para vender (2026-10-28, rama traspaso, sin publicar)
+- Precio único: plan mensual US$4.99 con 7 días de prueba, en landing (una sola tarjeta, stack $28 tachado), paywall (una tarjeta sin elección; Día 7 = US$4.99 al mes), /terminos y /reembolsos. Quitado el plan anual de la web: `Plan = 'mensual'`; basta NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL para abrir los pagos (antes exigía también el _ANUAL). La base sigue aceptando `cycle = 'anual'` (compatibilidad).
+- Garantía: quitada la última promesa de reembolso («te devolvemos todo» en la FAQ de la landing).
+- Legal: responsable «Giselle Alejandra Munzenmayer Gomez, persona natural, bajo la marca «HadaApps»» en /terminos y /privacidad (marca.ts: RESPONSABLE_LEGAL, RESPONSABLE_TIPO). Contacto sigue hadaapps@gmail.com. VERSION_LEGAL 4, actualizado 28-10-2026.
+- «Eliminar mi cuenta» en /cuenta (no para la admin): confirmación con qué se borra, qué queda en el teléfono, registros de pago anónimos, aviso de que no cancela Hotmart + botón a Mis compras y /cancelar. Server action eliminarCuenta → RPC eliminar_mi_cuenta(). Migración 20261028120000_eliminar_mi_cuenta.sql ESCRITA, NO APLICADA: hasta aplicarla el botón muestra el aviso de error (no borra nada). /privacidad explica el botón.
+- «Las comidas»: sin cambio (decisión de la dueña). Dominio: sin tocar (Paso B).
+- Migraciones sin aplicar (3): 20261024120000_retencion_estadisticas (aprobada por la dueña, decisión 29), 20261025010000_hotmart_producto_y_orden, 20261028120000_eliminar_mi_cuenta.
+- Verificado: 41 pruebas ✓ · typecheck ✓ · eslint 0 errores · build ✓ · capturas 375px (landing oferta, paywall 2 y 3, /cuenta con la confirmación, /entrar?eliminada=1) en simulación local.
+- Textos nuevos marcados (pendiente de aprobar) en docs/copy/embudo.md y landing.md.

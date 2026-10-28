@@ -1,7 +1,7 @@
 // Eventos ANÓNIMOS de uso hacia /api/events (contrato 36), desde el navegador.
 // Usa el mismo número al azar del teléfono que la app (pp_dispositivo) para unir el embudo.
 // Solo viaja el nombre del evento y, si hace falta, un número (por ejemplo, el paso)
-// o el plan elegido en el paywall (mensual o anual).
+// o el plan elegido en el paywall (hoy solo mensual).
 // Nunca se mandan aquí respuestas del onboarding ni datos del peque.
 // Respeta el interruptor de estadísticas de la app (Ajustes → pp_sin_estadisticas = '1'):
 // apagado, no sale ningún evento, igual que en app/js/medicion.js.
@@ -45,8 +45,8 @@ export function estadisticasApagadas(): boolean {
   return leer(CLAVE_SIN_ESTADISTICAS) === '1';
 }
 
-/** Propiedades permitidas: números (paso, total) y el plan del paywall (mensual o
- *  anual, contrato 36: `plan` y `plan_elegido`). Nada de texto libre. */
+/** Propiedades permitidas: números (paso, total) y el plan del paywall (hoy solo
+ *  mensual, contrato 36: `plan` y `plan_elegido`). Nada de texto libre. */
 export type PropsEvento = Record<string, number | Plan>;
 
 export function enviarEvento(tipo: string, props?: PropsEvento) {

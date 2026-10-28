@@ -54,6 +54,7 @@ export function validarEstado(raw: unknown): EstadoOnboarding | null {
     if (c.length) respuestas.crisis = c;
   }
   const estado: EstadoOnboarding = { v: 1, respuestas, ts: typeof o.ts === 'number' ? o.ts : Date.now() };
-  if (o.plan === 'mensual' || o.plan === 'anual') estado.plan = o.plan;
+  // Un 'anual' guardado de antes (ya no se vende) se descarta.
+  if (o.plan === 'mensual') estado.plan = o.plan;
   return estado;
 }

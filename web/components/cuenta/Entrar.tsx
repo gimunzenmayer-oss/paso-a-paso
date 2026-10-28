@@ -109,7 +109,7 @@ function Rescate({ sinSpam = false }: { sinSpam?: boolean }) {
   );
 }
 
-export function Entrar({ compra, aviso }: { compra: boolean; aviso: 'enlace' | 'salio' | null }) {
+export function Entrar({ compra, aviso }: { compra: boolean; aviso: 'enlace' | 'salio' | 'eliminada' | null }) {
   const [estado, despachar, pendiente] = useActionState(entrarConRed, { paso: 'correo', correo: '' });
   const [enviada, setEnviada] = useState<Accion | null>(null);
   const [errorLocal, setErrorLocal] = useState<'formato' | 'faltan' | null>(null);
@@ -306,9 +306,9 @@ export function Entrar({ compra, aviso }: { compra: boolean; aviso: 'enlace' | '
             </Link>
           </header>
           <main className="flex flex-1 flex-col pt-4">
-            {aviso === 'salio' && estado.paso === 'correo' && (
+            {(aviso === 'salio' || aviso === 'eliminada') && estado.paso === 'correo' && (
               <p role="status" className="mb-6 rounded-[var(--radius-button)] bg-[var(--surface-2)] px-4 py-3 text-[16px] font-semibold">
-                {ENTRAR.salio}
+                {aviso === 'salio' ? ENTRAR.salio : ENTRAR.eliminada}
               </p>
             )}
             {aviso === 'enlace' && estado.paso === 'correo' && (
