@@ -1,0 +1,80 @@
+[
+  {
+    "nombre": "acceso",
+    "ancho": 375,
+    "contenido": 375,
+    "botones": [
+      {
+        "alto": 56.796875,
+        "ancho": 211.109375
+      }
+    ]
+  },
+  {
+    "nombre": "precobro",
+    "ancho": 375,
+    "contenido": 375,
+    "botones": [
+      {
+        "alto": 56.796875,
+        "ancho": 220.046875
+      }
+    ]
+  },
+  {
+    "nombre": "carrito_2h",
+    "ancho": 375,
+    "contenido": 375,
+    "botones": [
+      {
+        "alto": 56.796875,
+        "ancho": 181.078125
+      }
+    ]
+  },
+  {
+    "nombre": "baja",
+    "ancho": 375,
+    "contenido": 375,
+    "botones": [
+      {
+        "alto": 53,
+        "ancho": 177.0625
+      }
+    ]
+  },
+  {
+    "nombre": "confirmar",
+    "ancho": 375,
+    "contenido": 375,
+    "botones": [
+      {
+        "alto": 53,
+        "ancho": 213.046875
+      }
+    ]
+  },
+  {
+    "nombre": "resultado",
+    "ancho": 375,
+    "contenido": 375,
+    "botones": []
+  },
+  {
+    "nombre": "error",
+    "ancho": 375,
+    "contenido": 375,
+    "botones": []
+  },
+  {
+    "nombre": "reintentar",
+    "ancho": 375,
+    "contenido": 375,
+    "botones": [
+      {
+        "alto": 53,
+        "ancho": 180.109375
+      }
+    ]
+  }
+]

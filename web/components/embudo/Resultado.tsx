@@ -7,7 +7,7 @@
 // secundaria: la acción principal de esta pantalla es "¡Hecho!". Después del
 // toque pasa a lleno con un pulso. Una sola acción llena a la vez.
 // Tras "¡Hecho!", el Método completo: Antes (el paso cumplido), Durante (el kit de
-// calma) y, en una 2.ª línea gris, el Después (queda anotado para su terapeuta).
+// calma) y, en una 2.ª línea gris, el Después (invita a anotar para la consulta).
 // Bajo el CTA, la microlínea "7 días gratis · cancelas cuando quieras" (16px, con
 // "7 días gratis" en negrita) SOLO si hay checkout configurado (conCheckout): sin
 // links de Hotmart no hay prueba que activar y la línea prometería algo que no se

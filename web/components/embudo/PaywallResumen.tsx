@@ -1,16 +1,15 @@
 'use client';
 
 // 2.1 Página 1 del paywall: el resumen de lo que armó el onboarding, con SUS
-// respuestas (50 C0: recap del valor + inversión visible, "Hecho con tus {N}
-// respuestas", con el número solo si son 3 o más: con menos, «Hecho con lo que nos
-// contaste»). Solo se pinta si hubo onboarding (Paywall.tsx lleva a /onboarding
+// respuestas visibles como recap, sin atribuirles una adaptación de las herramientas.
+// El número solo se muestra si son 3 o más. Solo se pinta si hubo onboarding (Paywall.tsx lleva a /onboarding
 // si no). Arriba, el dispositivo propio de FICHA-ARTE: la tira con las 3 primeras
 // fotos de SU rutina, en 3 columnas que llenan el ancho, y el check verde en la
 // primera (TiraDeFotos, la misma del reconocimiento), sobre el plano hundido. La
 // lista usa el mismo check (CheckQueSeLlena): un solo check en todo el embudo.
 // Bajo el subtítulo, sus respuestas en chips (--chip-bg): momento · edad · 1.ª
 // crisis, solo las que respondió (sin respuestas, sin chips). {N} es el número de
-// esos chips (contarRespuestas = etiquetasDeRespuestas(r).length): «tus 3 respuestas»
+// esos chips (contarRespuestas = etiquetasDeRespuestas(r).length): «Tus 3 respuestas»
 // y 3 chips, el número cuadra con lo que se ve (el nombre no tiene chip ni cuenta). Título, subtítulo, chips, lista y línea de pérdida entran
 // escalonados (entrada(i), 60 ms), como 1.5 y 1.6.
 

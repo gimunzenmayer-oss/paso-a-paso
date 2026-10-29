@@ -28,11 +28,14 @@ export default function Privacidad() {
       <p>
         El nombre y la edad de tu peque, las rutinas, las fotos, las grabaciones de voz, las historias, el tablero, el
         diario de crisis, los logros y el informe se guardan en el almacenamiento de tu navegador, en tu propio
-        dispositivo. <strong>No los enviamos a ningún servidor y no podemos verlos.</strong> El diario va cifrado con tu PIN.
+        dispositivo. <strong>No los enviamos a ningún servidor y no podemos verlos.</strong> El diario puede protegerse con PIN
+        y cifrado en navegadores compatibles; rutinas y fotos no se cifran. Si el navegador no permite el cifrado,
+        el diario se guarda sin cifrar.
       </p>
       <p>
         Las respuestas que das en el cuestionario inicial (nombre o apodo de tu peque, su edad y cómo son sus crisis) también
-        se quedan en tu teléfono: se usan para armar su primera rutina y no salen de ahí.
+        se quedan en este navegador y se muestran para recapitular tus elecciones. No implican una rutina adaptada por edad
+        o crisis y no salen de ahí.
       </p>
       <p>
         Como no tenemos copia, si borras la app o los datos del navegador, esa información se pierde. Para conservar algo,
@@ -131,7 +134,7 @@ export default function Privacidad() {
       <h2>11. Seguridad</h2>
       <p>
         Usamos conexiones cifradas, acceso a la cuenta con código de un solo uso, permisos que impiden que una cuenta vea los
-        datos de otra, y el diario cifrado con tu PIN en el teléfono. Ningún sistema es perfecto: si pasara algo que afecte tus
+        datos de otra, y cifrado del diario con PIN cuando el navegador lo permite. Ningún sistema es perfecto: si pasara algo que afecte tus
         datos, te avisaremos.
       </p>
 

@@ -177,19 +177,19 @@ window.PP = window.PP || {};
       main.onclick = function (e) {
         var b = e.target.closest('button'); if (!b) return;
         if (b.hasAttribute('data-dar')) PP.abrirCalma();
-        if (b.dataset.quitar != null) { c.cosas.splice(+b.dataset.quitar, 1); PP.persistir(); PP.repintar(); }
+        if (b.dataset.quitar != null) { c.cosas.splice(+b.dataset.quitar, 1); PP.persistirConAviso(); PP.repintar(); }
         if (b.dataset.elegir != null || b.hasAttribute('data-anadir')) {
           var i = b.dataset.elegir != null ? +b.dataset.elegir : -1;
           PP.elegirPicto($('#hoja'), function (picto, texto, foto) {
             if (i < 0) c.cosas.push({ id: PP.nuevoId(), picto: picto || '⭐', texto: texto || 'Lo que me ayuda', foto: foto || null });
             else { var x = c.cosas[i]; if (picto) x.picto = picto; x.foto = foto || null; if (texto && !x.texto) x.texto = texto; }
-            PP.persistir(); PP.repintar();
+            PP.persistirConAviso(); PP.repintar();
           });
         }
       };
       main.onchange = function (e) {
-        if (e.target.name === 'resp') { c.respirar = +e.target.value; PP.persistir(); PP.avisar('Guardado'); }
-        if (e.target.dataset.texto != null) { c.cosas[+e.target.dataset.texto].texto = e.target.value.trim() || 'Me ayuda'; PP.persistir(); PP.avisar('Guardado'); }
+        if (e.target.name === 'resp') { c.respirar = +e.target.value; PP.persistirConAviso(function () { PP.avisar('Guardado'); }); }
+        if (e.target.dataset.texto != null) { c.cosas[+e.target.dataset.texto].texto = e.target.value.trim() || 'Me ayuda'; PP.persistirConAviso(function () { PP.avisar('Guardado'); }); }
       };
     }
   };

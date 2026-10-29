@@ -1,0 +1,100 @@
+[
+  {
+    "name": "onboarding-03-estable-375",
+    "buttons": [
+      {
+        "text": "La mañana\nDespertar, vestirse y salir de casa",
+        "opacity": "1"
+      },
+      {
+        "text": "Las comidas\nSentarse a la mesa y probar",
+        "opacity": "1"
+      },
+      {
+        "text": "Volver del colegio\nDel colegio a la casa",
+        "opacity": "1"
+      },
+      {
+        "text": "Irse a dormir\nBaño, pijama y apagar la luz",
+        "opacity": "1"
+      }
+    ],
+    "images": [
+      {
+        "src": "/_next/image?url=%2Fapp%2Fimg%2Fdespertar.jpg&w=3840&q=75",
+        "width": 55
+      },
+      {
+        "src": "/_next/image?url=%2Fapp%2Fimg%2Fcenar.jpg&w=3840&q=75",
+        "width": 55
+      },
+      {
+        "src": "/_next/image?url=%2Fapp%2Fimg%2Fzapatos.jpg&w=3840&q=75",
+        "width": 55
+      },
+      {
+        "src": "/_next/image?url=%2Fapp%2Fimg%2Fdormir.jpg&w=3840&q=75",
+        "width": 55
+      }
+    ],
+    "width": 375,
+    "scroll": 375
+  },
+  {
+    "name": "onboarding-04-estable-375",
+    "buttons": [
+      {
+        "text": "Llora o grita fuerte",
+        "opacity": "1"
+      },
+      {
+        "text": "Se tira al piso o golpea",
+        "opacity": "1"
+      },
+      {
+        "text": "Se tapa los oídos o se esconde",
+        "opacity": "1"
+      },
+      {
+        "text": "Se queda en silencio y se cierra",
+        "opacity": "1"
+      },
+      {
+        "text": "Seguir armando su plan",
+        "opacity": "1"
+      },
+      {
+        "text": "Prefiero saltar esta",
+        "opacity": "1"
+      }
+    ],
+    "images": [],
+    "width": 375,
+    "scroll": 375
+  },
+  {
+    "name": "paywall-configurado-01-estable-375",
+    "buttons": [
+      {
+        "text": "Ver mis 7 días gratis",
+        "opacity": "1"
+      }
+    ],
+    "images": [
+      {
+        "src": "/_next/image?url=%2Fapp%2Fimg%2Fdespertar.jpg&w=3840&q=75",
+        "width": 87
+      },
+      {
+        "src": "/_next/image?url=%2Fapp%2Fimg%2Fbano.jpg&w=3840&q=75",
+        "width": 87
+      },
+      {
+        "src": "/_next/image?url=%2Fapp%2Fimg%2Fvestirse.jpg&w=3840&q=75",
+        "width": 87
+      }
+    ],
+    "width": 375,
+    "scroll": 375
+  }
+]

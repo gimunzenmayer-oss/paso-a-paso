@@ -1,0 +1,33 @@
+{
+  "resultados": [
+    {
+      "width": 375,
+      "contenido": 375
+    },
+    {
+      "width": 360,
+      "contenido": 360
+    },
+    {
+      "width": 1440,
+      "contenido": 1440
+    },
+    {
+      "ruta": "/api/correos/recurso",
+      "status": 503
+    },
+    {
+      "ruta": "/api/correos/procesar",
+      "status": 401
+    },
+    {
+      "ruta": "/api/correos/solicitud",
+      "status": 401
+    },
+    {
+      "ruta": "/api/webhooks/resend",
+      "status": 503
+    }
+  ],
+  "errores": []
+}

@@ -1,0 +1,85 @@
+
+> paso-a-paso-web@0.1.0 test
+> node --import ./pruebas/alias.mjs --test --test-concurrency=1 "pruebas/*.test.mjs"
+
+✔ SQL real: aviso de pago → cola durable, idempotencia y cancelación de recordatorios (10588.8183ms)
+✔ SQL real: doble confirmación, carrito con consentimiento y baja inmediata (4027.9078ms)
+✔ SQL real: no envía perfil admin y no acepta llave falsa ni acceso directo a cola (3465.8182ms)
+✔ SQL real: lease evita doble envío y borra enlace cifrado al terminar (4772.5101ms)
+✔ SQL real: rebote firmado suprime, evento repetido no se procesa dos veces (6274.5611ms)
+(node:21044) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/dulce/OneDrive/Desktop/claude/App1/paso-a-paso-traspaso/web/lib/correos/plantillas.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\dulce\OneDrive\Desktop\claude\App1\paso-a-paso-traspaso\web\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ todas las plantillas: 2 asuntos, preheader, trazabilidad, texto/HTML y baja solo en marketing (16.5611ms)
+✔ render rechaza acceso ajeno, enlaces peligrosos y precobro sin fecha/importe (2.1692ms)
+✔ baja firmada, secreta, no reutilizable como confirmación (15.7538ms)
+✔ cuerpo cifrado no contiene link/código en claro y detecta alteración (12.8388ms)
+✔ firma Resend requiere cuerpo original y rechaza replay viejo (252.0726ms)
+✔ envío exige activación y dominio verificado, sin tocar red cuando faltan (2.4776ms)
+✔ Resend: mismo ID, cabecera estable, separación de llaves y sin registrar cuerpos (25.2198ms)
+✔ cancelación de mensajes según estado actual, consentimiento y supresión (50.0496ms)
+✔ trabajador desactivado no toca cola, Supabase Auth ni proveedor (1.4044ms)
+✔ flujo simulado: cola → enlace/código → cifrado durable → proveedor → confirmación (1.8888ms)
+✔ pago recuperado durante preparación cancela el recordatorio (1.8407ms)
+✔ reintento reutiliza cuerpo cifrado, no genera otro enlace (2.5904ms)
+(node:39340) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/dulce/OneDrive/Desktop/claude/App1/paso-a-paso-traspaso/web/lib/cuenta/formato.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\dulce\OneDrive\Desktop\claude\App1\paso-a-paso-traspaso\web\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ correo: normaliza y rechaza lo incompleto (5.1462ms)
+✔ código: solo dígitos, máximo 6 (0.9836ms)
+✔ errores de envío: nunca dependen de si el correo existe (0.7875ms)
+✔ errores del código: incorrecto antes de 10 minutos, vencido después (1.1396ms)
+✔ mi_acceso: valida la forma de la respuesta (5.4245ms)
+✔ cuenta: cada estado de la base cae en su fila de §4 (7.2975ms)
+✔ cuenta: botones según el estado (0.9327ms)
+✔ simulación: solo con NODE_ENV=development (1.323ms)
+✔ simulación: cada valor da el estado de §4 que promete (3.9182ms)
+✔ copy: cada texto de /entrar y /cuenta está en docs/copy/embudo.md (7.6302ms)
+✔ /api/acceso: solo la base dice sí o no; sin sesión es 401; cualquier duda es 503 (sin conexión para la app) (1.3107ms)
+✔ /api/acceso: con la simulación de desarrollo responde lo mismo que respondería la base (0.8025ms)
+✔ después de entrar: con acceso va a la app; si no, a /cuenta (0.6637ms)
+(node:31456) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/dulce/OneDrive/Desktop/claude/App1/paso-a-paso-traspaso/web/lib/embudo/checkout.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\dulce\OneDrive\Desktop\claude\App1\paso-a-paso-traspaso\web\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ checkout: sin base o con dominio ajeno no hay enlace (4.6466ms)
+✔ checkout: agrega prueba y canal limpio, conserva la oferta (0.9699ms)
+✔ onboarding: valida y limpia lo guardado (2.9446ms)
+✔ acceso: respuesta del servidor manda (7.5606ms)
+✔ acceso: sin internet vale 7 días desde la última comprobación (2.7465ms)
+✔ acceso: sin sesión pide entrar, pero respeta un pase vigente (2.6943ms)
+✔ acceso: solo un 200 con acceso true/false es respuesta; 401 sin_sesion es sin sesión; el resto, sin conexión (2.7637ms)
+✔ acceso: un 5xx o sin red nunca cierra una app con pase vigente, ni convierte un pase bueno en "sin acceso" (2.2101ms)
+✔ acceso: días sin conexión y fin de la gracia para los avisos de §5.3 (4.1141ms)
+✔ copy: cada texto de la pantalla de bloqueo de la app está en docs/copy/embudo.md (6.5506ms)
+✔ paywall: el cobro es el día 7, en formato humano (1.7339ms)
+✔ paywall: cuenta solo las preguntas respondidas que tienen chip (el nombre no) (0.8082ms)
+✔ paywall: {N} cuenta solo respuestas vigentes (crisis con ids viejos no cuenta) (0.8127ms)
+✔ rutinas: las tiras usan pasos con foto y 1.3 no repite foto entre opciones (1.7411ms)
+✔ checkout: sin variables NEXT_PUBLIC_HOTMART_* no hay checkout (el resultado no promete la prueba) (4.1228ms)
+✔ copy 1.3: «de 5 a 7 pasos» es verdad para todas las rutinas (7.9471ms)
+✔ paywall: chips con sus respuestas (momento · edad · 1.ª crisis), solo las respondidas (0.9185ms)
+✔ paywall: un monto o una fecha no se parten (espacios duros) (0.6305ms)
+✔ paywall: {N} de «tus {N} respuestas» es el número de chips visibles, en todos los casos (1.2419ms)
+✔ copy: espacios duros donde el revisor vio cortes (carga y garantía) (2.0021ms)
+✔ copy 2.3: renovación y términos junto al botón, literales de docs/copy/embudo.md (6.755ms)
+(node:25580) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/dulce/OneDrive/Desktop/claude/App1/paso-a-paso-traspaso/web/lib/eventos-cliente.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\dulce\OneDrive\Desktop\claude\App1\paso-a-paso-traspaso\web\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ eventos: la clave es la misma que guarda el interruptor de la app (11.0062ms)
+✔ eventos: con las estadísticas encendidas se envía el evento (133.5685ms)
+✔ eventos: con el interruptor apagado (pp_sin_estadisticas = "1") no sale ninguno (1.0152ms)
+✔ eventos: otro valor guardado no apaga nada (solo "1", como la app) (1.38ms)
+✔ eventos: almacenamiento bloqueado (DOMException) = sin interruptor guardado, igual que la app (4.3538ms)
+✔ eventos: un error que no es del almacenamiento no se silencia (1.8671ms)
+ℹ tests 57
+ℹ suites 0
+ℹ pass 57
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 33768.5622

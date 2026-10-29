@@ -57,8 +57,11 @@ window.PP = window.PP || {};
   }
 
   function guardar() {
-    if (!PP.cifrado.disponible) return PP.guardar('diario', { plano: true, entradas: diario });
-    return PP.cifrado.cifrar(llave, diario).then(function (caja) { caja.sal = sal; return PP.guardar('diario', caja); });
+    var copia, salActual = sal;
+    try { copia = JSON.parse(JSON.stringify(diario)); }
+    catch (e) { return Promise.reject(e); }
+    if (!PP.cifrado.disponible) return PP.guardar('diario', { plano: true, entradas: copia });
+    return PP.cifrado.cifrar(llave, copia).then(function (caja) { caja.sal = salActual; return PP.guardar('diario', caja); });
   }
   PP.guardarDiario = guardar;
 
@@ -82,6 +85,9 @@ window.PP = window.PP || {};
       return PP.cifrado.llave(pin, sal).then(function (k) {
         return PP.cifrado.descifrar(k, caja).then(function (d) { llave = k; diario = renombrarEtiquetas(d); });
       });
+    }).catch(function (e) {
+      PP.cerrarDiario(); sal = null;
+      throw e;
     });
   };
 
@@ -94,12 +100,14 @@ window.PP = window.PP || {};
   // Quitar las entradas de ejemplo (desde el Diario o desde el Informe)
   PP.borrarEjemplosDiario = function () {
     var antes = diario; diario = diario.filter(function (x) { return !x.ejemplo; });
-    return guardar().then(function () { PP.avisar('Ejemplos borrados'); PP.repintar(); })
-      .catch(function () { diario = antes; PP.avisar('No se pudieron borrar. Prueba otra vez.'); });
+    return guardar().then(function () { PP.resolverError('diario-ejemplos'); PP.avisar('Ejemplos borrados'); PP.repintar(); })
+      .catch(function () { diario = antes; PP.avisarError('No se pudieron borrar los ejemplos. Revisa el espacio del teléfono y prueba otra vez.', { contexto: 'diario-ejemplos' }); });
   };
 
   PP.cerrarDiario = function () { diario = null; llave = null; };
-  PP.borrarDiario = function () { PP.cerrarDiario(); sal = null; return PP.guardar('diario', null); };
+  PP.borrarDiario = function () {
+    return PP.guardar('diario', null).then(function () { PP.cerrarDiario(); sal = null; });
+  };
 
   // Al cambiar el PIN, el diario se vuelve a cifrar con el nuevo
   PP.cambiarPinDiario = function (viejo, nuevo) {
@@ -107,9 +115,48 @@ window.PP = window.PP || {};
       if (!caja || caja.plano || !PP.cifrado.disponible) return;
       var abrir = diario ? Promise.resolve() : PP.abrirDiario(viejo);
       return abrir.then(function () {
-        sal = PP.cifrado.nuevaSal();
-        return PP.cifrado.llave(nuevo, sal);
-      }).then(function (k) { llave = k; return guardar(); });
+        var nuevaSal = PP.cifrado.nuevaSal(), copia = JSON.parse(JSON.stringify(diario));
+        return PP.cifrado.llave(nuevo, nuevaSal).then(function (k) {
+          return PP.cifrado.cifrar(k, copia).then(function (nuevaCaja) {
+            nuevaCaja.sal = nuevaSal;
+            return PP.guardar('diario', nuevaCaja).then(function () { sal = nuevaSal; llave = k; });
+          });
+        });
+      });
+    });
+  };
+
+  // El PIN del perfil y la caja cifrada se confirman juntos. Si el teléfono
+  // rechaza cualquiera de los dos, sigue sirviendo el PIN anterior.
+  PP.cambiarPinDuradero = function (viejo, nuevo) {
+    var perfil = JSON.parse(JSON.stringify(PP.estado.perfil));
+    var nuevaLlave = null, nuevaSal = null, cajaNueva;
+    perfil.pinDePrueba = nuevo === '1234';
+    var prepararPerfil;
+    if (PP.cifrado.disponible) {
+      perfil.pinSal = PP.cifrado.nuevaSal();
+      prepararPerfil = PP.cifrado.huella(nuevo, perfil.pinSal).then(function (huella) {
+        perfil.pinHuella = huella; delete perfil.pin;
+      });
+    } else { perfil.pin = nuevo; prepararPerfil = Promise.resolve(); }
+    return prepararPerfil.then(function () { return PP.leer('diario'); }).then(function (caja) {
+      if (!caja || !PP.cifrado.disponible) { cajaNueva = caja; return; }
+      var abrir = caja.plano ? Promise.resolve(caja.entradas || [])
+        : PP.cifrado.llave(viejo, caja.sal).then(function (k) { return PP.cifrado.descifrar(k, caja); });
+      return abrir.then(function (entradas) {
+        nuevaSal = PP.cifrado.nuevaSal();
+        return PP.cifrado.llave(nuevo, nuevaSal).then(function (k) {
+          nuevaLlave = k;
+          return PP.cifrado.cifrar(k, entradas);
+        });
+      }).then(function (cifrada) { cifrada.sal = nuevaSal; cajaNueva = cifrada; });
+    }).then(function () {
+      var estado = JSON.parse(JSON.stringify(PP.estado)); estado.perfil = perfil;
+      return PP.guardarConjunto({ estado: estado, diario: cajaNueva });
+    }).then(function () {
+      Object.keys(PP.estado.perfil).forEach(function (k) { delete PP.estado.perfil[k]; });
+      Object.assign(PP.estado.perfil, perfil);
+      if (nuevaLlave) { sal = nuevaSal; if (diario) llave = nuevaLlave; }
     });
   };
 
@@ -119,7 +166,7 @@ window.PP = window.PP || {};
     PP.pedirPin({
       titulo: 'Abrir el diario',
       alAcertar: function (pin) {
-        PP.abrirDiario(pin).then(fn).catch(function () { PP.avisar('No se pudo abrir el diario.'); });
+        PP.abrirDiario(pin).then(function () { PP.resolverError('abrir-diario'); fn(); }).catch(function () { PP.avisarError('No se pudo abrir el diario. Comprueba el PIN, el espacio del teléfono y los permisos del navegador, y vuelve a intentarlo.', { contexto: 'abrir-diario' }); });
       }
     });
   };
@@ -192,7 +239,7 @@ window.PP = window.PP || {};
         '<section class="tarjeta bloque"><h2 class="seccion-t">Últimos 14 días</h2>' +
         '<div class="cifras"><div><strong class="num">' + dificiles.length + '</strong><span>momentos difíciles</span></div><div><strong class="num">' + buenos + '</strong><span>buenos momentos</span></div></div>' +
         '<h3 class="mini-t">Momentos difíciles por día</h3>' + barrasDias(ent, 14) +
-        '<h3 class="mini-t">Lo que más los provoca</h3>' + PP.barrasRanking(PP.ranking(dificiles, 'causas')) +
+        '<h3 class="mini-t">Posibles desencadenantes que registraste</h3>' + PP.barrasRanking(PP.ranking(dificiles, 'causas')) +
         '<h3 class="mini-t">Lo que más ayuda</h3>' + PP.barrasRanking(PP.ranking(dificiles, 'ayudo').filter(function (f) { return f[0] !== 'Nada funcionó'; })) +
         '</section>' +
         '<h2 class="seccion-t">Todas las notas (' + ent.length + ')</h2>' +
@@ -280,7 +327,13 @@ window.PP = window.PP || {};
         var i = main.querySelector('input[name=int]:checked'), d = main.querySelector('input[name=dur]:checked');
         if (i) e.intensidad = +i.value; if (d) e.duracion = d.value;
       }
+      function enEscritura(si) {
+        params.guardando = si;
+        $('#form-d').setAttribute('aria-busy', String(si));
+        main.querySelectorAll('input, textarea, button').forEach(function (el) { el.disabled = si; });
+      }
       main.onclick = function (ev) {
+        if (params.guardando) return;
         var b = ev.target.closest('button'); if (!b || b.type === 'submit') return;
         leer();
         if (b.dataset.tipo) { e.tipo = b.dataset.tipo; params.faltaTipo = false; PP.repintar(); }
@@ -303,14 +356,18 @@ window.PP = window.PP || {};
         if (b.hasAttribute('data-borrar')) $('#zona-borrar').innerHTML = '<p><strong>¿Borrar esta nota?</strong></p><div class="fila"><button type="button" class="btn peligro" data-borrar-si>Sí, borrar</button><button type="button" class="btn" data-borrar-no>No</button></div>';
         if (b.hasAttribute('data-borrar-no')) PP.repintar();
         if (b.hasAttribute('data-borrar-si')) {
+          enEscritura(true);
           var antes = diario;
           diario = diario.filter(function (x) { return x.id !== e.id; });
-          guardar().then(function () { PP.avisar('Nota borrada'); PP.ir('diario', null, { raiz: true }); })
-            .catch(function () { diario = antes; PP.avisar('No se pudo borrar. Prueba otra vez.'); PP.repintar(); });
+          guardar().then(function () { params.guardando = false; PP.resolverError('diario-borrar:' + e.id); PP.avisar('Nota borrada'); PP.ir('diario', null, { raiz: true }); })
+            .catch(function () { diario = antes; enEscritura(false); PP.avisarError('No se pudo borrar la nota. Revisa el espacio del teléfono y prueba otra vez.', { contexto: 'diario-borrar:' + e.id, origen: b }); });
         }
       };
       $('#form-d').onsubmit = function (ev) {
-        ev.preventDefault(); leer();
+        ev.preventDefault();
+        var form = this, origen = ev.submitter || form.querySelector('[type=submit]');
+        if (params.guardando) return;
+        leer();
         if (!e.tipo) {
           params.faltaTipo = true;
           $('#d-tipo-error').hidden = false;
@@ -322,15 +379,20 @@ window.PP = window.PP || {};
         delete e.ejemplo;
         var antes = diario.slice(), k = diario.findIndex(function (x) { return x.id === e.id; });
         var nueva = k < 0;
-        if (k >= 0) diario[k] = e; else diario.push(e);
+        enEscritura(true);
+        var copia = JSON.parse(JSON.stringify(e));
+        if (k >= 0) diario[k] = copia; else diario.push(copia);
         // Solo salimos del formulario cuando de verdad quedó guardado
         guardar().then(function () {
+          params.guardando = false;
+          PP.resolverError('diario:' + e.id);
           if (nueva && PP.evento) PP.evento('diario_nota_guardada');
           PP.avisar('Guardado en el diario');
           PP.ir('diario', null, { raiz: true });
         }).catch(function () {
           diario = antes;
-          PP.avisar('No se pudo guardar. Revisa que haya espacio en el teléfono y prueba otra vez.');
+          enEscritura(false);
+          PP.avisarError('No se pudo guardar. Tu nota sigue abierta. Revisa el espacio y los permisos del navegador y prueba otra vez.', { contexto: 'diario:' + e.id, origen: origen, formulario: form });
         });
       };
     }

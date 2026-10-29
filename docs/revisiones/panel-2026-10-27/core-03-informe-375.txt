@@ -1,0 +1,12 @@
+Informe
+🔒
+El informe usa tu diario privado
+
+El diario es privado: se guarda cifrado en este teléfono y solo se abre con tu PIN.
+
+Abrir con mi PIN
+Inicio
+Preparar
+Diario
+Guía
+Más

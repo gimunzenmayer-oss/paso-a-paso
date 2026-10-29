@@ -1,0 +1,22 @@
+# Nombres de configuración. Valores secretos: solo en paneles oficiales, nunca en chat/Git.
+EMAIL_ENVIO_ACTIVO=false
+EMAIL_MARKETING_ACTIVO=false
+EMAIL_MARKETING_DOMINIO_VERIFICADO=false
+EMAIL_DOMINIOS_VERIFICADOS=false
+EMAIL_PRECOBRO_VERIFICADO=false
+EMAIL_CARRITO_ACTIVO=false
+EMAIL_CAPTACION_ACTIVA=false
+NEXT_PUBLIC_SITE_URL=https://paso-a-paso-sigma.vercel.app
+RESEND_API_KEY_TX=
+RESEND_API_KEY_MARKETING=
+RESEND_WEBHOOK_SECRET=
+SUPABASE_SERVICE_ROLE_KEY=
+# Clave de 64 caracteres hexadecimales (32 bytes aleatorios): cifra enlaces de acceso en la cola.
+EMAIL_PAYLOAD_KEY=
+# Secretos distintos, aleatorios, de 32+ caracteres.
+EMAIL_UNSUBSCRIBE_SECRET=
+CRON_SECRET=
+# Recurso existente y aprobado. Sin él no habilitar solicitud de marketing.
+EMAIL_RECURSO_URL=
+# También se conservan NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY e INGEST_KEY.
+# HOTMART_HOTTOK permanece separado. SMTP se configura directamente en Supabase.

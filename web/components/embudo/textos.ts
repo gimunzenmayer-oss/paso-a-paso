@@ -94,16 +94,16 @@ export function idsDeCrisis(crisis: readonly string[] | undefined): string[] {
 }
 
 export const RECONOCIMIENTO = {
-  titulo: 'Ya eres quien [acento]mejor conoce[/acento] a {nombre}',
+  titulo: 'Ya identificaste un [acento]momento difícil[/acento] para {nombre}',
   texto:
     'En un minuto nombraste que {momento} cuesta y qué pasa cuando {crisis}. Eso es [b]observar[/b], y es la base del [b]Método Antes, Durante y Después[/b].',
   /** Va en el plano hundido, debajo del texto. */
-  texto2: 'No es falta de paciencia. Es que {nombre} no sabe qué viene, y tú no tenías a mano qué hacer.',
+  texto2: 'No tienes que resolverlo todo a la vez. Puedes empezar mostrando a {nombre} un paso de su rutina.',
   boton: 'Armar su primera rutina',
 };
 
 export const COMPROMISO = {
-  titulo: 'Mañana probamos la rutina de [acento]{momento}[/acento] con {nombre}',
+  titulo: 'Mañana probamos [acento]una rutina[/acento] con {nombre}',
   /** «su rutina» con espacio duro: el acento no se parte entre dos líneas (Titulo ya lleva text-balance). */
   tituloManana: 'Mañana temprano probamos [acento]su\u00a0rutina[/acento] con {nombre}',
   ayuda: '{n_pasos}\u00a0pasos con fotos, en este teléfono. Una sola rutina, un día, basta para empezar.',
@@ -125,7 +125,7 @@ export const CARGANDO = {
   titulo: 'Armando el plan de [acento]{nombre}[/acento]…',
   /** Cada línea lleva su etapa del Método (la misma de §2.1 del paywall). */
   lineas: [
-    { etapa: 'Antes', texto: 'Rutina de {momento}: {n_pasos}\u00a0pasos con fotos' },
+    { etapa: 'Antes', texto: 'Rutina preparada: {n_pasos}\u00a0pasos con fotos' },
     { etapa: 'Durante', texto: 'Kit de calma para cuando {crisis}' },
     // Espacios duros tras las palabras cortas: ni «a / un toque» ni «a / su terapeuta».
     { etapa: 'Durante', texto: 'Guía «¿Momento difícil?» a\u00a0un\u00a0toque' },
@@ -138,13 +138,13 @@ export const CARGANDO = {
 };
 
 export const RESULTADO = {
-  titulo: 'La rutina de [acento]{momento}[/acento] de {nombre}',
-  ayuda: 'Toca «¡Hecho!» en el primer paso, como lo hará {nombre} mañana.',
+  titulo: 'Una rutina para [acento]probar[/acento] con {nombre}',
+  ayuda: 'Toca «¡Hecho!» para ensayar cómo se marca un paso.',
   hecho: '¡Hecho!',
   hechoAria: 'Marcar «{paso_1}» como hecho',
   despues: 'Así se ve cada paso cumplido, sin imprimir nada. Y cuando {crisis}, el kit de calma ya está en su plan.',
   /** 2.ª línea (16px, gris): el Después del Método. */
-  diario: 'Lo que pase queda anotado para su terapeuta.',
+  diario: 'Anota lo que pasó para su próxima consulta.',
   /** Chip propio bajo el nombre del paso 1, tras «¡Hecho!». (pendiente de aprobar: lugar) · antes: al final del texto de después */
   progreso: '1 de {n_pasos}',
   /** Etiqueta del paso 2 tras «¡Hecho!» (13px, acento): el que sigue. (pendiente de aprobar) · antes: (no había) */
@@ -161,9 +161,9 @@ export const RESULTADO = {
 export const TOTAL_PAGINAS_PAYWALL = 3;
 
 /** Lo que se cobra el día 7 según el plan (precios de §2.3). */
-const MONTO = { anual: 'US$59.90 al año', mensual: 'US$7.99 al mes' } as const;
+const MONTO = { mensual: 'US$4,99 al mes' } as const;
 
-/** Un monto o una fecha no se parten entre dos líneas ("28 de / octubre", "US$7.99 al / mes"): espacios duros. */
+/** Un monto o una fecha no se parten entre dos líneas ("28 de / octubre", "US$4,99 al / mes"): espacios duros. */
 export function sinCortes(texto: string): string {
   return texto.replace(/ /g, '\u00a0');
 }
@@ -181,17 +181,16 @@ export const PAYWALL_COMUN = {
 };
 
 export const PAYWALL_RESUMEN = {
-  titulo: 'El plan de {nombre} para [acento]{momento}[/acento] está listo',
-  /** {N} = los chips de debajo (momento · edad · crisis respondidas): el número cuadra con lo que se ve.
-   *  Solo con las 3: con menos, el número le resta valor. */
-  subtitulo: 'Hecho con tus {N} respuestas, con el [b]Método Antes, Durante y Después[/b].',
-  subtituloSinNumero: 'Hecho con lo que nos contaste, con el [b]Método Antes, Durante y Después[/b].',
+  titulo: 'Una rutina para [acento]empezar[/acento] con {nombre}',
+  /** {N} cuenta los chips visibles; no implica adaptación por edad ni por crisis. */
+  subtitulo: 'Tus {N} respuestas, a la vista. [b]Método Antes, Durante y Después[/b].',
+  subtituloSinNumero: 'Para empezar, el [b]Método Antes, Durante y Después[/b].',
   /** aria-label de los chips con sus respuestas, bajo el subtítulo. (pendiente de aprobar) · antes: (no había) */
   respuestasAria: 'Tus respuestas',
   puntos: [
-    '[b]Antes[/b]: su rutina de {momento}, {n_pasos}\u00a0pasos con fotos',
+    '[b]Antes[/b]: una rutina preparada, {n_pasos}\u00a0pasos con fotos',
     '[b]Durante[/b]: kit de calma para cuando {crisis}',
-    '[b]Después[/b]: su semana anotada, lista para la terapeuta',
+    '[b]Después[/b]: anotas lo que pasó para su próxima consulta',
   ],
   /** El CTA lleva los 7 días: la línea no los repite. (pendiente de aprobar) · antes: Tu plan ya está en este teléfono. [b]Pruébalo gratis 7 días[/b]. */
   perdida: 'Tu plan ya está en este teléfono.',
@@ -201,16 +200,15 @@ export const PAYWALL_RESUMEN = {
 export const PAYWALL_PRUEBA = {
   titulo: '[acento]7 días[/acento] para probarlo sin pagar',
   linea: [
-    { cuando: 'Hoy', titulo: 'Su rutina de {momento}, con fotos', texto: 'El kit de calma y la guía para cuando {crisis}' },
-    { cuando: 'Día 5', titulo: 'Te avisamos por correo', texto: '2 días antes de cualquier cobro' },
+    { cuando: 'Hoy', titulo: 'Una rutina preparada, con fotos', texto: 'El kit de calma y la guía para cuando {crisis}' },
+    { cuando: 'Antes del día 7', titulo: 'Revisa si quieres seguir', texto: 'Si no, cancela en Hotmart antes del cobro. No hay recordatorio por correo activo.' },
     // texto: (pendiente de aprobar) · antes: Solo si sigues. Cancela antes y no pagas nada
-    { cuando: 'Día 7 · {fecha_cobro}', titulo: 'Empieza el cobro: {monto}', texto: 'Solo si sigues. Cancelas antes desde Hotmart y no pagas nada' },
+    { cuando: 'Si empiezas hoy · {fecha_cobro}', titulo: 'Cobro estimado: {monto}', texto: 'Hotmart confirma la fecha definitiva. Si no sigues, cancela antes del cobro.' },
   ],
-  /** Día 7 cuando todavía no eligió plan (sin ?plan= ni plan guardado): no afirma un monto que ella no eligió.
-   *  (pendiente de aprobar) · antes: Empieza el cobro: US$59.90 al año (el anual por defecto) */
+  /** Respaldo del único plan vigente, sin depender de enlaces o selecciones antiguas. */
   cobroSinPlan: {
-    titulo: 'Empieza el cobro del plan que elijas',
-    texto: `${sinCortes(MONTO.mensual)} o ${sinCortes(MONTO.anual)}. Solo si sigues. Cancelas antes desde Hotmart y no pagas nada`,
+    titulo: 'Cobro estimado: US$4,99 al mes',
+    texto: 'Hotmart confirma la fecha definitiva. Si no sigues, cancela antes del cobro.',
   },
   /** «no\u00a0pagas\u00a0nada» con espacios duros: la condición no se parte. Sin garantía de días:
    *  Hotmart tiene 7 días de reembolso desde la compra, que se solapan con la prueba (auditoría 2026-10-25). */
@@ -218,36 +216,27 @@ export const PAYWALL_PRUEBA = {
   /** {monto} del Día 7 según el plan elegido (precios de §2.3). */
   monto: MONTO,
   /** (pendiente de aprobar) · antes: Ver los planes de {nombre} */
-  boton: 'Quiero ver los planes de {nombre}',
+  boton: 'Quiero ver el plan de {nombre}',
 };
 
 export const PAYWALL_PRECIO = {
-  titulo: 'Días más [acento]predecibles[/acento] para {nombre}, desde hoy',
-  subtitulo: 'Mañana {nombre} ya sabe qué viene. Empiezas gratis y eliges cómo seguir después.',
+  titulo: 'Anticipa con fotos. [acento]Acompaña[/acento] a {nombre}.',
+  subtitulo: 'Prueba 7 días gratis y sigue mes a mes.',
   /** Junto a la tira de 3 fotos de su rutina, sobre "Incluye". */
-  rutinaLista: 'Su rutina de {momento} ya está armada',
+  rutinaLista: 'Una rutina con fotos para probar juntos',
   /** Qué incluye el plan (nombres de la app y de la landing §6). */
   incluyeTitulo: 'Incluye:',
   incluye: ['Su rutina con fotos', 'Kit de calma', 'Guía «Ahora mismo»', 'Diario e informe'],
-  anual: {
-    etiqueta: 'Mejor precio',
-    nombre: 'Anual',
-    precio: 'US$4.99',
-    sufijo: '/mes',
-    detalle: 'Se cobra US$59.90 al año · ahorras 4 meses',
-    nota: 'Menos de US$0.17 al día',
-  },
   mensual: {
     nombre: 'Mensual',
-    precio: 'US$7.99',
+    precio: 'US$4,99',
     sufijo: '/mes',
-    detalle: 'Se cobra cada mes · cancelas cuando quieras',
+    detalle: 'Después de los 7 días gratis. Cancelas cuando quieras.',
   },
   ayuda: 'En Hotmart, completa tus datos y elige «Quiero un periodo gratis».',
   /** En el flujo, junto al botón (no en el pie): la renovación del plan elegido. (pendiente de aprobar) */
   renovacion: {
     mensual: 'Se renueva automáticamente cada mes hasta que canceles.',
-    anual: 'Se renueva automáticamente cada año hasta que canceles.',
   } satisfies Record<Plan, string>,
   /** Debajo de la renovación; {terminos} y {privacidad} son enlaces a /terminos y /privacidad. (pendiente de aprobar) */
   terminos: {
@@ -262,7 +251,7 @@ export const PAYWALL_PRECIO = {
   garantiaCorta: '[b]Hoy no pagas nada[/b] · cancelas antes del día 7',
   /** En el flujo, justo debajo del pie: la condición de la prueba, sin ícono ni nombre (el pie ya los lleva). */
   garantia: 'Si no es para ustedes, cancelas en Hotmart antes del día 7 y no se te cobra nada.',
-  confianza: ['Hoy no pagas nada · primer cobro el {fecha_cobro}', 'Cancelas en Hotmart cuando quieras'],
+  confianza: ['Si empiezas hoy: {fecha_cobro} (estimada). Hotmart confirma la fecha definitiva.', 'Cancelas en Hotmart cuando quieras'],
   pie: 'Pago seguro con Hotmart · tarjeta o medios locales',
   yaPagaste: '¿Ya pagaste? Entra aquí',
   errorAbrir: 'No se abrió Hotmart. Toca el botón otra vez o revisa si tu navegador bloqueó la ventana.',
@@ -315,7 +304,7 @@ export function etiquetasDeRespuestas(r: Respuestas): string[] {
   return [momento, edad, crisis].filter((x): x is string => x !== undefined);
 }
 
-/** Variables que solo usa el paywall: {N} respuestas, {fecha_cobro} (día 7 de la prueba) y {monto} (el cobro del plan elegido). */
+/** Variables del paywall: {N} respuestas, {fecha_cobro} (estimación local hoy + 7, no fecha contractual de Hotmart) y {monto}. */
 export interface VariablesPaywall {
   n?: string;
   N?: string;

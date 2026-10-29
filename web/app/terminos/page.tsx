@@ -43,9 +43,9 @@ export default function Terminos() {
 
       <h2>5. Suscripción, prueba y renovación</h2>
       <ul>
-        <li>El acceso se vende como suscripción mensual o anual a través de Hotmart, que es quien cobra.</li>
+        <li>El acceso se vende como suscripción mensual a través de Hotmart, que es quien cobra.</li>
         <li>Empiezas con {PRUEBA_DIAS} días de prueba sin cobro. El día {PRUEBA_DIAS} se cobra el plan que elegiste.</li>
-        <li><strong>La suscripción se renueva automáticamente</strong> cada mes o cada año, al mismo precio que aceptaste, hasta que la canceles. Si algún día cambiamos el precio, te avisaremos por correo antes del siguiente cobro.</li>
+        <li><strong>La suscripción se renueva automáticamente</strong> cada mes, al mismo precio que aceptaste, hasta que la canceles. Si algún día cambiamos el precio, te avisaremos por correo antes del siguiente cobro.</li>
         <li>Puedes cancelar cuando quieras desde Hotmart, en pocos pasos y sin llamadas: <Link href="/cancelar">cómo cancelar</Link>. Mantienes el acceso hasta el final del periodo que ya pagaste.</li>
         <li>Reembolsos: ver la <Link href="/reembolsos">política de reembolsos</Link>.</li>
       </ul>

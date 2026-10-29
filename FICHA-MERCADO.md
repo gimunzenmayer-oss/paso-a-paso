@@ -32,3 +32,7 @@ No se encontró ninguna app de pago en español que junte rutinas + diario de cr
 ## Actualización 2026-10-20 (voz del cliente)
 - ⚠️ Competidor en español: app "Nello" (App Store España) ofrece registro de crisis / diario del autismo (apps.apple.com/es/app/nello-autismo-y-conducta/id6784738384). Kits imprimibles de "registro de crisis" en Etsy y Hotmart. El hueco ya no es "nadie hace diario": es "nadie junta rutinas + calma en el momento + diario/informe".
 - Desconfianza a apps de pago en grupos de FB ("BASTA DE APPS QUE SE APROVECHAN…") → la privacidad es argumento de venta.
+
+## Oferta propia confirmada — 2026-10-25
+- Fuente: configuración de Hotmart producto 8796204 mostrada y confirmada por Giselle en esta conversación. SOLO US$4,99/mes; anual aplazado. Prueba 7 días y plazo de reembolso 7 días. El comienzo del plazo de reembolso debe comprobarse antes de lanzar; no se suma automáticamente a la prueba.
+- Esta decisión sustituye la oferta anterior propia; las cifras de competidores arriba son referencias históricas, no precios de Paso a Paso.

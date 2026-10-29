@@ -1,0 +1,144 @@
+
+> paso-a-paso-web@0.1.0 test
+> node --import ./pruebas/alias.mjs --test --test-concurrency=1 "pruebas/*.test.mjs"
+
+(node:24332) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/dulce/OneDrive/Desktop/claude/App1/paso-a-paso-traspaso/web/lib/correos/trabajador.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\dulce\OneDrive\Desktop\claude\App1\paso-a-paso-traspaso\web\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ compra → cola → worker/Resend reales → Auth confirmado → mi_acceso, con reintento sin duplicados (23074.3212ms)
+✔ trial monto 0: acceso tras confirmar, sin venta pagada y precobro bloqueado sin verificación (4355.2005ms)
+✔ reembolso antes del worker: cancela acceso sin transportarlo y mi_acceso lo niega (3455.0341ms)
+✔ reembolso durante la preparación: cancela acceso sin transportarlo y mi_acceso lo niega (12026.2808ms)
+✔ producto 0 y llave falsa: no crean perfil, pago, correo ni acceso (7127.8057ms)
+✔ fuera de orden: un aviso viejo no reactiva; reembolso antiguo sí revoca, repetición no resucita (11378.4372ms)
+(node:39484) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/dulce/OneDrive/Desktop/claude/App1/paso-a-paso-traspaso/web/lib/correos/captacion.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\dulce\OneDrive\Desktop\claude\App1\paso-a-paso-traspaso\web\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ captación solo habilitada si servicio, marketing, dominios y recurso están preparados (5.9588ms)
+✔ solicitud exige correo y permiso explícito; no acepta listas ni añade datos del niño (9.6165ms)
+(node:26192) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/dulce/OneDrive/Desktop/claude/App1/paso-a-paso-traspaso/web/lib/correos/carrito.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\dulce\OneDrive\Desktop\claude\App1\paso-a-paso-traspaso\web\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ carrito oficial: solo el producto y oferta mensual esperados, sin importar datos adicionales (6.4959ms)
+✔ carrito rechaza oferta ajena, evento viejo, estructura rota y correo inválido (3.2927ms)
+✔ SQL real: un acceso nuevo precede a consejos antiguos en la cola (14743.0683ms)
+✔ SQL real: captación limita entre instancias y no almacena la IP en claro (9492.2788ms)
+✔ SQL real: aviso de pago → cola durable, idempotencia y cancelación de recordatorios (6116.0053ms)
+✔ SQL real: doble confirmación, carrito con consentimiento y baja inmediata (5759.2313ms)
+✔ SQL real: no envía perfil admin y no acepta llave falsa ni acceso directo a cola (5584.769ms)
+✔ SQL real: lease evita doble envío y borra enlace cifrado al terminar (5852.3266ms)
+✔ SQL real: rebote firmado suprime, evento repetido no se procesa dos veces (6370.7214ms)
+✔ programación apagada por defecto, credencial separada y sin invocaciones vacías (8978.9848ms)
+(node:5616) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/dulce/OneDrive/Desktop/claude/App1/paso-a-paso-traspaso/web/lib/correos/prueba.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\dulce\OneDrive\Desktop\claude\App1\paso-a-paso-traspaso\web\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ la prueba solo puede ir a la dueña y no contiene un acceso ficticio ni anuncia una compra (5.6532ms)
+(node:29820) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/dulce/OneDrive/Desktop/claude/App1/paso-a-paso-traspaso/web/lib/correos/plantillas.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\dulce\OneDrive\Desktop\claude\App1\paso-a-paso-traspaso\web\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ todas las plantillas: 2 asuntos, preheader, trazabilidad, texto/HTML y baja solo en marketing (32.3155ms)
+✔ render rechaza acceso ajeno, enlaces peligrosos y precobro sin fecha/importe (2.4532ms)
+✔ baja firmada, secreta, no reutilizable como confirmación (19.2528ms)
+✔ cuerpo cifrado no contiene link/código en claro y detecta alteración (15.8126ms)
+✔ firma Resend requiere cuerpo original y rechaza replay viejo (193.4237ms)
+✔ envío exige activación y dominio verificado, sin tocar red cuando faltan (3.888ms)
+✔ remitente verificado: acceso.hadaapps.com para servicio y rechazo del remitente anterior (2.3134ms)
+✔ Resend: mismo ID, cabecera estable, separación de llaves y sin registrar cuerpos (35.7922ms)
+✔ verificar servicio no habilita marketing: su dominio necesita comprobación independiente (5.3442ms)
+✔ cancelación de mensajes según estado actual, consentimiento y supresión (22.4428ms)
+✔ trabajador desactivado no toca cola, Supabase Auth ni proveedor (0.9204ms)
+✔ flujo simulado: cola → enlace/código → cifrado durable → proveedor → confirmación (3.0683ms)
+✔ pago recuperado durante preparación cancela el recordatorio (2.3241ms)
+✔ reintento reutiliza cuerpo cifrado, no genera otro enlace (9.0236ms)
+✔ una clave de otro servicio nunca se transmite a Resend (9.2746ms)
+(node:18916) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/dulce/OneDrive/Desktop/claude/App1/paso-a-paso-traspaso/web/lib/cuenta/formato.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\dulce\OneDrive\Desktop\claude\App1\paso-a-paso-traspaso\web\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ correo: normaliza y rechaza lo incompleto (2.9292ms)
+✔ código: solo dígitos, máximo 6 (0.7223ms)
+✔ errores de envío: nunca dependen de si el correo existe (4.8307ms)
+✔ errores del código: incorrecto antes de 10 minutos, vencido después (2.2187ms)
+✔ mi_acceso: valida la forma de la respuesta (4.1344ms)
+✔ cuenta: cada estado de la base cae en su fila de §4 (17.3112ms)
+✔ cuenta: botones según el estado (0.8782ms)
+✔ simulación: solo con NODE_ENV=development (1.6151ms)
+✔ simulación: cada valor da el estado de §4 que promete (1.2734ms)
+✔ copy: cada texto de /entrar y /cuenta está en docs/copy/embudo.md (7.5804ms)
+✔ /api/acceso: solo la base dice sí o no; sin sesión es 401; cualquier duda es 503 (sin conexión para la app) (4.0331ms)
+✔ /api/acceso: con la simulación de desarrollo responde lo mismo que respondería la base (0.9171ms)
+✔ después de entrar: con acceso va a la app; si no, a /cuenta (1.1319ms)
+(node:6596) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/dulce/OneDrive/Desktop/claude/App1/paso-a-paso-traspaso/web/lib/embudo/checkout.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\dulce\OneDrive\Desktop\claude\App1\paso-a-paso-traspaso\web\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ checkout: sin base o con dominio ajeno no hay enlace (5.5432ms)
+✔ checkout: agrega prueba y canal limpio, conserva la oferta (2.0249ms)
+✔ onboarding: valida y limpia lo guardado (2.358ms)
+✔ acceso: respuesta del servidor manda (5.0702ms)
+✔ acceso: sin internet vale 7 días desde la última comprobación (5.524ms)
+✔ acceso: sin sesión pide entrar, pero respeta un pase vigente (4.4378ms)
+✔ acceso: solo un 200 con acceso true/false es respuesta; 401 sin_sesion es sin sesión; el resto, sin conexión (3.8326ms)
+✔ acceso: un 5xx o sin red nunca cierra una app con pase vigente, ni convierte un pase bueno en "sin acceso" (4.3344ms)
+✔ acceso: días sin conexión y fin de la gracia para los avisos de §5.3 (5.6421ms)
+✔ copy: cada texto de la pantalla de bloqueo de la app está en docs/copy/embudo.md (4.4197ms)
+✔ paywall: el cobro es el día 7, en formato humano (1.7393ms)
+✔ paywall: cuenta solo las preguntas respondidas que tienen chip (el nombre no) (1.9894ms)
+✔ paywall: {N} cuenta solo respuestas vigentes (crisis con ids viejos no cuenta) (1.687ms)
+✔ rutinas: las tiras usan pasos con foto y 1.3 no repite foto entre opciones (7.7257ms)
+✔ checkout: sin variables NEXT_PUBLIC_HOTMART_* no hay checkout (el resultado no promete la prueba) (0.7798ms)
+✔ copy 1.3: «de 5 a 7 pasos» es verdad para todas las rutinas (2.5153ms)
+✔ paywall: chips con sus respuestas (momento · edad · 1.ª crisis), solo las respondidas (4.1983ms)
+✔ paywall: un monto o una fecha no se parten (espacios duros) (1.5835ms)
+✔ paywall: {N} de «tus {N} respuestas» es el número de chips visibles, en todos los casos (1.7939ms)
+✔ copy: espacios duros donde el revisor vio cortes (carga y garantía) (2.3481ms)
+✔ copy 2.3: renovación y términos junto al botón, literales de docs/copy/embudo.md (4.5344ms)
+✔ oferta vigente: no se ofrece anual y conserva las respuestas anteriores (0.9392ms)
+✔ checkout: basta el enlace mensual; un enlace anual nunca lo sustituye (29.5221ms)
+(node:30256) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/dulce/OneDrive/Desktop/claude/App1/paso-a-paso-traspaso/web/lib/eventos-cliente.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\dulce\OneDrive\Desktop\claude\App1\paso-a-paso-traspaso\web\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ eventos: la clave es la misma que guarda el interruptor de la app (7.148ms)
+✔ eventos: con las estadísticas encendidas se envía el evento (122.3409ms)
+✔ eventos: con el interruptor apagado (pp_sin_estadisticas = "1") no sale ninguno (1.5938ms)
+✔ eventos: otro valor guardado no apaga nada (solo "1", como la app) (1.0705ms)
+✔ eventos: almacenamiento bloqueado (DOMException) = sin interruptor guardado, igual que la app (3.5419ms)
+✔ eventos: un error que no es del almacenamiento no se silencia (4.0436ms)
+✔ guardar no confirma put: espera oncomplete y solicita durabilidad estricta (40.4611ms)
+✔ un aborto posterior a put rechaza y conserva la versión confirmada (12.4294ms)
+✔ quota rechaza con su causa y permite un reintento real (12.9033ms)
+✔ sin IndexedDB nunca promete guardado ni deja una falsa copia legible (17.8752ms)
+✔ error al abrir no queda cacheado para siempre (9.3993ms)
+✔ captura el valor al invocar y la memoria no comparte referencias con el formulario (8.7084ms)
+✔ valor no serializable rechaza como promesa sin abrir transacciones (7.7967ms)
+✔ cierre por cambio de versión permite volver a abrir (10.8533ms)
+✔ interfaz no anuncia éxito antes de commit y consume quota sin rechazo suelto (19.3743ms)
+✔ navegadores sin opción durability conservan espera por commit (19.1052ms)
+✔ diario con AES real: persiste, nueva sesión lo abre solo con el PIN correcto (219.0127ms)
+✔ diario: abortar borrado y cambio PIN conserva llave/sal y todas las notas (174.0135ms)
+✔ diario nuevo: quota no deja diario abierto ni copia falsa (60.2829ms)
+✔ diario nuevo: noDB no deja diario abierto ni copia falsa (65.9142ms)
+✔ cambio PIN atómico: un aborto no cambia perfil, caja ni PIN; el éxito confirma ambos (680.6187ms)
+✔ guardarConjunto abortado no publica valores parciales (2.7605ms)
+✔ lectura incierta (get) bloquea overwrite aunque las escrituras funcionen (5.6171ms)
+✔ lectura incierta (true) bloquea overwrite aunque las escrituras funcionen (3.1128ms)
+✔ lectura incierta (abort) bloquea overwrite aunque las escrituras funcionen (1.9541ms)
+✔ una lectura pendiente tampoco permite una escritura que se adelante a su resultado (8.7008ms)
+✔ fallo transitorio al abrir tampoco se convierte en dato inexistente ni habilita overwrite (3.5758ms)
+✔ IndexedDB denegado permite sesión temporal, pero no sobrescribe al recuperar permisos sin releer (2.7719ms)
+✔ reparación Hotmart conserva versión instalada, permisos y deduplicación (9499.4224ms)
+✔ reparación preserva catálogo y rechaza producto simulado sin dar acceso (4993.9885ms)
+ℹ tests 100
+ℹ suites 0
+ℹ pass 100
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 153676.1227

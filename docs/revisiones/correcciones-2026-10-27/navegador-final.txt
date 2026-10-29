@@ -1,0 +1,27 @@
+
+> paso-a-paso-web@0.1.0 test:guardado-browser
+> node --test pruebas/guardado-browser.mjs
+
+✔ IndexedDB real: estado y diario AES sobreviven reload, sin notas en texto plano (4190.749ms)
+✔ aborto REAL después de put no altera el valor previo tras reload (1627.7614ms)
+✔ noIndexedDB: rechaza escritura, avisa una vez y no produce rechazo no manejado (1681.2196ms)
+✔ diario: quota conserva borrador, revierte entradas, permite reintento y reload (4251.0301ms)
+✔ diario: doble submit durante cifrado solo escribe una vez y bloquea controles (2260.2545ms)
+✔ diario: fallo al borrar y al cambiar PIN conserva la caja y la llave anterior (1465.0516ms)
+✔ abrir diario por primera vez sin espacio no lo deja marcado como abierto (1150.2136ms)
+✔ caller real de calma maneja cuota sin éxito falso ni rechazo suelto (1353.9457ms)
+✔ Ajustes: error persistente a 375px, rollback, cierre explícito y reintento durable (5990.6079ms)
+✔ Preparar: quota desde interruptor no anuncia Guardado ni deja rechazo sin manejar (1324.6679ms)
+✔ Restaurar ejemplos: aborto real conserva estado y diario; éxito borra ambos juntos (2678.8555ms)
+✔ PIN desde Ajustes: fallo conserva PIN y diario; reintento y reload usan el nuevo (3279.2046ms)
+✔ arranque sin IndexedDB continúa en sesión con error persistente y sin rechazo suelto (1313.6401ms)
+✔ lectura fallida al arrancar: get.onerror real no permite reemplazar el estado anterior (2203.2909ms)
+✔ éxito de Ajustes no retira un error de otro contexto ni activa una acción de borrado (1692.8126ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38644.5495

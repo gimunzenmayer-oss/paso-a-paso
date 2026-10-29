@@ -1,7 +1,7 @@
 'use client';
 
 // /entrar — correo → código de 6 dígitos (docs/copy/embudo.md §3). Mismo sistema que el
-// embudo (components/embudo/ui.tsx): título con acento, campo de 56px, CTA en PieFijo,
+// embudo (components/embudo/ui.tsx): título con acento, campo de 56px, CTA junto al campo,
 // salidas secundarias de 48px. El estado vive en la acción del servidor (app/entrar/acciones.ts);
 // el correo no pasa por la URL. Al entrar, la acción pone la sesión (cookies) y aquí se
 // navega a /cuenta (el proxy ya ve la sesión nueva en esa petición).
@@ -11,12 +11,14 @@
 
 import { startTransition, useActionState, useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import './entrada.css';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
-import { ChevronDown } from 'lucide-react';
+import { Check, ChevronDown, ChevronRight, LockKeyhole } from 'lucide-react';
 import { entrar, type EstadoEntrar } from '@/app/entrar/acciones';
 import { Logo } from '@/components/landing/Logo';
-import { Ayuda, BotonPrincipal, BotonTexto, entrada, PieFijo, TextoOcupado, Titulo } from '@/components/embudo/ui';
+import { Ayuda, BotonPrincipal, BotonTexto, entrada, TextoOcupado, Titulo } from '@/components/embudo/ui';
 import { codigoCompleto, DIGITOS_CODIGO, ESPERA_REENVIO_S, limpiarCodigo, normalizarCorreo } from '@/lib/cuenta/formato';
 import { SOPORTE_EMAIL } from '@/lib/marca';
 import { ENTRAR, ERRORES_CODIGO, ERRORES_ENVIO, poner } from './textos';
@@ -70,7 +72,7 @@ function Reenviar({ onReenviar, ocupado }: { onReenviar: () => void; ocupado: bo
   if (s > 0 || ocupado) {
     return (
       <p className="mx-auto flex min-h-12 items-center justify-center px-4 text-center text-[16px] text-[var(--text-secondary)] tabular-nums">
-        {poner(ENTRAR.codigo.reenviarEn, { s: String(s) })}
+        {ocupado ? ENTRAR.codigo.esperando : poner(ENTRAR.codigo.reenviarEn, { s: String(s) })}
       </p>
     );
   }
@@ -195,7 +197,14 @@ export function Entrar({ compra, aviso }: { compra: boolean; aviso: 'enlace' | '
             />
             <MensajeError id="error-correo" texto={error} />
           </motion.div>
-          <motion.div {...entrada(2)}>
+          </div>
+        <div className="entrada-acciones">
+          <BotonPrincipal type="submit" disabled={ocupado} ariaBusy={pendiente && enviada === 'pedir'}>
+            {pendiente && enviada === 'pedir' ? <TextoOcupado>{ENTRAR.correo.enviando}</TextoOcupado> : ENTRAR.correo.boton}
+          </BotonPrincipal>
+        </div>
+        <p className="entrada-nota"><LockKeyhole size={16} aria-hidden="true" />{ENTRAR.portada.seguridad}</p>
+          <motion.div {...entrada(2)} className="entrada-apoyo">
             <Rescate />
             {/* Quien llegó sin comprar tiene una salida a los planes (no en la variante de Hotmart: ya compró). */}
             {!compra && (
@@ -207,12 +216,6 @@ export function Entrar({ compra, aviso }: { compra: boolean; aviso: 'enlace' | '
               </p>
             )}
           </motion.div>
-        </div>
-        <PieFijo>
-          <BotonPrincipal type="submit" disabled={ocupado} ariaBusy={pendiente && enviada === 'pedir'}>
-            {pendiente && enviada === 'pedir' ? <TextoOcupado>{ENTRAR.correo.enviando}</TextoOcupado> : ENTRAR.correo.boton}
-          </BotonPrincipal>
-        </PieFijo>
       </motion.form>
     );
   } else {
@@ -220,7 +223,7 @@ export function Entrar({ compra, aviso }: { compra: boolean; aviso: 'enlace' | '
     const enviadoEn = estado.paso === 'codigo' ? estado.enviadoEn : 0;
     const errorServidor = estado.paso === 'codigo' && !pendiente ? estado.error : undefined;
     const errorCodigo = errorLocal === 'faltan' ? ERRORES_CODIGO.faltan : errorServidor ? poner(ERRORES_CODIGO[errorServidor], { min: String(estado.paso === 'codigo' ? (estado.minutos ?? 15) : 15) }) : null;
-    const errorEnvio = estado.paso === 'codigo' && !pendiente && estado.errorEnvio ? ERRORES_ENVIO[estado.errorEnvio] : null;
+    const errorEnvio = estado.paso === 'codigo' && !pendiente && estado.errorEnvio ? (estado.errorEnvio === 'red' ? ENTRAR.codigo.errorReenvio : ERRORES_ENVIO[estado.errorEnvio]) : null;
     const reenviado = estado.paso === 'codigo' && !pendiente && estado.reenviado;
     contenido = (
       <motion.form key="codigo" {...SALIDA} ref={formCodigo} action={despachar} onSubmit={alVerificar} noValidate className="flex flex-1 flex-col">
@@ -276,26 +279,24 @@ export function Entrar({ compra, aviso }: { compra: boolean; aviso: 'enlace' | '
               {reenviado ? ENTRAR.codigo.reenviado : null}
             </p>
           </motion.div>
-          <motion.div {...entrada(2)}>
-            <Rescate sinSpam />
-          </motion.div>
         </div>
-        <PieFijo>
+        <div className="entrada-acciones">
           <BotonPrincipal type="submit" disabled={ocupado} ariaBusy={ocupado && enviada === 'verificar'}>
             {ocupado && enviada === 'verificar' ? <TextoOcupado>{ENTRAR.codigo.revisando}</TextoOcupado> : ENTRAR.codigo.boton}
           </BotonPrincipal>
           <Reenviar key={enviadoEn} ocupado={ocupado} onReenviar={() => despacharAccion('reenviar', { email: correo })} />
-          <BotonTexto onClick={() => despacharAccion('otro', { email: correo })}>{ENTRAR.codigo.otroCorreo}</BotonTexto>
-        </PieFijo>
+          <BotonTexto disabled={ocupado} onClick={() => despacharAccion('otro', { email: correo })}>{ENTRAR.codigo.otroCorreo}</BotonTexto>
+        </div>
+        <Rescate sinSpam />
       </motion.form>
     );
   }
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="min-h-dvh bg-[var(--bg)] text-[var(--text-primary)] [font-family:var(--font-body)]">
-        <div className="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col overflow-x-clip px-5">
-          <header className="flex h-16 items-center pt-[env(safe-area-inset-top)]">
+      <div className="entrada-pagina">
+        <div className="entrada-marco">
+          <header className="entrada-cabecera">
             <Link
               href="/"
               aria-label={ENTRAR.logo}
@@ -305,7 +306,22 @@ export function Entrar({ compra, aviso }: { compra: boolean; aviso: 'enlace' | '
               <span aria-hidden="true">Paso a Paso</span>
             </Link>
           </header>
-          <main className="flex flex-1 flex-col pt-4">
+          <main className={`entrada-principal${estado.paso !== 'correo' ? ' entrada-principal-codigo' : ''}`}>
+            {estado.paso === 'correo' && (
+            <section className="entrada-bienvenida" aria-label={ENTRAR.portada.etiqueta}>
+              <motion.div {...entrada(0)} className="entrada-tira" aria-hidden="true">
+                {['despertar', 'vestirse', 'desayunar'].map((foto, i) => (
+                  <span key={foto} className="contents">
+                    {i > 0 && <ChevronRight className="entrada-paso" size={16} />}
+                    <span className="entrada-foto"><Image src={`/app/img/${foto}.jpg`} alt="" fill sizes="80px" />{i === 0 && <span className="entrada-check"><Check size={12} strokeWidth={3} /></span>}</span>
+                  </span>
+                ))}
+              </motion.div>
+              <motion.h2 {...entrada(1)} className="text-[32px] leading-[1.15] font-bold tracking-[-0.02em] text-balance [font-family:var(--font-display)]">{ENTRAR.portada.titulo}</motion.h2>
+              <p>{ENTRAR.portada.texto}</p>
+            </section>
+            )}
+            <div className="entrada-tarjeta">
             {aviso === 'salio' && estado.paso === 'correo' && (
               <p role="status" className="mb-6 rounded-[var(--radius-button)] bg-[var(--surface-2)] px-4 py-3 text-[16px] font-semibold">
                 {ENTRAR.salio}
@@ -319,6 +335,7 @@ export function Entrar({ compra, aviso }: { compra: boolean; aviso: 'enlace' | '
             <AnimatePresence mode="wait" initial={false}>
               {contenido}
             </AnimatePresence>
+            </div>
           </main>
         </div>
       </div>

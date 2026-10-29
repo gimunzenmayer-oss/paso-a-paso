@@ -3,12 +3,14 @@ Fecha: 2026-10-21 · Estado: en uso, pendiente de aprobación final de la dueña
 Fuentes: plan aprobado, FICHA-AVATAR, FICHA-MODELO, ESTADO (precios), `docs/copy/landing.md` (voz aprobada), reglas 02B, 50, 52 y 42.
 Voz: español latino neutro, tuteo, cálido, sin culpa, sin "berrinche", sin "trastorno", sin "normal". Cero emojis en la interfaz.
 
+Precisión aprobada 27-10 — PROMESAS HONESTAS: las respuestas se muestran como resumen, sin prometer adaptación por edad/crisis. La rutina es preparada; la familia registra las notas. No hay recordatorio por correo activo. Solo existe la oferta mensual ya aprobada el 25-10. Las notas históricas de composición no autorizan rediseño ni reintroducir dos tarjetas de precio.
+
 ## Convenciones
 - `[acento]…[/acento]` = palabra en color de acento · `[b]…[/b]` = semibold.
 - Variables:
   - `{nombre}`: nombre del peque. Si lo salta, "tu peque". Se muestra con la inicial en mayúscula y nunca se recorta con "…".
   - `{momento}`: sale de la pregunta 3 (tabla abajo).
-  - `{fecha_cobro}`: día 7 de la prueba, en formato humano ("28 de octubre").
+  - `{fecha_cobro}` en el paywall: estimación local de hoy + 7 días, en formato humano ("28 de octubre"). No viene de Hotmart: se muestra «si empiezas hoy» y Hotmart confirma la fecha definitiva. Las fechas de /cuenta proceden del estado de la suscripción; no se cambian aquí.
   - `{correo}`: el correo que escribió.
 - Variables extra (necesarias, con el mismo estilo):
   - `{crisis}`: texto corto de la pregunta 4.
@@ -92,13 +94,13 @@ La barra empieza en 10 % y nunca retrocede: 10 · 25 · 40 · 55 · 70 · 85 (si
 
 ### 1.5 Reconocimiento con etiqueta de identidad
 Lleva arriba la tira con las 3 primeras fotos de su rutina y el check verde en la primera (la misma del resumen del paywall y de 1.6, al ancho completo), sin opciones y con un solo botón.
-- Título: Ya eres quien [acento]mejor conoce[/acento] a {nombre}
+- Título: Ya identificaste un [acento]momento difícil[/acento] para {nombre}
 - Texto: En un minuto nombraste que {momento} cuesta y qué pasa cuando {crisis}. Eso es [b]observar[/b], y es la base del [b]Método Antes, Durante y Después[/b]. (pendiente de aprobar) · antes: En un minuto nombraste su momento difícil y qué pasa cuando {crisis}. Eso es…
-- Texto 2 (quita la culpa; va en el plano hundido, debajo del texto): No es falta de paciencia. Es que {nombre} no sabe qué viene, y tú no tenías a mano qué hacer.
+- Texto 2 (acompaña sin atribuir una causa a la crisis): No tienes que resolverlo todo a la vez. Puedes empezar mostrando a {nombre} un paso de su rutina.
 - Botón: Armar su primera rutina (pendiente de aprobar) · antes: Seguir
 
 ### 1.6 Compromiso
-- Título: Mañana probamos la rutina de [acento]{momento}[/acento] con {nombre}
+- Título: Mañana probamos [acento]una rutina[/acento] con {nombre}
 - Ayuda: {n_pasos} pasos con fotos, en este teléfono. Una sola rutina, un día, basta para empezar. (pendiente de aprobar) · antes: Una sola rutina, un día. Con eso basta para empezar.
 - Arriba, la misma tira de 3 fotos de 1.5 (plano hundido, check en la primera, al ancho completo).
 - Debajo de la ayuda, en el plano hundido (16px), los pasos que no entran en la tira de 3 fotos: Y {n} pasos más: {paso} · {paso} · … (pendiente de aprobar) · antes: a 13px
@@ -113,7 +115,7 @@ Lleva arriba la tira con las 3 primeras fotos de su rutina y el check verde en l
 Dura de 4 a 6 segundos. Cada línea recibe su check, una tras otra.
 - Título: Armando el plan de [acento]{nombre}[/acento]…
 - Cada línea lleva arriba su etapa del Método, en etiqueta: ANTES, DURANTE, DURANTE, DESPUÉS.
-- Línea 1 (Antes): Rutina de {momento}: {n_pasos} pasos con fotos
+- Línea 1 (Antes): Rutina preparada: {n_pasos} pasos con fotos
 - Línea 2 (Durante): Kit de calma para cuando {crisis}
 - Línea 3 (Durante): Guía «¿Momento difícil?» a un toque («a un toque» con espacios duros) (pendiente de aprobar: solo los espacios) · antes: con espacios normales («a / un toque»)
 - Línea 4 (Después): Diario para contarle a su terapeuta («a su terapeuta» con espacios duros) (pendiente de aprobar: solo los espacios) · antes: con espacios normales («a / su terapeuta»)
@@ -126,14 +128,14 @@ Dura de 4 a 6 segundos. Cada línea recibe su check, una tras otra.
 - Con "reducir movimiento": las 4 líneas aparecen ya marcadas y el texto es el mismo.
 
 ### 1.8 Resultado: su rutina real con "¡Hecho!"
-- Título: La rutina de [acento]{momento}[/acento] de {nombre}
-- Ayuda: Toca «¡Hecho!» en el primer paso, como lo hará {nombre} mañana. (pendiente de aprobar) · antes: Toca «¡Hecho!» en el primer paso, como lo hará mañana.
+- Título: Una rutina para [acento]probar[/acento] con {nombre}
+- Ayuda: Toca «¡Hecho!» para ensayar cómo se marca un paso. Es un ensayo; no una rutina ya realizada con el peque.
 - Lista: los pasos reales de la rutina elegida en `datos.js` (texto y foto). Solo el paso 1 tiene botón.
 - Botón del paso 1: ¡Hecho!
 - Botón del paso 1 (aria-label): Marcar «{paso_1}» como hecho
 - Después de tocar:
   - texto: Así se ve cada paso cumplido, sin imprimir nada. Y cuando {crisis}, el kit de calma ya está en su plan. (pendiente de aprobar) · antes: Así se ve cada paso cumplido. Sin imprimir nada. Y para cuando {crisis}, el kit de calma ya está en su plan.
-  - 2.ª línea (16px, gris), el Después del Método: Lo que pase queda anotado para su terapeuta. (pendiente de aprobar) · antes: (no había)
+  - 2.ª línea (16px, gris), el Después del Método: Anota lo que pasó para su próxima consulta. La familia escribe la nota; no hay registro automático.
   - progreso, como chip propio bajo el nombre del paso 1: 1 de {n_pasos} (pendiente de aprobar: lugar) · antes: al final del texto de después
   - el paso 2 toma el borde de acento y una etiqueta (13px, acento): Sigue (pendiente de aprobar) · antes: (no había)
 - CTA (se ve de inmediato en estilo secundario y pasa a principal después del toque): Quiero el plan de {nombre} (pendiente de aprobar) · antes: Seguir con el plan de {nombre}
@@ -154,14 +156,14 @@ Elementos comunes a las 3 páginas:
 - Sin onboarding en este teléfono no hay plan que resumir: `/paywall` lleva a `/onboarding`.
 
 ### 2.1 Página 1: resumen
-- Título: El plan de {nombre} para [acento]{momento}[/acento] está listo
-- Subtítulo, con las 3 respuestas que tienen chip: Hecho con tus {N} respuestas, con el [b]Método Antes, Durante y Después[/b].
-- Subtítulo, con menos de 3: Hecho con lo que nos contaste, con el [b]Método Antes, Durante y Después[/b]. (pendiente de aprobar) · antes: siempre «Hecho con tus {N} respuestas»
+- Título: Una rutina para [acento]empezar[/acento] con {nombre}
+- Subtítulo, con las 3 respuestas que tienen chip: Tus {N} respuestas, a la vista. [b]Método Antes, Durante y Después[/b].
+- Subtítulo, con menos de 3: Para empezar, el [b]Método Antes, Durante y Después[/b]. No afirma adaptación por edad o crisis; los chips solo resumen elecciones.
 - Bajo el subtítulo, sus respuestas en chips: el label de cada opción que tocó, momento · edad · 1.ª crisis; solo las respondidas (aria-label de la lista: Tus respuestas) (pendiente de aprobar) · antes: (no había)
 - 3 puntos (con sus respuestas; «{n_pasos} pasos» con espacio duro, no se parte):
-  1. **Antes**: su rutina de {momento}, {n_pasos} pasos con fotos (pendiente de aprobar) · antes: su rutina de {momento}, paso a paso y con fotos
+  1. **Antes**: una rutina preparada, {n_pasos} pasos con fotos
   2. **Durante**: kit de calma para cuando {crisis}
-  3. **Después**: su semana anotada, lista para la terapeuta
+  3. **Después**: anotas lo que pasó para su próxima consulta
 - Línea de pérdida honesta (peso regular): Tu plan ya está en este teléfono. (pendiente de aprobar) · antes: Tu plan ya está en este teléfono. [b]Pruébalo gratis 7 días[/b]. (el CTA ya lleva los 7 días)
 - Botón: Ver mis 7 días gratis (pendiente de aprobar) · antes: Ver cómo funciona la prueba
 - Salida: Ahora no, volver a su rutina (pendiente de aprobar) · antes: Ahora no
@@ -169,39 +171,33 @@ Elementos comunes a las 3 páginas:
 ### 2.2 Página 2: la prueba, día por día
 - Título: [acento]7 días[/acento] para probarlo sin pagar
 - Línea de tiempo:
-  - **Hoy** (nodo: el check del embudo; debajo, 3 fotos de su rutina): Su rutina de {momento}, con fotos · El kit de calma y la guía para cuando {crisis} (pendiente de aprobar) · antes: Hoy mismo, su rutina de {momento} · Con fotos, el kit de calma y la guía para cuando {crisis}
-  - **Día 5**: Te avisamos por correo · 2 días antes de cualquier cobro
-  - **Día 7 · {fecha_cobro}**, con un plan ya elegido (?plan=, plan guardado o elegido en la página 3): Empieza el cobro: {monto} (pendiente de aprobar) · Solo si sigues. Cancelas antes desde Hotmart y no pagas nada (pendiente de aprobar) · antes: Solo si sigues. Cancela antes y no pagas nada. ({monto} y {fecha_cobro} nunca se parten entre dos líneas.)
-  - **Día 7 · {fecha_cobro}**, sin plan elegido: Empieza el cobro del plan que elijas · US$7.99 al mes o US$59.90 al año. Solo si sigues. Cancelas antes desde Hotmart y no pagas nada (pendiente de aprobar) · antes: Empieza el cobro: US$59.90 al año (el anual por defecto)
+  - **Hoy** (nodo: el check del embudo; debajo, 3 fotos de su rutina): Una rutina preparada, con fotos · El kit de calma y la guía para cuando {crisis}
+  - **Antes del día 7**: Revisa si quieres seguir · Si no, cancela en Hotmart antes del cobro. No hay recordatorio por correo activo.
+  - **Si empiezas hoy · {fecha_cobro}**, con plan elegido: Cobro estimado: {monto} · Hotmart confirma la fecha definitiva. Si no sigues, cancela antes del cobro. ({monto} y {fecha_cobro} no se parten entre dos líneas.)
+  - **Si empiezas hoy · {fecha_cobro}**, sin plan elegido: Cobro estimado: US$4,99 al mes · Hotmart confirma la fecha definitiva. Si no sigues, cancela antes del cobro. Se conserva la única oferta vigente aprobada; no hay anual.
 - Debajo (bloque hundido con escudo): Si no es para ustedes, cancelas en Hotmart antes del día 7 y [b]no pagas nada[/b]. («no pagas nada» con espacios duros) (2026-10-25: se quitó la garantía de 30 días; Hotmart tiene 7 días de reembolso desde la compra, que se solapan con la prueba) · antes: Y después, 30 días de la [b]Garantía del Día Tranquilo[/b]: si no te ayuda, te devolvemos todo.
 - Botón: Quiero ver los planes de {nombre} (pendiente de aprobar) · antes: Ver los planes de {nombre} (y antes: Ver precios)
 - Salida: Ahora no, volver a su rutina (pendiente de aprobar) · antes: Ahora no
 
 ### 2.3 Página 3: precio
-- Título: Días más [acento]predecibles[/acento] para {nombre}, desde hoy
-- Subtítulo: Mañana {nombre} ya sabe qué viene. Empiezas gratis y eliges cómo seguir después. (pendiente de aprobar) · antes: Empiezas gratis. Eliges cómo seguir después.
+- Título: Anticipa con fotos. [acento]Acompaña[/acento] a {nombre}.
+- Subtítulo: Prueba 7 días gratis y sigue mes a mes.
 - Orden: las 2 tarjetas van justo después del subtítulo (la elegida se ve entera en el primer pliegue, también con el error en el pie); debajo, a 32px, "Incluye", y después la tira de su rutina. El pie fijo de esta página es sólido (fondo de la página con una línea fina arriba, sin degradado): lo que pasa por debajo se corta con un borde limpio. (pendiente de aprobar) · antes (ronda 4): "Incluye" separado 80px para no asomar bajo el degradado del pie (dejaba un hueco de ~90 pt) · antes (ronda 3): tarjetas → tira (32px) → "Incluye"; la tira asomaba a medias bajo el degradado del pie. Prioridad: la tarjeta elegida entera. · antes: "Incluye" en una línea sobre las tarjetas. Ronda 3: se probó la tira entre el subtítulo y las tarjetas y empujaba la mensual elegida bajo el pie (27px; 59px sin nombre y con el error): se dejó debajo para que la tarjeta elegida quede entera.
-- Junto a una tira de 3 fotos de su rutina: Su rutina de {momento} ya está armada (pendiente de aprobar)
+- Junto a una tira de 3 fotos de su rutina: Una rutina con fotos para probar juntos
 - Incluye (etiqueta en gris secundario —el acento queda para el CTA, la palabra que vende y el check— y 4 chips con el check del embudo; nombres de la app y de la landing §6): [b]Incluye:[/b] Su rutina con fotos · Kit de calma · Guía «Ahora mismo» · Diario e informe (pendiente de aprobar)
-- Tarjeta Anual (recomendada y marcada de inicio):
-  - etiqueta: Mejor precio
-  - nombre: Anual
-  - precio grande: US$4.99/mes
-  - detalle: Se cobra US$59.90 al año · ahorras 4 meses
-  - nota: Menos de US$0.17 al día
-- Tarjeta Mensual:
+- Única tarjeta, Mensual (oferta ya aprobada el 25-10; sin anual):
   - nombre: Mensual
-  - precio grande: US$7.99/mes
-  - detalle: Se cobra cada mes · cancelas cuando quieras
+  - precio grande: US$4,99/mes
+  - detalle: Después de los 7 días gratis. Cancelas cuando quieras.
 - Botón: Empezar mis 7 días gratis (el CTA de la oferta de la landing §6)
 - Botón, mientras abre: Abriendo Hotmart…
 - Pie fijo: SOLO el botón y una línea bajo él: [b]Hoy no pagas nada[/b] · cancelas antes del día 7 (2026-10-25, sin garantía de 30 días) · antes: [b]Garantía del Día Tranquilo[/b] · 30 días.
-- En el flujo, justo debajo del pie (junto al botón, no dentro del pie, que sigue siendo botón + 1 línea), la renovación del plan elegido: Se renueva automáticamente cada mes hasta que canceles. (mensual) · Se renueva automáticamente cada año hasta que canceles. (anual) (pendiente de aprobar) · antes: (no había)
+- En el flujo, justo debajo del pie: Se renueva automáticamente cada mes hasta que canceles.
 - Debajo de la renovación, con los dos nombres como enlaces: Al empezar la prueba aceptas los [Términos](/terminos) y la [Política de privacidad](/privacidad). (pendiente de aprobar) · antes: (no había)
 - En el flujo, debajo de los términos: la condición de la prueba, sin ícono ni nombre: Si no es para ustedes, cancelas en Hotmart antes del día 7 y no se te cobra nada. (2026-10-25) · antes: Si en 30 días no te ayuda a tener un día más predecible, te devolvemos todo.
 - Ayuda, en el flujo, con ícono de información: En Hotmart, completa tus datos y elige «Quiero un periodo gratis». (pendiente de aprobar) · antes: debajo del botón, en el pie.
 - 2 líneas de confianza, con check:
-  1. Hoy no pagas nada · primer cobro el {fecha_cobro} ({fecha_cobro} no se parte)
+  1. Si empiezas hoy: {fecha_cobro} (estimada). Hotmart confirma la fecha definitiva. ({fecha_cobro} no se parte)
   2. Cancelas en Hotmart cuando quieras
 - Fila final (con un candado, no un escudo; alineada a la izquierda en la columna de las líneas de confianza): Pago seguro con Hotmart · tarjeta o medios locales
 - Enlaces:
@@ -432,15 +428,15 @@ Paso a Paso: rutinas con fotos, kit de calma y diario para la terapeuta, con el 
 - [x] Las preguntas repiten los dolores de la FICHA: "no sé qué hacer cuando se desborda" y "un día tranquilo" (02B, se deriva de la ficha).
 - [x] Saltar solo en pasos que no son clave (nombre y crisis), con texto neutro (02B regla 7; 50 A2).
 - [x] La pregunta sensible paga con un reconocimiento que nombra el patrón, quita la culpa con la causa real y nombra el mecanismo (50 A5, fórmula).
-- [x] El último reconocimiento etiqueta en positivo con evidencia de sus respuestas: "Ya eres quien mejor conoce a {nombre}" (02B regla b; 50 A5 variante final).
+- [x] El reconocimiento se refiere a una acción comprobable: "Ya identificaste un momento difícil para {nombre}"; no deduce quién conoce mejor al niño (corrección aprobada 27-10).
 - [x] Compromiso explícito con momento y día ("Mañana probamos…"), sin lenguaje que obliga (02B peldaño 7, regla d).
 - [x] El loading muestra 4 líneas con datos reales y no es un spinner (50 B, D).
 - [x] Primera victoria antes del pago: "¡Hecho!" en el paso 1 de su rutina real (02B trabajo 3, regla 6).
 - [x] El paywall va en 3 páginas: resumen, línea de la prueba y precio (02B; 50 C0).
-- [x] La inversión se ve: "Hecho con tus {N} respuestas" (02B regla a; 50 D).
+- [x] Las elecciones se ven como chips: «Tus {N} respuestas, a la vista», sin atribuirles una adaptación inexistente (precisión aprobada 27-10).
 - [x] El título nombra su meta ({momento}) y el mecanismo, nunca "Elige tu plan" (50 C1, D; 02B).
-- [x] El anual se muestra como US$/mes, con el total anual visible y el ahorro en meses. El mensual es un precio real (50 C1, C5; 52 punto 2).
-- [x] La fecha exacta de cobro aparece en la línea de tiempo, bajo el botón y en /cuenta (02B; 50 C4).
+- [x] Solo se ofrece el mensual aprobado. Anual aplazado; no prometerlo en Términos ni en el copy.
+- [x] El paywall distingue la estimación local hoy + 7 («si empiezas hoy») de la fecha definitiva que confirma Hotmart. No se presenta como fecha contractual. /cuenta conserva las fechas de la suscripción.
 - [x] La verdad del puente bajo el botón: hoy no pagas y cancelas antes del día 7 sin pagar (50 C4bis). Sin garantía de días: la de Hotmart (7 días desde la compra) se solapa con la prueba.
 - [ ] ~~La garantía (30 días) dura más que la prueba (7 días) (52 punto 3).~~ Se quitó el 2026-10-25 por decisión de la dueña: Hotmart quedó con 7 días de reembolso.
 - [x] Ningún aviso nombra un miedo nuevo ("no te asustes"): todo se dice en positivo junto al botón (52 punto 4).
@@ -452,3 +448,27 @@ Paso a Paso: rutinas con fotos, kit de calma y diario para la terapeuta, con el 
 - [x] Cuatro estados de acceso. Un fallo de red nunca dice "no compraste" (42, acceso y compras; plan, decisión 6).
 - [x] El bloqueo no borra datos y deja abiertos la guía y el kit de calma, dicho con calma (plan, decisión 7).
 - [x] Personaliza con lo que eligió (momento y crisis), no solo con el nombre, y el nombre se puede saltar (52 punto 5).
+
+### Entrada: bienvenida visual (petición de Giselle; implementación local)
+- Un espacio para tu familia
+- Un paso a la vez. Contigo.
+- Rutinas para anticipar. Calma para acompañar. Vuelve a tu espacio, a tu ritmo.
+- Un código por correo. Sin contraseñas.
+Trazabilidad: FICHA-AVATAR deseos 1 (rutinas) y 3 (acompañamiento sin juicio), objeción 1 (tiempo); FICHA-ARTE tira de pasos con fotos. Fotos ilustrativas, no datos ni progreso de la cuenta. Se conserva la lógica de acceso.
+Ajustes de revisión: Usa el mismo correo de tu cuenta.
+Enviando el código…
+No pudimos reenviar el código. Revisa tu internet y toca «Reenviar código» otra vez.
+Espera durante acciones de acceso: Un momento…
+
+
+## Oferta vigente — 25 de octubre de 2026 (sustituye los precios anteriores)
+
+- SOLO mensual: US$4,99/mes. Anual aplazado. Prueba gratis: 7 días.
+- Cobro estimado: US$4,99 al mes. Si empiezas hoy: {fecha_cobro} (estimada). Hotmart confirma la fecha definitiva.
+- Solo si sigues. Cancelas antes desde Hotmart y no pagas nada
+- Quiero ver el plan de {nombre}
+- Prueba 7 días gratis y sigue mes a mes.
+- Después de los 7 días gratis. Cancelas cuando quieras.
+- Se renueva automáticamente cada mes hasta que canceles.
+- Reembolso: 7 días, según las [condiciones de reembolso](/reembolsos).
+- Inicio exacto del plazo de reembolso: pendiente de verificar antes de lanzar; no prometer 7 días adicionales tras la prueba.

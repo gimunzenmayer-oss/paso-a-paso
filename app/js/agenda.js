@@ -134,7 +134,7 @@ window.PP = window.PP || {};
         if (t.hasAttribute('data-cancelar')) PP.atras();
         if (t.hasAttribute('data-reiniciar')) {
           PP.estado.progreso[b.id] = { fecha: PP.hoy(), hechos: [] };
-          PP.persistir(); PP.avisar('Pasos de hoy desmarcados');
+          PP.persistirConAviso(function () { PP.avisar('Pasos de hoy desmarcados'); });
         }
         if (t.hasAttribute('data-eliminar')) {
           $('#zona-extra').innerHTML = '<p><strong>¿Eliminar «' + PP.esc(b.nombre) + '»?</strong> No se puede deshacer.</p>' +
@@ -143,7 +143,7 @@ window.PP = window.PP || {};
         if (t.hasAttribute('data-eliminar-si')) {
           PP.estado.rutinas = PP.estado.rutinas.filter(function (r) { return r.id !== b.id; });
           delete PP.estado.progreso[b.id];
-          PP.persistir(); PP.avisar('Rutina eliminada'); PP.ir('agenda', null, { raiz: true });
+          PP.persistirConAviso(function () { PP.avisar('Rutina eliminada'); PP.ir('agenda', null, { raiz: true }); });
         }
         if (t.hasAttribute('data-eliminar-no')) PP.repintar();
       };
@@ -156,9 +156,10 @@ window.PP = window.PP || {};
         b.pasos.forEach(function (p, i) { p.texto = (p.texto || '').trim() || 'Paso ' + (i + 1); });
         var i = PP.estado.rutinas.findIndex(function (r) { return r.id === b.id; });
         if (i >= 0) PP.estado.rutinas[i] = b; else PP.estado.rutinas.push(b);
-        PP.persistir();
-        PP.avisar('Rutina guardada');
-        PP.ir('agenda', null, { raiz: true });
+        PP.persistirConAviso(function () {
+          PP.avisar('Rutina guardada');
+          PP.ir('agenda', null, { raiz: true });
+        });
       };
     }
   };
@@ -309,14 +310,14 @@ window.PP = window.PP || {};
         if (t.dataset.ver != null) { elegido = +t.dataset.ver; dibujar(cont); PP.decirItem(r.pasos[elegido]); }
         if (t.hasAttribute('data-desmarcar')) {
           pr.hechos = pr.hechos.filter(function (id) { return id !== paso.id; });
-          PP.persistir(); elegido = null; dibujar(cont);
+          PP.persistirConAviso(); elegido = null; dibujar(cont);
         }
         if (t.hasAttribute('data-hecho')) {
           // 1) Guardar que está hecho  2) Refuerzo suave  3) Pasar al siguiente
           ocupado = true;
           var nuevo = pr.hechos.indexOf(paso.id) < 0;
           if (nuevo) pr.hechos.push(paso.id);
-          PP.persistir();
+          PP.persistirConAviso();
           if (nuevo) PP.evento('rutina_paso_completado');
           if (pr.hechos.length === r.pasos.length) {
             PP.anotarEstrella(r); // rutina terminada: ¡una estrella!

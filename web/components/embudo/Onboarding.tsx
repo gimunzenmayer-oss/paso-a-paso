@@ -54,7 +54,7 @@ let inicioContado = false;
 function planDeUrl(): Plan | undefined {
   try {
     const q = new URLSearchParams(window.location.search).get('plan');
-    return q === 'anual' || q === 'mensual' ? q : undefined;
+    return q === 'anual' || q === 'mensual' ? 'mensual' : undefined;
   } catch {
     return undefined;
   }

@@ -14,8 +14,8 @@
 // botón "Atrás" de la cabecera vuelven a la página anterior, no fuera del paywall;
 // en la página 1, "‹ Atrás" vuelve a /onboarding (su resultado).
 //
-// Checkout: NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL / _ANUAL (se fijan al compilar)
-// pasan por checkoutDe (lib/embudo/checkout.ts). Si alguno falta o no es un link https de Hotmart, la
+// Checkout: NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL (se fijan al compilar)
+// pasan por checkoutDe (lib/embudo/checkout.ts). Si falta o no es un link https de Hotmart, la
 // página 3 muestra el estado honesto (botón deshabilitado), nunca un enlace roto.
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
@@ -45,11 +45,6 @@ function origenGuardado(): string | null {
   } catch {
     return null;
   }
-}
-
-function planDeUrl(): Plan | null {
-  const q = new URLSearchParams(window.location.search).get('plan');
-  return q === 'anual' || q === 'mensual' ? q : null;
 }
 
 /* La página abierta vive en la URL (?p=2, ?p=3; sin ?p = la 1). Cambia con
@@ -91,7 +86,6 @@ export function Paywall() {
   const progreso = useProgreso();
   const fecha = useSyncExternalStore(sinSuscripcion, fechaDeHoy, () => null);
   const origen = useSyncExternalStore(sinSuscripcion, origenGuardado, () => null);
-  const planUrl = useSyncExternalStore(sinSuscripcion, planDeUrl, () => null);
   const pagina = useSyncExternalStore(suscribirPagina, paginaDeUrl, () => 0);
   const reduce = useReducedMotion() === true;
   const router = useRouter();
@@ -105,7 +99,6 @@ export function Paywall() {
     setDireccion(pagina > anterior ? 1 : -1);
     setNavegado(true);
   }
-  const [planElegido, setPlanElegido] = useState<Plan | null>(null);
 
   const ir = useCallback((n: number) => empujarPagina(n), []);
   // "Atrás" de la cabecera = el atrás del navegador, si la entrada es nuestra. Si se
@@ -127,16 +120,14 @@ export function Paywall() {
 
   const respuestas = progreso?.respuestas ?? {};
   const nRespuestas = contarRespuestas(respuestas);
-  // El plan que ella eligió (en la página 3, con ?plan= o guardado desde la landing). Sin
-  // ninguno, la página 3 marca el anual de inicio, pero la 2 no le atribuye un monto que no eligió.
-  const planConocido: Plan | null = planElegido ?? planUrl ?? progreso?.plan ?? null;
-  const plan: Plan = planConocido ?? 'anual';
+  // Una sola oferta vigente, incluso si llega desde un enlace anual antiguo.
+  const plan: Plan = 'mensual';
   const v = {
     ...variablesDe(respuestas),
     N: String(nRespuestas),
     // La fecha y el monto nunca se parten entre dos líneas ("28 de / octubre").
     fecha_cobro: sinCortes(fecha ?? ''),
-    monto: planConocido ? sinCortes(PAYWALL_PRUEBA.monto[planConocido]) : undefined,
+    monto: sinCortes(PAYWALL_PRUEBA.monto[plan]),
   };
   const hrefVolver = '/onboarding';
 
@@ -170,7 +161,6 @@ export function Paywall() {
           v={v}
           pasos={pasos}
           plan={plan}
-          onElegir={setPlanElegido}
           checkout={checkoutDe(origen ?? undefined)}
           hrefVolver={hrefVolver}
           enfocar={navegado}

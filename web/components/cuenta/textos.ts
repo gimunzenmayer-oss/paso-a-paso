@@ -12,6 +12,12 @@ export function poner(texto: string, v: Record<string, string>): string {
 
 export const ENTRAR = {
   logo: 'Paso a Paso, ir al inicio',
+  portada: {
+    etiqueta: 'Un espacio para tu familia',
+    titulo: 'Un paso a la vez. Contigo.',
+    texto: 'Rutinas para anticipar. Calma para acompañar. Vuelve a tu espacio, a tu ritmo.',
+    seguridad: 'Usa el mismo correo de tu cuenta.',
+  },
   correo: {
     titulo: 'Entra a [acento]Paso a Paso[/acento]',
     ayuda: 'Te mandamos un código de 6 dígitos. Sin contraseñas.',
@@ -40,6 +46,9 @@ export const ENTRAR = {
     revisando: 'Revisando…',
     reenviarEn: 'Reenviar código en {s} s',
     reenviar: 'Reenviar código',
+    reenviando: 'Enviando el código…',
+    esperando: 'Un momento…',
+    errorReenvio: 'No pudimos reenviar el código. Revisa tu internet y toca «Reenviar código» otra vez.',
     reenviado: 'Te mandamos otro código. Usa el más nuevo.',
     otroCorreo: 'Usar otro correo',
   },

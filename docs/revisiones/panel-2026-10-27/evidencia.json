@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-27T14:10:39.394Z",
+  "scope": "local actual, sin checkout configurado; API acceso simulado solo navegador, sin correos ni solicitudes remotas",
+  "evidence": [
+    {
+      "name": "landing-completa-375",
+      "url": "http://127.0.0.1:3113/",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "onboarding-01-nombre-375",
+      "url": "http://127.0.0.1:3113/onboarding",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "onboarding-02-edad-375",
+      "url": "http://127.0.0.1:3113/onboarding",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "onboarding-03-momento-375",
+      "url": "http://127.0.0.1:3113/onboarding",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "onboarding-04-crisis-375",
+      "url": "http://127.0.0.1:3113/onboarding",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "onboarding-05-reconocimiento-375",
+      "url": "http://127.0.0.1:3113/onboarding",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "onboarding-06-compromiso-375",
+      "url": "http://127.0.0.1:3113/onboarding",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "onboarding-07-armando-375",
+      "url": "http://127.0.0.1:3113/onboarding",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "onboarding-08-rutina-375",
+      "url": "http://127.0.0.1:3113/onboarding",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "onboarding-09-primera-victoria-375",
+      "url": "http://127.0.0.1:3113/onboarding",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "paywall-01-375",
+      "url": "http://127.0.0.1:3113/paywall?p=1",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "paywall-02-375",
+      "url": "http://127.0.0.1:3113/paywall?p=2",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "paywall-03-375",
+      "url": "http://127.0.0.1:3113/paywall?p=3",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "entrada-375",
+      "url": "http://127.0.0.1:3113/entrar",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "core-01-inicio-375",
+      "url": "http://127.0.0.1:3113/app/index.html",
+      "screen": "inicio",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "core-02-agenda-375",
+      "url": "http://127.0.0.1:3113/app/index.html",
+      "screen": "agenda",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "core-03-informe-375",
+      "url": "http://127.0.0.1:3113/app/index.html",
+      "screen": "informe",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "name": "core-04-diario-375",
+      "url": "http://127.0.0.1:3113/app/index.html",
+      "screen": "diario",
+      "width": 375,
+      "scrollWidth": 375
+    }
+  ],
+  "errors": []
+}

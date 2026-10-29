@@ -1,0 +1,48 @@
+{
+  "resultados": [
+    {
+      "pantalla": "landing",
+      "width": 375,
+      "contenido": 375
+    },
+    {
+      "pantalla": "paywall",
+      "width": 375,
+      "contenido": 375
+    },
+    {
+      "pantalla": "landing",
+      "width": 360,
+      "contenido": 360
+    },
+    {
+      "pantalla": "paywall",
+      "width": 360,
+      "contenido": 360
+    },
+    {
+      "pantalla": "landing",
+      "width": 1440,
+      "contenido": 1440
+    },
+    {
+      "pantalla": "paywall",
+      "width": 1440,
+      "contenido": 1440
+    },
+    {
+      "pantalla": "paywall nombre largo",
+      "width": 375,
+      "contenido": 375
+    }
+  ],
+  "errores": [],
+  "pruebas": [
+    "precio mensual único",
+    "enlace antiguo anual",
+    "respuestas conservadas",
+    "cobro día 7 mensual",
+    "CTA sin enlace deshabilitado",
+    "enlace de reembolsos"
+  ]
+}

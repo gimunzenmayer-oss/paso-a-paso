@@ -204,8 +204,8 @@ test('paywall: chips con sus respuestas (momento · edad · 1.ª crisis), solo l
 test('paywall: un monto o una fecha no se parten (espacios duros)', async () => {
   const { sinCortes, PAYWALL_PRUEBA } = await import('../components/embudo/textos.ts');
   assert.equal(sinCortes('28 de octubre'), '28 de octubre');
-  // Sin plan elegido, el Día 7 nombra los 2 montos, cada uno entero.
-  assert.ok(PAYWALL_PRUEBA.cobroSinPlan.texto.startsWith('US$7.99 al mes o US$59.90 al año.'));
+  assert.equal(sinCortes(PAYWALL_PRUEBA.monto.mensual), 'US$4,99 al mes');
+  assert.equal(PAYWALL_PRUEBA.cobroSinPlan.titulo, 'Cobro estimado: US$4,99 al mes');
 });
 
 test('paywall: {N} de «tus {N} respuestas» es el número de chips visibles, en todos los casos', async () => {
@@ -240,9 +240,43 @@ test('copy 2.3: renovación y términos junto al botón, literales de docs/copy/
   const { PAYWALL_PRECIO } = await import('../components/embudo/textos.ts');
   const md = readFileSync(new URL('../../docs/copy/embudo.md', import.meta.url), 'utf8');
   assert.equal(PAYWALL_PRECIO.renovacion.mensual, 'Se renueva automáticamente cada mes hasta que canceles.');
-  assert.equal(PAYWALL_PRECIO.renovacion.anual, 'Se renueva automáticamente cada año hasta que canceles.');
   for (const t of Object.values(PAYWALL_PRECIO.renovacion)) assert.ok(md.includes(t), `falta en embudo.md: ${t}`);
   const { texto, terminos, privacidad } = PAYWALL_PRECIO.terminos;
   const enMd = texto.replace('{terminos}', `[${terminos}](/terminos)`).replace('{privacidad}', `[${privacidad}](/privacidad)`);
   assert.ok(md.includes(enMd), `falta en embudo.md: ${enMd}`);
+});
+
+
+test('oferta vigente: no se ofrece anual y conserva las respuestas anteriores', async () => {
+  const { PAYWALL_PRECIO, PAYWALL_PRUEBA } = await import('../components/embudo/textos.ts');
+  assert.equal(PAYWALL_PRECIO.mensual.precio, 'US$4,99');
+  assert.equal(PAYWALL_PRECIO.anual, undefined);
+  assert.deepEqual(Object.keys(PAYWALL_PRUEBA.monto), ['mensual']);
+  const respuestas = { nombre: 'Ana', momento: 'manana', edad: '5-7' };
+  const estado = validarEstado({ v: 1, respuestas, plan: 'anual', ts: 42 });
+  assert.equal(estado.plan, 'mensual');
+  assert.deepEqual(estado.respuestas, respuestas);
+});
+
+test('checkout: basta el enlace mensual; un enlace anual nunca lo sustituye', async () => {
+  const mensualPrevio = process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL;
+  const anualPrevio = process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_ANUAL;
+  try {
+    process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL = 'https://pay.hotmart.com/PRUEBA?off=mensual';
+    delete process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_ANUAL;
+    const { checkoutDe } = await import('../lib/embudo/checkout.ts?solo-mensual');
+    const links = checkoutDe('instagram');
+    assert.deepEqual(Object.keys(links), ['mensual']);
+    assert.equal(new URL(links.mensual).searchParams.get('off'), 'mensual');
+    assert.equal(new URL(links.mensual).searchParams.get('showOnlyTrial'), '1');
+    process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL = 'https://otro.example/checkout';
+    process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_ANUAL = 'https://pay.hotmart.com/ANUAL';
+    const invalido = await import('../lib/embudo/checkout.ts?mensual-invalido');
+    assert.equal(invalido.checkoutDe(), null);
+  } finally {
+    if (mensualPrevio === undefined) delete process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL;
+    else process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL = mensualPrevio;
+    if (anualPrevio === undefined) delete process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_ANUAL;
+    else process.env.NEXT_PUBLIC_HOTMART_CHECKOUT_ANUAL = anualPrevio;
+  }
 });
