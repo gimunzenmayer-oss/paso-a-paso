@@ -14,8 +14,8 @@
 // botón "Atrás" de la cabecera vuelven a la página anterior, no fuera del paywall;
 // en la página 1, "‹ Atrás" vuelve a /onboarding (su resultado).
 //
-// Checkout: NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL / _ANUAL (se fijan al compilar)
-// pasan por checkoutDe (lib/embudo/checkout.ts). Si alguno falta o no es un link https de Hotmart, la
+// Checkout: NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL (se fijan al compilar)
+// pasan por checkoutDe (lib/embudo/checkout.ts). Si falta o no es un link https de Hotmart, la
 // página 3 muestra el estado honesto (botón deshabilitado), nunca un enlace roto.
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
@@ -120,7 +120,7 @@ export function Paywall() {
 
   const respuestas = progreso?.respuestas ?? {};
   const nRespuestas = contarRespuestas(respuestas);
-  // Un solo plan a la venta (mensual, decisión de la dueña 2026-10-25): no hay nada que elegir.
+  // Una sola oferta vigente, incluso si llega desde un enlace anual antiguo.
   const plan: Plan = 'mensual';
   const v = {
     ...variablesDe(respuestas),

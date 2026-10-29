@@ -1,0 +1,50 @@
+Agenda visual
+
+Elige una rutina y dásela a Mateo. Verá un paso cada vez y lo marcará al terminar.
+
+Mañana
+
+07:30 · 7 pasos
+
+0 / 7
+Despertar
+Ir al baño
+Vestirse
+Desayunar
+Lavarse los dientes
+Ponerse los zapatos
+Tomar la mochila
+Editar
+Empezar con Mateo
+Volver de la escuela
+
+16:30 · 5 pasos
+
+0 / 5
+Quitarse los zapatos
+Lavarse las manos
+Merendar
+Rato tranquilo
+Jugar en el parque
+Editar
+Empezar con Mateo
+Noche
+
+20:00 · 6 pasos
+
+0 / 6
+Cenar
+Bañarse
+🩳
+Ponerse el pijama
+Lavarse los dientes
+Leer un cuento
+Dormir
+Editar
+Empezar con Mateo
++ Crear una rutina nueva
+Inicio
+Preparar
+Diario
+Guía
+Más

@@ -6,7 +6,7 @@
 // rutina de {momento} y la guía para cuando {crisis}), no una lista de funciones.
 // El nodo de "Hoy" es el check del embudo (CheckQueSeLlena: acceso sin pagar, ya
 // suyo) y bajo su texto van 3 fotos de su rutina: la página lleva el dispositivo
-// propio de la marca, como la 1 y la 3. El Día 5 es un aviso, no un
+// propio de la marca, como la 1 y la 3. «Antes del día 7» invita a revisar, no promete un
 // acceso: su nodo y su tramo van en la 2.ª nota de FICHA-ARTE (niebla, "después").
 // Nodo con borde = el día del cobro, con su fecha exacta y el monto del plan
 // elegido ({monto}, que nunca se parte entre líneas). Si todavía no eligió plan (sin
@@ -64,7 +64,7 @@ export function PaywallPrueba({
           {PAYWALL_PRUEBA.linea.map((hito, i) => {
             const hoy = i === 0;
             const cobro = i === ultimo;
-            // El Día 5 (aviso) y su tramo hasta el cobro van en la 2.ª nota.
+            // La revisión antes del día 7 y su tramo hasta el cobro van en la 2.ª nota.
             const aviso = i === ultimo - 1;
             const { titulo, texto } = hito;
             return (

@@ -1,0 +1,56 @@
+[
+  {
+    "ruta": "/api/correos/procesar",
+    "method": "GET",
+    "status": 401,
+    "resultado": "correcto"
+  },
+  {
+    "ruta": "/api/correos/procesar",
+    "method": "POST",
+    "status": 401,
+    "resultado": "correcto"
+  },
+  {
+    "ruta": "/api/correos/procesar",
+    "method": "POST",
+    "status": 200,
+    "resultado": "correcto"
+  },
+  {
+    "ruta": "/api/correos/solicitud",
+    "method": "POST",
+    "status": 401,
+    "resultado": "correcto"
+  },
+  {
+    "ruta": "/api/correos/solicitud",
+    "method": "POST",
+    "status": 503,
+    "resultado": "correcto"
+  },
+  {
+    "ruta": "/api/webhooks/resend",
+    "method": "POST",
+    "status": 503,
+    "resultado": "correcto"
+  },
+  {
+    "ruta": "/api/correos/baja?token=ficticio",
+    "method": "GET",
+    "status": 400,
+    "resultado": "correcto"
+  },
+  {
+    "ruta": "/api/correos/baja?token=ficticio",
+    "method": "POST",
+    "status": 400,
+    "resultado": "correcto"
+  },
+  {
+    "ruta": "/api/correos/confirmar?token=ficticio",
+    "method": "GET",
+    "status": 400,
+    "resultado": "correcto"
+  }
+]

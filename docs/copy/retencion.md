@@ -1,5 +1,7 @@
 # Retención: correos, recordatorios y canales
 
+> Actualización 25-10: estos tres textos iniciales son antecedentes, NO plantillas activas. Los reemplaza `web/lib/correos/plantillas.ts` (28 variantes de servicio/marketing) y `docs/correos/OPERACION.md`. No usar el nombre del niño, detalles sensibles ni supuesta actividad local en emails. Todo el envío sigue desactivado, sin proveedor verificado ni pruebas reales de bandeja.
+
 Plan escrito del punto 13 de la auditoría (2026-10-21). Todavía no hay nada conectado: los correos necesitan Resend (o el correo propio que conectes a Supabase) y la entrada de pago (cuenta de clienta) para saber a quién escribir.
 
 ## 3 correos básicos

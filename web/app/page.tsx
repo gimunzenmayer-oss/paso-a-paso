@@ -54,8 +54,8 @@ export default function PaginaDeVentas() {
         appName="Paso a Paso"
         logo={<Logo />}
         // Espacios que no se cortan: "en la crisis" queda en un solo renglón (sin "y, en la" suelto).
-        h1Marked={'Días predecibles y, en\u00a0la\u00a0crisis, [acento]sabrás\u00a0qué\u00a0hacer[/acento]'}
-        subtitleMarked={'El [b]Método Antes, Durante y Después[/b]. Tu primera rutina, [b]lista\u00a0en\u00a02\u00a0minutos[/b].'}
+        h1Marked={'Rutinas con fotos y [acento]apoyo en\u00a0la\u00a0crisis[/acento]'}
+        subtitleMarked={'El [b]Método Antes, Durante y Después[/b]. Una rutina [b]preparada para empezar[/b].'}
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
         socialProof={<span>Prueba 7 días sin pagar · cancelas cuando quieras</span>}
@@ -89,12 +89,12 @@ export default function PaginaDeVentas() {
       />
 
       <Solucion
-        tituloMarked="Tu peque sabe qué viene. [acento]Tú, qué hacer.[/acento]"
+        tituloMarked="Anticipa su día. [acento]Acompaña cada paso.[/acento]"
         mecanismo="el Método Antes, Durante y Después"
-        bigIdeaMarked="No te falta paciencia: te falta tener a mano [b]qué viene y qué hacer[/b]."
+        bigIdeaMarked="Ten a mano [b]rutinas, recursos de calma y un diario[/b] para acompañar a tu peque."
         pasos={[
           { titulo: 'Antes · Anticipas', foto: '/fotos/despertar.jpg', fotoAlt: 'Niño estirándose al despertar', detalle: 'Rutinas e historias con fotos reales, listas para usar.' },
-          { titulo: 'Durante · Calmas', foto: '/fotos/tranquilo.jpg', fotoAlt: 'Niño tranquilo', detalle: 'Respirar, contar y música suave en un toque.' },
+          { titulo: 'Durante · Acompañas', foto: '/fotos/tranquilo.jpg', fotoAlt: 'Niño tranquilo', detalle: 'Respirar, contar y música suave en un toque.' },
           { titulo: 'Después · Cuentas', foto: '/fotos/mama.jpg', fotoAlt: 'Mamá', detalle: 'Anotas en segundos y llevas el informe a la terapeuta.' },
         ]}
         antesDespues={{
@@ -112,37 +112,26 @@ export default function PaginaDeVentas() {
           { src: '/capturas/tablero.jpg', alt: 'Tablero para hablar: botones con fotos como Sí, No, Ayuda, Quiero y Me siento', label: 'Pide lo que necesita con fotos' },
           { src: '/capturas/siento.jpg', alt: 'Termómetro de emociones: de Necesito ayuda a Estoy tranquilo', label: '"¿Cómo me siento?" cuando no salen las palabras' },
           { src: '/capturas/guia.jpg', alt: 'Guía para familias con la lista de momentos difíciles', label: 'Qué hacer ahora, en 12 momentos difíciles' },
-          { src: '/capturas/informe.jpg', alt: 'Informe de seguimiento para imprimir o guardar como PDF', label: 'Su semana, lista para la terapeuta' },
+          { src: '/capturas/informe.jpg', alt: 'Informe de seguimiento para imprimir o guardar como PDF', label: 'Lo que anotaste, para su próxima consulta' },
         ]}
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
       />
 
       <Oferta
-        tituloMarked="Empieza gratis. Luego, [acento]menos de $0.17 al día[/acento]"
+        tituloMarked="Prueba gratis. Después, [acento]US$4,99 al mes[/acento]"
         trialDias={7}
-        stack={{
-          lineas: [
-            { resultado: 'Paso a Paso con el Método Antes, Durante y Después (cada mes)', valor: '$8' },
-            { resultado: 'Guía «Ahora mismo»: qué hacer en 12 momentos difíciles', valor: '$10' },
-            { resultado: 'Rutinas e historias listas: mañana, colegio, noche, médico y más', valor: '$10' },
-          ],
-          totalTachado: '$28',
-          nota: 'Tú pagas US$4.99 al mes. Los primeros 7 días, nada.',
-        }}
-        plan={{
-          nombre: 'Mensual',
-          precioMes: '$4.99',
-          sufijo: 'USD/mes',
-          bajoCta: 'Hoy no pagas nada · cancelas antes del día\u00a07',
+        mensual={{
+          nombre: 'Plan mensual',
+          precioMes: 'US$4,99',
+          sufijo: '/mes',
           ctaLabel: 'Empezar mis 7 días gratis',
-          ctaHref: CTA_HREF,
+          ctaHref: CTA_HREF + '?plan=mensual',
           features: [
             'Rutinas con fotos reales que puedes cambiar',
             'Kit de calma con música suave',
             'Diario con clave y su informe imprimible',
             'Guía para los momentos difíciles',
-            'Cancelas cuando quieras',
           ],
         }}
       />
@@ -165,11 +154,11 @@ export default function PaginaDeVentas() {
           },
           {
             pregunta: '¿Vale lo que cuesta?',
-            respuestaMarked: 'Son [b]menos de $0.17 al día[/b], menos que una hoja plastificada. Y si no te sirve, cancelas antes del día 7 y no pagas nada.',
+            respuestaMarked: 'Cuesta [b]US$4,99 al mes[/b], después de 7 días gratis. Si cancelas en Hotmart antes del día 7, no pagas nada.',
           },
           {
             pregunta: '¿Y los datos de mi hijo?',
-            respuestaMarked: 'Se quedan [b]en tu teléfono[/b], con clave. No los vendemos ni los vemos.',
+            respuestaMarked: 'Se quedan [b]en este navegador[/b]. El diario puede protegerse con PIN y cifrado en navegadores compatibles; rutinas y fotos no se cifran.',
           },
           {
             pregunta: '¿Es seguro pagar? ¿Puedo cancelar?',
@@ -184,7 +173,7 @@ export default function PaginaDeVentas() {
 
       <CtaFinal
         h2Marked="Imagina mañana [acento]a las 7:30[/acento]"
-        futurePacingMarked="Tu peque mira su día en el celular, toca [b]«¡Hecho!»[/b] y tú tomas el café caliente."
+        futurePacingMarked="Puedes mostrarle el primer paso y acompañarle a tocar [b]«¡Hecho!»[/b], a su ritmo."
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
         recap="7 días gratis · cancelas cuando quieras"

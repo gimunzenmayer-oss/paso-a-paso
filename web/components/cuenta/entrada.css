@@ -1,0 +1,46 @@
+.entrada-pagina {
+  min-height: 100dvh;
+  background: radial-gradient(ellipse at 12% 6%, var(--surface-2), transparent 65%), var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.entrada-marco { width: min(100%, 1040px); margin-inline: auto; padding: 0 24px 32px; }
+.entrada-cabecera { display: flex; height: 80px; align-items: center; }
+.entrada-principal { max-width: 440px; margin-inline: auto; }
+.entrada-bienvenida { padding: 8px 0 24px; }
+.entrada-bienvenida h2 { font-size: 32px; line-height: 1.15; }
+.entrada-bienvenida p { margin-top: 12px; font-size: 18px; line-height: 1.45; color: var(--text-secondary); text-wrap: pretty; }
+.entrada-tira { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding: 16px; background: var(--surface-2); border-radius: var(--radius-card); width: fit-content; transform: rotate(-2deg); }
+.entrada-foto { width: 64px; height: 64px; position: relative; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-1); }
+.entrada-foto img { object-fit: cover; }
+.entrada-check { position: absolute; bottom: 4px; right: 4px; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: var(--surface); }
+.entrada-paso { color: var(--text-secondary); flex-shrink: 0; }
+.entrada-tarjeta { background: var(--surface); padding: 24px; border-radius: var(--radius-card); box-shadow: 0 12px 40px color-mix(in oklab,var(--text-primary) 8%,transparent); border: 1px solid var(--surface-2); }
+.entrada-tarjeta h1 { font-size: 24px; }
+.entrada-tarjeta label { margin-top: 24px; }
+.entrada-acciones { margin-top: 24px; display: grid; gap: 8px; }
+.entrada-nota { display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 12px; color: var(--text-secondary); font-size: 13px; }
+.entrada-apoyo { padding-top: 4px; }
+.entrada-apoyo details { margin-top: 24px; }
+.entrada-apoyo p { margin-top: 12px; }
+.entrada-pagina :is(a,button,summary):focus-visible { outline: 3px solid var(--accent-2); outline-offset: 4px; }
+.entrada-pagina input { scroll-margin-block: 24px; }
+@media (min-width: 860px) {
+  .entrada-marco { padding-top: 24px; }
+  .entrada-principal { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,440px); gap: 64px; max-width: none; align-items: center; padding-block: 48px; }
+  .entrada-bienvenida { padding: 0; }
+  .entrada-bienvenida h2 { font-size: 40px; }
+  .entrada-tira { padding: 24px; margin-bottom: 32px; gap: 16px; }
+  .entrada-foto { width: 80px; height: 96px; }
+}
+@media (max-width: 380px) { .entrada-marco { padding-inline: 16px; } .entrada-tarjeta { padding: 16px; } .entrada-cabecera { height: 64px; } .entrada-bienvenida { padding-bottom: 24px; } }
+@media (prefers-reduced-motion: reduce) { .entrada-tira { transform: none; } }
+@media (max-width: 859px) {
+  .entrada-cabecera { height: 64px; }
+  .entrada-bienvenida h2 { font-size: 28px; }
+  .entrada-bienvenida { padding-bottom: 24px; }
+  .entrada-tira { padding: 12px; margin-bottom: 16px; }
+  .entrada-foto { width: 56px; height: 56px; }
+}
+.entrada-principal.entrada-principal-codigo { display: block; max-width: 440px; padding-block: 24px; }

@@ -1,7 +1,27 @@
 # ESTADO — Paso a Paso
-Última actualización: 2026-10-21 | Sesión actual: 1 (Flujo C: mejorar app existente) | Panel de administración construido, en revisión visual
+Última actualización: 2026-10-29 | Rama traspaso = Paso A (703dfe4) + trabajo local de Codex 27-28 oct unido | Sin publicar · compra→correo→acceso real pendiente
 
-⏸️ CHECKPOINT (2026-10-28) — Paso A del cierre hecho en la rama traspaso (ver «Paso A» al final); sigue el Paso B (dominio, correo y Hotmart con la dueña presente). Checkpoint anterior: Última acción completada: auditoría senior, capa 4 (animaciones) aplicada y verificada / Siguiente acción exacta: capa 5 (retención: texto de la garantía, plan de recordatorios y correos; confirmar alcance del onboarding/paywall con la usuaria). Reporte completo: /mnt/project-files/auditoria-paso-a-paso/REPORTE-AUDITORIA.md
+⏸️ CHECKPOINT (2026-10-29) — Paso A y el trabajo local de Codex (carpeta de la dueña, sin commit allí) unidos en traspaso; 101 pruebas ✓, typecheck ✓, build ✓. Sigue el Paso B: base de datos, URLs del dominio pasoapaso.hadaapps.com, compra de prueba, publicar con el visto bueno de la dueña. Traspaso de Codex: docs/traspaso/PASO-A-PASO-TRASPASO-A-CLAUDE-2026-10-28.md.
+⏸️ CHECKPOINT — Correos locales preparados; cola/programación instaladas APAGADAS; reparación Hotmart aplicada y8fixtures200, sin compra→correo→acceso real verificado. SMTP OTP6 probado por Giselle. Vault paso_a_paso_correos_cron guardado según captura27-10; sustituciones de secretos confirmadas por dueña, sin comparación de valores. Código nuevo no publicado. Panel de4expertos SOLO diagnóstico completado27-10: REPORTE-PANEL.md y4informes en docs/revisiones/panel-2026-10-27. Copy12/20; arte landing15/20. Notas de especialidad:copy6,diseño6,conversión5,retención4,negocio4 sobre10. Aprobación posterior: acceso poscompra, guardado duradero y promesas honestas; correcciones y pruebas locales cerradas en docs/revisiones/correcciones-2026-10-27/CIERRE.md; entrega real/publicación pendientes y campañas apagadas. Traspaso actualizado: docs/traspaso/PASO-A-PASO-TRASPASO-A-CLAUDE-2026-10-28.md. Auditoría pre-lanzamiento autorizada con correcciones locales: INCOMPLETA, tres auditores interrumpidos por límite de uso; npm audit falló por DNS, no prueba limpia. Sin certificado nuevo, publicación ni compra real. Evidencia válida: docs/revisiones/panel-2026-10-27/landing-completa-lenta-375.png y LEEME.md. Las secciones históricas no sustituyen estas actualizaciones.
+
+## Panel independiente — 27-10 y correcciones aprobadas después
+- Aprobado: «evalúa todo» y retomar panel. Ejecutado:4expertos independientes, captura375 de landing lenta/onboarding/precio/core,3recapturas estables y reporte docs/revisiones/panel-2026-10-27/REPORTE-PANEL.md. Sin cambiar código, precio, cuentas, envíos o despliegues.
+- Expertos Copy/Arte/Conversión/Negocio:copy6/6/6/5,diseño6/6/7/7,conversión5/5/5/5,retención5/5/4/5,negocio4/5/4/4 (/10). Son juicios, no métricas de clientes. Copy12/20; arte por pantalla, no promedio de certificación.
+- Aprobación posterior «apruevo»: acceso poscompra, guardado y promesas. Ejecutado local: confirmación transaccional/lectura incierta protegida, PIN+diario atómicos, reintento/foco/errores por contexto, copy preciso ySWv19;100tests+15Edge pasan, build/TypeScript/lint sin errores (1aviso heredado),14capturas375sin desborde/errores. Cierre:docs/revisiones/correcciones-2026-10-27/CIERRE.md. Revisor:ventas31–35/40y13–17/20,Inicio29/40y12/20;gate NO acreditado. Sin publicar/cobrar/activar;pendientes entrega real y autorización de otros arreglos (respaldo,rediseño/retención,economía,atajo calma).
+## Correos: ejecución del plan aprobado 26-10 (en curso)
+- Giselle aprobó el inventario y plan completo con «ok». Implementar y probar; campañas a clientas siguen apagadas. Prueba real autorizada únicamente a hadaapps@gmail.com.
+- Resend inspeccionado en panel real: cuenta hadaapps, SOLO acceso.hadaapps.com, Verified, Forge São Paulo. DKIM TXT y CNAME rsend/send verificados; envío ON, recepción OFF. DNS público: SPF y DKIM publicados; DMARC raíz p=none sin rua. Giselle confirmó nueva prueba en Recibidos; alineación de cabeceras pendiente.
+- Supabase real uvubnzymrkqirdvneeds: se guardó y reabrió Email provider; OTP expiration 3600→600 segundos, longitud 6 conservada. Evidencia docs/revisiones/correos-supabase-otp-600.png. No se alteraron plantillas SMTP que la dueña ya probó.
+- Remitente local adaptado a acceso@acceso.hadaapps.com, validación exacta. URL por defecto del correo usa la app Vercel actual. Marketing requiere verificación separada EMAIL_MARKETING_DOMINIO_VERIFICADO; defaults OFF.
+- Preparado local: carrito v2 apagado, cola prioriza accesos, /guia-gratis+captación opcional y PDF rellenable. Verificación26-10:71tests pasan, build/TypeScript y lint pasan; navegador360/375/1440 sin overflow ni errores,7estados de formulario simulados. Revisor guía ronda2:37/40,17/20,18/20. Cola y programación instaladas APAGADAS tras nuevo «autorizo»; nueva versión NO publicada. Evidencia correos-instalados-apagados.png:enabled=false,cron0,cola0,RLStrue,anonlecturafalse,ticknull.
+- Resend en Vercel: captura de la dueña confirma RESEND_API_KEY_TX Secreto creada SOLO en Producción el 26-10, conservando Preview/traspaso. No redistribuida tras esta alta; correo postcompra aún no publicado. Captura posterior confirma alta de SUPABASE_SERVICE_ROLE_KEY secreta SOLO Producción (nombre truncado, valor no leído). Dueña confirmó EMAIL_ENVIO_ACTIVO=false en Producción.
+- Programación instalada APAGADA tras autorización: migración20261026220000 pg_cron/pg_net y despachador apagado, sin agenda; verificación real exitosa. activar-programacion.sql separado requiere aprobación y Vault/CRON_SECRET coincidentes. Prueba PGlite con dobles net/Vault pasó (72tests por bloques); extensiones reales instaladas; petición HTTP aún sin probar. Claves cifrado/baja/cron generadas en web/.env.correos-servidor.local (ignorado por Git); las3claves iniciales quedaron expuestas en captura de la dueña; reemplazos generados sin mostrar en .env.correos-servidor.local y .env.valor-{cifrado,baja,cron}.local. Actualización27-10: dueña confirmó sustituciones EMAIL_PAYLOAD_KEY/EMAIL_UNSUBSCRIBE_SECRET/CRON_SECRET en Producción; Vault paso_a_paso_correos_cron guardado según captura. Valores no revelados ni comparados; falta probar tras publicar. No reutilizar los expuestos.
+- Archivo privado web/.env.correos-prueba.local ignorado por Git; dueña confirmó guardado. Prueba aislada ejecutada el 26-10: Resend aceptó UN mensaje a hadaapps@gmail.com, sin utilizar la cola ni activar campañas. Recibo sin secretos: docs/correos/prueba-servicio-resultado.json. Giselle confirmó llegada a Recibidos. Cabeceras de autenticación pendientes; no repetir el envío.
+
+- Hotmart 26-10: capturas de Giselle confirman contenido de acceso publicado y producto con Ventas activas. Checkout público https://pay.hotmart.com/W108168393K abierto en Chile: $5.212/mes y prueba de 7 días seleccionada; al desmarcar desaparece la explicación, al restaurar vuelve. No se completaron datos ni compra. Webhook real, entrega postcompra y todos los métodos de pago siguen pendientes.
+
+- Hotmart 26-10: dueña guardó HOTMART_HOTTOK sensible en Vercel Production y redistribuyó 5a9f1b8 (4bhmLXaVU, Ready). Webhook producto8796204 v2 con8eventos guardado y prueba enviada:4HTTP200/4HTTP500. Supabase logs confirman profiles_email_key(23505) y deadlock entre ingest_hotmart simultáneos; prueba genérica lleva product.id=0.
+- Reparación preparada: supabase/migrations/20261026210000_hotmart_concurrencia.sql (lock transaccional antes de eventos + upsert email, preserva función instalada);2tests PGlite pasaron. APLICADA tras autorización explícita «autorizo»: Supabase devolvió reparacion_instalada=true. Evidencia docs/revisiones/hotmart-reparacion-aplicada.png. Cuatro reintentos simulados ejecutados: historial final 8/8 HTTP200 Procesado, evidencia docs/revisiones/hotmart-prueba-8-procesados.png. No declarar venta/acceso/correos certificados con HTTP200 genérico.
 
 ## Qué es esta app (3 líneas máximo)
 PWA para madres/padres de niños autistas de 2 a 12 años (ejemplo: Mateo, 6). Dos zonas: "Espacio de Mateo" (niño, bloqueado con PIN) y zona de la familia (agenda visual, tablero de comunicación, temporizador, kit de calma con música, historias sociales, diario de crisis cifrado, logros, informe para profesionales, guía).
@@ -18,10 +38,10 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Brecha en español: sí, ninguna app de pago con rutinas + diario de crisis + informe
 - Precio de referencia: $8-21/mes en inglés; $7-10 pago único en Hotmart español. Detalle en FICHA-MERCADO.md
 
-## Estrategia de monetización (propuesta 2026-10-20, esperando OK de la usuaria)
+## Estrategia de monetización (decisión de la dueña 2026-10-25)
 - Modelo: Onboarding + paywall de prueba (Modelo 2 del 02C, tipo B bienestar). Vista previa sin cuenta → paywall → cuenta.
 - Trial: 7 días gratis (el valor se siente en la primera rutina; patrón Headspace 7 días mensual)
-- Precio: $7.99/mes · anual $59.90 mostrado como $4.99/mes ("ahorras 5 meses"). Bajo la mediana inglesa (~$9.99), por encima del pago único de Hotmart porque es app viva y no PDF. Sin costo de IA → margen alto.
+- Precio aprobado: SOLO US$4,99/mes; anual aplazado. Hotmart borrador 8796204 con prueba 7 días y reembolso 7 días (inicio del plazo aún por comprobar). Frontend conserva precios anteriores: pendiente corregir, no publicar ventas todavía.
 - Suelo 3 (publicidad) pendiente: este precio es de canal orgánico/afiliados; revisar antes de pagar anuncios.
 
 ## Avatar y venta
@@ -36,7 +56,26 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - App interna: construida (prototipo, sin auditar contra el SO)
 - Servicios externos: bloqueados
 
+## Retomar tras la pausa del 25-10 (capturas de la dueña; no guardar secretos)
+- Resend: cuenta hadaapps, clave de solo envío creada; alcance del dominio por confirmar. No pedir la clave por chat. Correo Auth recibido en Gmail Recibidos según captura; acceso con OTP de 6 dígitos confirmado por Giselle. No prueba Hotmart/cola ni garantía para todos los destinatarios.
+- Vercel: cuenta/equipo giselle10, proyecto paso-a-paso. RESEND_API_KEY_TX guardada como secreto SOLO en vista previa de rama traspaso (captura de confirmación). Contenido y validez no comprobados.
+- Vercel EMAIL_ENVIO_ACTIVO: nombre original comprobado en editar, false escrito y guardado confirmado por Giselle; SOLO traspaso. Guardado como secreto, aceptable. No se redistribuyó.
+- Aviso posterior: «Despedir» cierra; NO «Redistribuir». No desplegar, activar envíos, publicar, cobrar ni aplicar migraciones sin completar preparación y pruebas.
+- Siguiente trabajo agente: adaptar remitente local de tx.hadaapps.com a acceso.hadaapps.com, revisar configuración SMTP/Supabase y secretos faltantes, preparar prueba aislada; marketing sigue apagado. No marcar dominio/news ni entrega como verificados por inferencia.
+- Giselle necesita instrucciones en español, UNA acción por paso y guiadas por capturas; no volver a pedirle crear cuentas existentes. Porkbun sesión hadaapps y dominio hadaapps.com confirmados; correo de inicio de sesión no confirmado.
+- Supabase real uvubnzymrkqirdvneeds: SMTP activo guardado (smtp.resend.com,465,resend; remitente acceso@acceso.hadaapps.com, nombre Paso a Paso). Clave nunca recibida por chat. Estos ajustes Auth aplican al proyecto real, independientemente del interruptor de cola en Vercel.
+- Auth URLs: Giselle confirmó Site URL https://paso-a-paso-sigma.vercel.app y Redirect URL https://paso-a-paso-sigma.vercel.app/auth/callback; antes localhost:3000 y sin redirects. Magic link inicial falló; no atribuir causa exacta sin logs.
+- Plantilla Magic link or OTP: Giselle sustituyó asunto por «Tu código para entrar a Paso a Paso» y cuerpo HTML corto con {{ .Token }}, sin enlace, y guardó. Email OTP length cambió 8→6 (captura + confirmación); expiración observada 3600s, no modificada. Confirm signup también sustituida por HTML con {{ .Token }}; guardado y registro con correo nunca usado confirmados por Giselle. No alterar estas plantillas por defecto.
+- Última prueba: nuevo código de seis dígitos llegó y permitió entrar; URL ambiental /app/index.html. No hubo compra. Antes de lanzar verificar que entrar no permita contenido de pago sin suscripción; no inferir control de pago a partir de login correcto.
+- Portada Hotmart creada: docs/marca/hotmart/paso-a-paso-portada-hotmart.png, ilustración cálida madre/peque con rutinas, nombre y subtítulo «Rutinas, comunicación y calma», logo escalera. PNG cuadrado; subir por Información básica → Cambiar imagen; NO subida ni guardado en Hotmart aún. Captura confirma producto8796204 todavía borrador; recomendación600x600, máximo5MB.
+- Portada Hotmart v2 solicitada con especificación propia: docs/marca/hotmart/paso-a-paso-portada-1200-v2.png, PNG1200x1200. Foto generada madre/hijo, smartphone con pictogramas ilustrativos (no captura real), título y subtítulo «Rutinas, calma y apoyo para tu familia». V1 conservada. Subida mostrada en captura de Información básica y guardado confirmado por Giselle («quedó guardada»).
 ## Decisiones técnicas
+- Correos (25-10, plan aprobado): Plan inicial: `tx.hadaapps.com` (servicio) y `news.hadaapps.com` (marketing); descubrimiento posterior: aprovechar `acceso.hadaapps.com` ya verificado para servicio (adaptación local pendiente), Reply-To `hadaapps@gmail.com`. Preparar localmente; NO enviar campañas, cobrar, publicar ni aplicar migraciones en esta etapa. Cuenta Resend hadaapps confirmada por capturas; dominio acceso.hadaapps.com verificado, DKIM y CNAME de envío verdes. DMARC raíz v=DMARC1; p=none; observado en Porkbun; entrega Auth a Gmail comprobada; alineación de cabeceras y otros proveedores pendientes.
+- Arquitectura email: cola durable privada en Postgres, disparadores transaccionales desde cambios de suscripción, trabajador autenticado por secreto, deduplicación e idempotencia Resend; consentimiento y supresión comprobados antes de marketing. Datos del niño no salen del teléfono ni entran en correos. Tokens de acceso generados justo al enviar; nunca en logs. Recuperación sigue con Supabase OTP/SMTP. Separar evidencia automatizada de entrega real (esta última bloqueada hasta configurar proveedor).
+- Plantillas: web/lib/correos/plantillas.ts (28), docs/correos/supabase-acceso.html (SMTP). Cola preparada: migración 20261025130000_correos.sql, NO aplicada; trabajador /api/correos/procesar sin cron activo. Todos los interruptores de envío en false por defecto.
+- Evidencia email local: 57 pruebas; typecheck/build OK; lint 0 errores, 1 aviso heredado. Capturas docs/revisiones/correos-*-375.png; revisor ronda 2 36/40 y 16/20 en correos-veredicto.md. 9 pruebas HTTP, sin envíos. Actualización posterior: inbox Auth en Gmail y acceso OTP probados por la dueña; acceso postcompra/cola aún NO probado.
+- Operación mensual email: atrasos/errores de cola y entregas de acceso, rescate de login, conversión de carrito y recuperación de pagos según Hotmart; rebotes/quejas/bajas por subdominio. Aperturas son señal imperfecta, no prueba de lectura. No se instaló seguimiento en accesos.
+- Decisiones actuales: app prevista pasoapaso.hadaapps.com, raíz reservada a HadaApps; contacto legal/atención hadaapps@gmail.com; mantener bloqueo, permitir solo pruebas autorizadas. No conectar ventas hasta corregir precios y probar el aviso D5 con datos reales.
 - Framework de venta: Next.js 16 en web/ (landing, onboarding, paywall, login, rutas para webhook de Hotmart). La app interna sigue en app/ como PWA sin build y se copia a web/public/app al compilar. Decidido 2026-10-20.
 - Stack actual: HTML + JS sin framework, sin paso de build, PWA con service worker (sw.js v7), datos en IndexedDB del teléfono (local-first).
 - PIN: huella PBKDF2 150k; diario cifrado AES-GCM con sal propia.
@@ -54,7 +93,7 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 
 ## Pendientes de la página de ventas
 - ✓ Datos de la responsable: HadaApps · Chile · hadaapps@gmail.com (web/lib/marca.ts, 2026-10-20).
-- ⚠️ Hotmart: configurar garantía de 30 días (debe superar la prueba de 7). La página promete 30.
+- Oferta vigente: Hotmart configurado por la dueña con US$4,99/mes, prueba 7 días y reembolso 7 días. No configurar 30. La producción antigua aún debe actualizarse.
 - /onboarding redirige por ahora a la app de ejemplo (/app). Se reemplaza en la etapa de Onboarding.
 - Sin testimonios (regla día 1): se agregan con ≥3 reales.
 - Pulido menor del revisor (N1–N8, no bloquea): carrusel a 1440, puntos del footer, captura del hero 6+1, ceros con barra en precios chicos, pasos del método a 1 línea, 1ª línea del stack, barra fija sobre el CTA del carrusel. Ver docs/revisiones/landing-veredicto.md.
@@ -63,14 +102,6 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 ## Pendientes heredados
 - Más secciones de la Guía para Familias; modo "frase" del tablero (ofrecido, sin respuesta).
 
-## Publicación (2026-10-20)
-- Pre-vuelo: tsc limpio · build OK (6 páginas estáticas) · npm audit 0 vulnerabilidades · .env* en .gitignore · sin claves en el código ni variables NEXT_PUBLIC_. La app hoy no tiene servidor ni base de datos: no hay RLS ni IDOR que revisar todavía.
-- Cuentas: GitHub gimunzenmayer-oss (sin repos) · Vercel plan Hobby (gratis, sin proyectos) · Supabase sin proyectos.
-- Bloqueo: este espacio no puede crear repos en GitHub por su cuenta → la dueña crea el repo privado vacío "paso-a-paso"; después se sube el código y se conecta a Vercel.
-- Supabase: no se crea aún. No hay login ni pagos construidos (onboarding → paywall → login van antes). Se crea en la etapa de Login.
-- ⚠️ Vercel Hobby no permite uso comercial: pasar a Pro (US$20/mes) antes de la primera venta.
-- La primera publicación es la página de ventas + app de ejemplo. Aún NO cobra: falta onboarding, paywall, login, webhook de Hotmart y correos (Resend). Gate de seguridad pendiente.
-
 ## 🚀 EN VIVO (2026-10-24)
 - Producción: https://paso-a-paso-sigma.vercel.app (Vercel Hobby, proyecto prj_KQIVMVm2JIyQTgdYGDx01ZbsMWWp, raíz web/, Next.js). Repo privado: github.com/gimunzenmayer-oss/paso-a-paso (main 22d1a24). Cada push a main publica solo.
 - Comprobado: /, /admin/entrar y /paywall→/onboarding responden 200 con contenido correcto. Consola del navegador NO revisada (este entorno no llega a *.vercel.app y el plan Hobby no da registros de errores por API).
@@ -78,13 +109,6 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Supabase: 14 migraciones (se aplicó acceso_clientas el 22-10).
 - Pendientes de la dueña: ⚠ Supabase → Authentication → URL Configuration: Site URL = la de producción y Redirect URLs = /auth/callback y /admin/auth/callback · hottok y links de checkout de Hotmart · webhook en Hotmart → https://paso-a-paso-sigma.vercel.app/api/webhooks/hotmart · ⚠ Vercel Pro US$20/mes antes de vender · Resend para correos.
 - Cambios sin guardar de otro hilo (entrada de pago) siguen en el árbol de trabajo: se publicarán cuando ese hilo haga commit y alguien haga push a main.
-
-## Publicación — intento 2 (2026-10-21)
-- Pre-vuelo OK: tsc limpio · next build OK (16 rutas) · npm audit 0 · sin secretos en código · solo NEXT_PUBLIC_ públicos (URL y publishable de Supabase).
-- Supabase uvubnzymrkqirdvneeds: 13 migraciones aplicadas · RLS en todas las tablas public · advisors: sin ERROR; WARN de funciones SECURITY DEFINER es intencional (ingesta exige llave, admin exige private.assert_admin) · performance solo INFO (índices sin uso, aún no hay datos).
-- Código guardado localmente con commit "feat: MVP inicial" (f0cdf75) en main. Aún sin remoto.
-- Bloqueos (dueña): repo privado vacío gimunzenmayer-oss/paso-a-paso no existe · app de Claude en GitHub sin instalar · Vercel sin conexión con GitHub (git_namespaces vacío).
-- Plan al desbloquear: push → proyecto Vercel con raíz web/ (Next.js) → variables (URL y publishable de Supabase, INGEST_KEY nueva rotada en private.app_secrets, HOTMART_HOTTOK cuando llegue) → desplegar → revisar consola → URL del sitio y /admin/auth/callback en Supabase Auth (paso de la dueña).
 
 ## Panel de administración (2026-10-21)
 - Qué es: panel real (sin demos) conectado a Supabase de producción (uvubnzymrkqirdvneeds). Rutas: /admin (Resumen), /admin/clientes, /admin/costos, /admin/entrar, /admin/verificar. Código en web/app/admin, web/components/admin, web/lib/admin; base en supabase/migrations (13 archivos, todos aplicados en producción).
@@ -117,7 +141,7 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Verificado: typecheck ✓ · build ✓ · servidor ✓ · sin errores de página · con movimiento: animación "entrar" con 0/60/120 ms · con reducir movimiento: none · repintar conserva el scroll (400 → 400) y navegar vuelve arriba (0) · captura L4-entrada-80ms.png.
 ### Capa 5: retención (2026-10-21, en curso)
 - Hecho: plan escrito en docs/copy/retencion.md (3 correos: bienvenida, activación al 3.er día, pago fallido; recordatorios posibles sin servidor; hoja de canales).
-- Garantía: la landing promete 30 días. Se mantiene el texto; la dueña debe configurar 30 días de garantía en Hotmart antes de vender.
+- Corrección posterior 25-10: prueba 7 días y reembolso 7 días; NO mantener la promesa antigua de 30 días.
 - Entrada de pago (onboarding → paywall → cuenta → acceso por Hotmart): se le preguntó a la usuaria si se construye ahora.
 - Funciones nuevas para decidir: notificaciones push; tarjeta «¿Cómo fue esta semana?» tras 7 días sin anotar.
 ### Capa 6: auditoría final con el revisor (2026-10-21, en curso)
@@ -131,7 +155,7 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Revisor visual, 6 rondas: las 7 pantallas LISTA (≥36/40, ≥16/20). Veredictos en auditoria-paso-a-paso/veredictos/ronda6/. Margen opcional: cortes de línea en 1.4, 1.6 y chips «Incluye».
 - Migración 20261021110000_acceso_clientas.sql escrita, NO aplicada: espera permiso de la dueña.
 - Espera decisión de la dueña: «Las comidas» abre la rutina de noche; uso de la pregunta de edad; ~40 textos «(pendiente de aprobar)» en docs/copy/embudo.md.
-- Bloquea vender: correo del Día 5 (prometido en /paywall) sin crear; garantía 30 días sin configurar en Hotmart; links de checkout en Vercel; fotos reales de baño y pijama.
+- Bloquea vender: correo del Día 5 (prometido en /paywall) sin crear; coherencia de precio y reembolso en producción; links de checkout en Vercel; fotos reales de baño y pijama.
 - Falta: /entrar, /auth/callback, /cuenta (paso 7); /api/acceso y bloqueo en la PWA (paso 8); punta a punta en Vercel (paso 9).
 
 ## Auditoría legal (2026-10-24)
@@ -140,7 +164,7 @@ Doc: https://claude.ai/code/artifact/634d2a58-d9bd-4cdf-8442-351f09361e90
 - Verificado: typecheck ✓ · build ✓ (rutas /cancelar y legales estáticas) · capturas 375px sin desborde (auditoria-paso-a-paso/capturas/legal-*.png).
 - Migración 20261024120000_retencion_estadisticas.sql (borra estadísticas y errores a los 24 meses, lo que promete /privacidad) escrita, NO aplicada: espera permiso de la dueña.
 - Pendiente en el embudo (pedido al hilo del embudo): eventos web que respeten "Compartir estadísticas" apagado · paywall con "se renueva automáticamente" y enlaces a Términos/Privacidad · botón "Eliminar mi cuenta" en /cuenta · correo del Día 5.
-- Pendiente de la dueña: nombre legal y tipo (persona natural o empresa) · garantía 30 días en Hotmart y confirmar desde cuándo cuenta.
+- Pendiente de la dueña: nombre legal y tipo (persona natural o empresa) · confirmar desde cuándo cuenta el plazo de reembolso de 7 días en Hotmart.
 
 ### Entrada de pago: avance 2026-10-25
 - Hecho y verificado (sin push): /entrar con código, /auth/callback, /cuenta (d64f83d, a7fc55c); /api/acceso y bloqueo en la app con guía y kit de calma siempre abiertos, sin borrar datos (9fd213a, bbc6934, 6cadf47; SW v18). Eventos respetan el interruptor de estadísticas; el precio dice renovación automática y enlaza Términos y Privacidad.
@@ -161,7 +185,7 @@ Datos reales de Hotmart (confirmados por la dueña): producto 8796204 en BORRADO
 - Pendiente: decidir plan anual (en la web siguen US$7.99/mes y US$59.90/año; Hotmart solo tiene US$4,99/mes) · HOTMART_HOTTOK y links de checkout en Vercel · registrar webhook en Hotmart (v2, PURCHASE_*, SUBSCRIPTION_CANCELLATION, SWITCH_PLAN) · correo de envío: solo existe reenvío de Porkbun, no hay servicio SMTP ni Resend; el correo de Supabase Auth admite ~2 por hora · texto de bienvenida y acceso (método verificado: sitio → /entrar → correo de compra → código de 6 dígitos → /cuenta → /app) · correo del Día 5 prometido en /paywall sin crear · prueba punta a punta · nombre legal · retención 24 meses sin aplicar · Vercel Pro antes de vender.
 
 ## Paso A: código listo para vender (2026-10-28, rama traspaso, sin publicar)
-- Precio único: plan mensual US$4.99 con 7 días de prueba, en landing (una sola tarjeta, stack $28 tachado), paywall (una tarjeta sin elección; Día 7 = US$4.99 al mes), /terminos y /reembolsos. Quitado el plan anual de la web: `Plan = 'mensual'`; basta NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL para abrir los pagos (antes exigía también el _ANUAL). La base sigue aceptando `cycle = 'anual'` (compatibilidad).
+- Precio único: plan mensual US$4,99 con 7 días de prueba, en landing (una sola tarjeta, stack $28 tachado), paywall (una tarjeta sin elección; Día 7 = US$4.99 al mes), /terminos y /reembolsos. Quitado el plan anual de la web: `Plan = 'mensual'`; basta NEXT_PUBLIC_HOTMART_CHECKOUT_MENSUAL para abrir los pagos (antes exigía también el _ANUAL). La base sigue aceptando `cycle = 'anual'` (compatibilidad).
 - Garantía: quitada la última promesa de reembolso («te devolvemos todo» en la FAQ de la landing).
 - Legal: responsable «Giselle Alejandra Munzenmayer Gomez, persona natural, bajo la marca «HadaApps»» en /terminos y /privacidad (marca.ts: RESPONSABLE_LEGAL, RESPONSABLE_TIPO). Contacto sigue hadaapps@gmail.com. VERSION_LEGAL 4, actualizado 28-10-2026.
 - «Eliminar mi cuenta» en /cuenta (no para la admin): confirmación con qué se borra, qué queda en el teléfono, registros de pago anónimos, aviso de que no cancela Hotmart + botón a Mis compras y /cancelar. Server action eliminarCuenta → RPC eliminar_mi_cuenta(). Migración 20261028120000_eliminar_mi_cuenta.sql ESCRITA, NO APLICADA: hasta aplicarla el botón muestra el aviso de error (no borra nada). /privacidad explica el botón.
@@ -169,3 +193,4 @@ Datos reales de Hotmart (confirmados por la dueña): producto 8796204 en BORRADO
 - Migraciones sin aplicar (3): 20261024120000_retencion_estadisticas (aprobada por la dueña, decisión 29), 20261025010000_hotmart_producto_y_orden, 20261028120000_eliminar_mi_cuenta.
 - Verificado: 41 pruebas ✓ · typecheck ✓ · eslint 0 errores · build ✓ · capturas 375px (landing oferta, paywall 2 y 3, /cuenta con la confirmación, /entrar?eliminada=1) en simulación local.
 - Textos nuevos marcados (pendiente de aprobar) en docs/copy/embudo.md y landing.md.
+- Unión 29-10 con Codex: en landing/paywall manda la versión de Codex (copy de «promesas honestas», sin stack de valor, US$4,99 con coma); de Paso A se conservan nombre legal, «Eliminar mi cuenta», /terminos con precio. En la base ya están instaladas (por Codex, fuera del historial de migraciones) la cola de correos y la reparación Hotmart; faltan eliminar_mi_cuenta, retención y producto_y_orden (verificar).

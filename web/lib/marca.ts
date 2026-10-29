@@ -15,6 +15,6 @@ export const VERSION_LEGAL = 4;
 export const REEMBOLSO_DIAS = 7;
 export const PRUEBA_DIAS = 7;
 // Único plan a la venta (decisión de la dueña 2026-10-25): mensual, sin plan anual por ahora.
-export const PRECIO_MENSUAL = 'US$4.99';
+export const PRECIO_MENSUAL = 'US$4,99';
 // Área de compras de Hotmart ("Mis compras"): ahí la clienta cambia su tarjeta o cancela.
 export const HOTMART_MIS_COMPRAS = 'https://consumer.hotmart.com/purchase';

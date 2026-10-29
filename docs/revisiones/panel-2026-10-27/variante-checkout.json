@@ -1,0 +1,33 @@
+{
+  "purpose": "enlace publico temporal solo proceso dev, sin mutar archivos ni Vercel; no se hizo clic checkout; sin compra ni entrega verificadas",
+  "hrefs": [
+    {
+      "text": "",
+      "url": "http://127.0.0.1:3113/onboarding"
+    },
+    {
+      "text": "condiciones de reembolso",
+      "url": "http://127.0.0.1:3113/reembolsos"
+    },
+    {
+      "text": "Empezar mis 7 días gratis",
+      "url": "https://pay.hotmart.com/W108168393K?showOnlyTrial=1"
+    },
+    {
+      "text": "Términos",
+      "url": "http://127.0.0.1:3113/terminos"
+    },
+    {
+      "text": "Política de privacidad",
+      "url": "http://127.0.0.1:3113/privacidad"
+    },
+    {
+      "text": "Ahora no, volver a su rutina",
+      "url": "http://127.0.0.1:3113/onboarding"
+    },
+    {
+      "text": "¿Ya pagaste? Entra aquí",
+      "url": "http://127.0.0.1:3113/entrar"
+    }
+  ]
+}

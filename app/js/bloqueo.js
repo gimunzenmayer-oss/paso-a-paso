@@ -110,7 +110,9 @@ window.PP = window.PP || {};
       var motivoAntes = st.decision ? st.decision.motivo : null;
       var d = A.decidir(st.decision ? st.decision.pase : null, Date.now(), res);
       // El pase solo cambia con una respuesta clara de la base; nunca se borra.
-      if (res.tipo === 'ok') PP.guardar('pase', d.pase);
+      if (res.tipo === 'ok') PP.guardar('pase', d.pase).then(function () { PP.resolverError('pase'); }).catch(function () {
+        PP.avisarError('Entraste, pero no se pudo guardar el acceso en este teléfono. Revisa el espacio y los permisos del navegador antes de usarlo sin internet.', { contexto: 'pase' });
+      });
       if (desdeBoton) {
         st.falloBoton = st.fallo;
         st.sinPago = d.motivo === 'sin_acceso' && !st.fallo;

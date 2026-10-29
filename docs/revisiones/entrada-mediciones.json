@@ -1,0 +1,32 @@
+{
+  "resultados": [
+    {
+      "width": 375,
+      "contenido": 375,
+      "separacionCampoBoton": 24,
+      "botonAlto": 56
+    },
+    {
+      "width": 360,
+      "contenido": 360,
+      "separacionCampoBoton": 24,
+      "botonAlto": 56
+    },
+    {
+      "width": 1440,
+      "contenido": 1440,
+      "separacionCampoBoton": 24,
+      "botonAlto": 56
+    }
+  ],
+  "pruebas": [
+    "validacion vacia",
+    "codigo simulado",
+    "codigo incompleto",
+    "codigo incorrecto",
+    "cambiar correo",
+    "sin conexion",
+    "variante compra/enlace"
+  ],
+  "errores": []
+}

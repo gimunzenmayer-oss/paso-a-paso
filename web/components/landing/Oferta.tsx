@@ -1,11 +1,12 @@
 'use client';
 
 // KIT DE LANDING — §6 OFERTA (blueprint: 55 §6 · mecánica: 02C · estructura: 19 §6)
-// UN SOLO PLAN (decisión de la dueña 2026-10-25: mensual US$4.99 con 7 días de prueba;
-// el anual queda para más adelante). Badge de trial SOLO si trialDias existe (02C decide N;
-// sin esquema de trial NO se pinta — prohibido inventarlo) · hairline degradada en la card
-// (el uso canónico de la técnica) · checkmarks custom.
-// El destino del CTA sigue al MODELO de 02C (checkout vs /onboarding).
+// Reglas embebidas: el ANUAL va PRIMERO en el DOM (recomendado, mobile arriba) ·
+// badge de trial en AMBAS cards SOLO si trialDias existe (02C decide N; sin
+// esquema de trial NO se pinta — prohibido inventarlo) · total anual SIEMPRE
+// visible ("Se cobra $X/año") · ahorro en MESES, no en % · hairline degradada en
+// la card recomendada (el uso canónico de la técnica) · checkmarks custom.
+// El destino de los CTAs sigue al MODELO de 02C (checkout vs /onboarding).
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion } from 'motion/react';
@@ -32,12 +33,17 @@ export interface OfertaProps {
   tituloMarked: string;
   /** N días de trial según 02C/ESTADO.md. undefined = esquema SIN trial → sin badge. */
   trialDias?: number;
-  /** El único plan a la venta. */
-  plan: PlanOferta & {
+  /** El plan ANUAL — recomendado, primero en el DOM. */
+  anual?: PlanOferta & {
+    /** "Se cobra $X/año" — OBLIGATORIO: el total nunca se esconde (52 §2). */
+    totalAnual: string;
     /** Microlínea de tranquilidad bajo el CTA (solo lo que es cierto). */
     bajoCta?: string;
+    /** Ahorro en meses ("2 meses gratis") — el elemento más ruidoso tras el CTA. */
+    ahorro: string;
     badge?: string;
   };
+  mensual: PlanOferta;
   /** Stack de valor Hormozi opcional — total TACHADO del stack, jamás precio falso. */
   stack?: {
     lineas: { resultado: string; valor: string }[];
@@ -92,7 +98,8 @@ export function Oferta({
   kicker = 'LA OFERTA',
   tituloMarked,
   trialDias,
-  plan,
+  anual,
+  mensual,
   stack,
   id = 'oferta',
 }: OfertaProps) {
@@ -138,34 +145,59 @@ export function Oferta({
           </motion.div>
         )}
 
-        {/* La card del plan: hairline 2px + fondo acento sutil + sombra tintada */}
-        <div className="mx-auto mt-10 max-w-[440px]">
-          <motion.div variants={item} className="relative">
-            {plan.badge && (
+        {/* Cards: ANUAL PRIMERO en el DOM — en mobile apilado arriba, nunca scroll horizontal */}
+        <div className={`mx-auto mt-8 grid grid-cols-1 items-start gap-6 ${anual ? "max-w-[880px] md:grid-cols-2" : "max-w-[480px]"}`}>
+          {/* ── ANUAL (recomendado): hairline 2px + fondo acento sutil + sombra tintada ── */}
+          {anual && <motion.div variants={item} className="relative md:-translate-y-2">
+            {anual.badge && (
               <span className="absolute -top-[10px] left-1/2 z-10 -translate-x-1/2 rounded-full border border-[color-mix(in_oklab,var(--accent)_25%,transparent)] bg-[var(--accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.06em] text-[var(--bg)]">
-                {plan.badge}
+                {anual.badge}
               </span>
             )}
             <Hairline emphasis surface="surface" className="shadow-[0_12px_36px_color-mix(in_oklab,var(--accent)_16%,transparent)]">
               <div className="rounded-[var(--radius-card)] bg-[color-mix(in_oklab,var(--accent)_5%,transparent)] p-6 md:p-7">
                 <div className="flex items-center justify-between gap-3">
-                  <h3 className="text-[18px] font-semibold text-[var(--text-primary)]">{plan.nombre}</h3>
+                  <h3 className="text-[18px] font-semibold text-[var(--text-primary)]">{anual.nombre}</h3>
                   {trialDias !== undefined && <TrialBadge dias={trialDias} />}
                 </div>
                 <div className="mt-4">
-                  <Precio plan={plan} contar />
+                  <Precio plan={anual} contar />
+                  {/* El total anual SIEMPRE visible — regla de oro de 02C */}
+                  <p className="mt-1 text-[12px] text-[var(--text-secondary)]">{anual.totalAnual}</p>
+                  <p className="mt-2 text-[15px] font-semibold text-[var(--accent)]">{anual.ahorro}</p>
                 </div>
-                <Features items={plan.features} origen="Oferta → plan" />
+                <Features items={anual.features} origen="Oferta → anual" />
                 <div className="mt-6">
-                  <CtaButton href={plan.ctaHref} full>
-                    {plan.ctaLabel}
+                  <CtaButton href={anual.ctaHref} full>
+                    {anual.ctaLabel}
                   </CtaButton>
-                  {plan.bajoCta && (
-                    <p className="mt-2 text-center text-[13px] text-[var(--text-secondary)]">{plan.bajoCta}</p>
+                  {anual.bajoCta && (
+                    <p className="mt-2 text-center text-[13px] text-[var(--text-secondary)]">{anual.bajoCta}</p>
                   )}
                 </div>
               </div>
             </Hairline>
+          </motion.div>}
+
+          {/* ── MENSUAL: card base, CTA outline — menos peso visual ── */}
+          <motion.div
+            variants={item}
+            className="rounded-[var(--radius-card)] border border-[color-mix(in_oklab,var(--text-tertiary)_28%,transparent)] bg-[var(--surface)] p-6 shadow-[var(--shadow-1)] md:p-7"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-[18px] font-semibold text-[var(--text-primary)]">{mensual.nombre}</h3>
+              {trialDias !== undefined && <TrialBadge dias={trialDias} />}
+            </div>
+            <div className="mt-4">
+              <Precio plan={mensual} />
+            </div>
+            <Features items={mensual.features} origen="Oferta → mensual" />
+            <p className="mt-3 text-[18px] leading-snug text-[var(--text-secondary)]">Después de la prueba, se renueva cada mes hasta que canceles.</p>
+            <div className="mt-6">
+              <CtaButton href={mensual.ctaHref} full>{mensual.ctaLabel}</CtaButton>
+              <p className="mt-3 text-center text-[14px] leading-snug text-[var(--text-secondary)]">Cancelas en Hotmart antes del día 7 y no pagas nada.</p>
+              <p className="mt-3 text-center text-[14px] leading-snug text-[var(--text-secondary)]">Reembolso: 7 días, según las <a className="inline-block py-3 underline underline-offset-4" href="/reembolsos">condiciones de reembolso</a>.</p>
+            </div>
           </motion.div>
         </div>
       </motion.div>

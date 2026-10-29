@@ -21,7 +21,7 @@ window.PP = window.PP || {};
     var hoy = PP.hoy(), e = PP.estado.estrellas;
     if (e.some(function (x) { return x.fecha === hoy && x.rutina === rutina.id; })) return; // una por rutina y día
     e.push({ fecha: hoy, rutina: rutina.id, nombre: rutina.nombre });
-    PP.persistir();
+    PP.persistirConAviso();
   };
 
   // Llamado por el tablero al tocar un botón
@@ -29,7 +29,7 @@ window.PP = window.PP || {};
     var u = PP.estado.uso.tablero, hoy = PP.hoy();
     u[hoy] = u[hoy] || {};
     u[hoy][texto] = (u[hoy][texto] || 0) + 1;
-    PP.persistir();
+    PP.persistirConAviso();
   };
 
   function estrellaSvg(clase) {
@@ -71,14 +71,14 @@ window.PP = window.PP || {};
       main.onclick = function (e) {
         var b = e.target.closest('button'); if (!b || b.type === 'submit') return;
         if (b.dataset.picto) { params.picto = b.dataset.picto; var t = $('#l-texto').value; PP.repintar(); $('#l-texto').value = t; }
-        if (b.dataset.quitar) { PP.estado.logros = PP.estado.logros.filter(function (l) { return l.id !== b.dataset.quitar; }); PP.persistir(); PP.repintar(); }
+        if (b.dataset.quitar) { PP.estado.logros = PP.estado.logros.filter(function (l) { return l.id !== b.dataset.quitar; }); PP.persistirConAviso(function () { PP.repintar(); }); }
         if (b.hasAttribute('data-ver')) PP.abrirEstrellas();
       };
       $('#form-l').onsubmit = function (e) {
         e.preventDefault();
         var t = $('#l-texto').value.trim(); if (!t) return;
         PP.estado.logros.push({ id: PP.nuevoId(), fecha: PP.hoy(), picto: params.picto, texto: t });
-        PP.persistir(); PP.avisar('¡Logro guardado!'); PP.repintar();
+        PP.persistirConAviso(function () { PP.avisar('¡Logro guardado!'); PP.repintar(); });
       };
     }
   };

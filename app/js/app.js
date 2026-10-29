@@ -58,6 +58,52 @@ window.PP = window.PP || {};
     temporizadorAviso = setTimeout(function () { a.classList.remove('visible'); }, 2600);
   };
 
+  // Un error de guardado necesita tiempo de lectura y cierre explícito.
+  var avisoError = null, origenError = null, contextoError = null, pantallaError = null;
+  function cerrarError(devolverFoco) {
+    var origen = origenError;
+    if (avisoError) avisoError.remove();
+    avisoError = origenError = contextoError = pantallaError = null;
+    if (devolverFoco && origen && origen.isConnected && !origen.disabled) {
+      origen.focus();
+    }
+  }
+  PP.resolverError = function (contexto) {
+    if (avisoError && contextoError === contexto) cerrarError(avisoError.contains(document.activeElement));
+  };
+  PP.avisarError = function (texto, opciones) {
+    opciones = opciones || {};
+    var accionReintento = opciones.reintentar;
+    if (opciones.formulario) {
+      var pantalla = PP.actual, idFormulario = opciones.formulario.id;
+      accionReintento = function () {
+        var form = document.getElementById(idFormulario);
+        if (PP.actual === pantalla && form) form.requestSubmit(form.querySelector('[type=submit]'));
+      };
+    }
+    var activo = document.activeElement;
+    var origen = opciones.origen || (avisoError && avisoError.contains(activo) ? origenError : activo);
+    if (!avisoError) {
+      avisoError = document.createElement('section');
+      avisoError.id = 'error-guardado';
+      avisoError.className = 'tarjeta bloque no-imprimir';
+      avisoError.setAttribute('role', 'alert');
+      avisoError.innerHTML = '<p class="error-campo" id="error-guardado-texto"></p><button type="button" class="btn principal" data-reintentar hidden>Volver a intentar</button><button type="button" class="btn" data-entendido>Entendido</button>';
+      avisoError.querySelector('[data-entendido]').onclick = function () { cerrarError(true); };
+    }
+    origenError = origen;
+    contextoError = opciones.contexto || PP.actual;
+    pantallaError = PP.actual;
+    var reintentar = avisoError.querySelector('[data-reintentar]');
+    reintentar.hidden = !accionReintento;
+    reintentar.onclick = accionReintento || null;
+    reintentar.setAttribute('aria-describedby', 'error-guardado-texto');
+    avisoError.querySelector('p').textContent = texto;
+    $('#contenido').prepend(avisoError);
+    avisoError.scrollIntoView({ block: 'center' });
+    avisoError.querySelector(accionReintento ? '[data-reintentar]' : '[data-entendido]').focus({ preventScroll: true });
+  };
+
   // ---------- Aplicar modo calma ----------
   PP.aplicarPreferencias = function () {
     document.documentElement.classList.toggle('calma', !!PP.estado.perfil.modoCalma);
@@ -102,6 +148,11 @@ window.PP = window.PP || {};
     main.onclick = main.onchange = main.oninput = null; // cada pantalla pone los suyos
     main.classList.remove('entrando');
     p.pintar(main, PP.actual.params);
+    if (avisoError) {
+      main.prepend(avisoError);
+      var reintentar = avisoError.querySelector('[data-reintentar]');
+      reintentar.hidden = !reintentar.onclick || pantallaError !== PP.actual;
+    }
     if (mantener) { window.scrollTo(0, y); return; }
     Array.prototype.slice.call(main.children, 0, 8).forEach(function (h, i) { h.style.setProperty('--i', i); });
     void main.offsetWidth; // reinicia la animación de entrada
@@ -256,10 +307,9 @@ window.PP = window.PP || {};
     return (PP.estado.estrellas || []).filter(function (e) { return e.fecha >= desde; });
   };
 
-  // ---------- Que el teléfono no borre los datos ----------
-  // Una web no instalada puede perder sus datos (Safari los borra tras
-  // unos días sin uso). Pedimos almacenamiento permanente e invitamos
-  // a guardar la app en la pantalla de inicio.
+  // ---------- Acceso desde la pantalla de inicio ----------
+  // Pedimos almacenamiento persistente e invitamos a instalar.
+  // Ni la instalación ni esta solicitud garantizan conservar los datos.
   var avisoInstalar = null; // evento de Chrome/Android para instalar con un toque
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); avisoInstalar = e; if (PP.actual && PP.actual.nombre === 'inicio') PP.repintar(); });
   function estaInstalada() {
@@ -276,7 +326,7 @@ window.PP = window.PP || {};
     if (oculto || estaInstalada()) return '';
     return '<section class="tarjeta aviso-instalar" aria-labelledby="inst-t">' +
       '<h3 id="inst-t">Guarda la app en tu pantalla de inicio</h3>' +
-      '<p class="suave">Así se abre como cualquier app y el teléfono no borra tus rutinas ni tu diario.</p>' +
+      '<p class="suave">Abre la app desde un icono. Instalarla no crea una copia: si borras los datos del navegador o cambias de teléfono, puedes perder tus registros.</p>' +
       '<p class="suave" id="inst-pasos" hidden></p>' +
       '<div class="fila"><button class="btn crece" data-instalar>' + (avisoInstalar ? 'Instalar' : 'Ver cómo') + '</button><button class="btn" data-instalar-no>Ahora no</button></div>' +
       '</section>';
@@ -406,7 +456,7 @@ window.PP = window.PP || {};
       main.onchange = function (e) {
         var id = e.target.id; if (!id || id.indexOf('esp-') !== 0) return;
         p.espacio[id.slice(4)] = e.target.checked;
-        PP.persistir(); PP.avisar('Guardado');
+        PP.persistirConAviso(function () { PP.avisar('Guardado'); });
       };
     }
   };
@@ -496,9 +546,18 @@ window.PP = window.PP || {};
         $('#zona-reset').innerHTML = '<p><strong>¿Seguro?</strong> Se borrarán tus cambios, también el diario, y volverán los datos de ejemplo de Mateo.</p>' +
           '<div class="fila"><button type="button" class="btn peligro" id="aj-reset-si">Sí, borrar</button><button type="button" class="btn" id="aj-reset-no">No, cancelar</button></div>';
         $('#aj-reset-si').onclick = function () {
-          PP.borrarDiario();
+          var boton = this;
+          if (boton.disabled) return;
+          boton.disabled = true;
+          var antes = PP.estado;
           PP.estado = PP.datosEjemplo();
-          PP.prepararDatos().then(function () { PP.aplicarPreferencias(); PP.avisar('Datos de ejemplo restaurados'); PP.ir('inicio', null, { raiz: true }); });
+          PP.prepararDatos({ sinGuardar: true })
+            .then(function () { return PP.guardarConjunto({ estado: PP.estado, diario: null }); })
+            .then(function () { PP.resolverError('restaurar'); PP.cerrarDiario(); PP.aplicarPreferencias(); PP.avisar('Datos de ejemplo restaurados'); PP.ir('inicio', null, { raiz: true }); })
+            .catch(function () {
+              PP.estado = antes; boton.disabled = false;
+              PP.avisarError('No se pudieron restaurar los ejemplos. Tus datos y tu diario se conservaron. Revisa el espacio y los permisos del navegador y vuelve a intentarlo.', { contexto: 'restaurar', origen: boton });
+            });
         };
         $('#aj-reset-no').onclick = function () { pintar(); };
       };
@@ -506,8 +565,12 @@ window.PP = window.PP || {};
       if (est && PP.fijarEstadisticas) est.onchange = function () { PP.fijarEstadisticas(est.checked); PP.avisar(est.checked ? 'Estadísticas activadas' : 'Ya no se envían estadísticas'); };
       $('#form-ajustes').onsubmit = function (e) {
         e.preventDefault();
+        var form = this, boton = form.querySelector('[type=submit]');
+        if (boton.disabled) return;
         var pin = $('#aj-pin').value.trim();
         if (pin && !/^\d{4}$/.test(pin)) { PP.avisar('El PIN tiene que tener 4 números.'); $('#aj-pin').focus(); return; }
+        var perfilAntes = JSON.parse(JSON.stringify(p));
+        boton.disabled = true;
         p.nombre = $('#aj-nombre').value.trim() || 'Mateo';
         p.edad = +$('#aj-edad').value || p.edad;
         p.abrirEnEspacio = $('#aj-espacio').checked;
@@ -518,17 +581,32 @@ window.PP = window.PP || {};
         p.vozNombre = $('#aj-voz-nombre').value;
         p.velocidad = +$('#aj-vel').value;
         p.imagenes = main.querySelector('input[name=imagenes]:checked').value;
-        PP.persistir(); PP.aplicarPreferencias();
-        if (!pin) { PP.avisar('Ajustes guardados'); return; }
-        // Para cambiar el PIN hay que escribir antes el actual
-        PP.pedirPin({
-          titulo: 'Escribe el PIN actual',
-          alAcertar: function (viejo) {
-            PP.cambiarPinDiario(viejo, pin)
-              .then(function () { return PP.fijarPin(pin); })
-              .then(function () { PP.persistir(); $('#aj-pin').value = ''; PP.avisar('PIN cambiado'); pintar(); })
-              .catch(function () { PP.avisar('No se pudo cambiar el PIN. Prueba otra vez.'); });
-          }
+        PP.persistir().then(function () {
+          boton.disabled = false;
+          PP.resolverError('ajustes');
+          PP.aplicarPreferencias();
+          if (!pin) { PP.avisar('Ajustes guardados'); return; }
+          // El diario y la huella del PIN se guardan en una sola transacción.
+          PP.pedirPin({
+            titulo: 'Escribe el PIN actual',
+            alAcertar: function (viejo) {
+              boton.disabled = true;
+              PP.cambiarPinDuradero(viejo, pin)
+                .then(function () { PP.resolverError('pin'); $('#aj-pin').value = ''; PP.avisar('PIN cambiado'); pintar(); })
+                .catch(function () {
+                  boton.disabled = false;
+                  PP.avisarError('No se pudo cambiar el PIN. Tu PIN anterior y tu diario se conservaron. Revisa el espacio del teléfono y vuelve a intentarlo.', {
+                    contexto: 'pin', origen: boton, formulario: form
+                  });
+                });
+            }
+          });
+        }).catch(function () {
+          Object.keys(p).forEach(function (k) { delete p[k]; }); Object.assign(p, perfilAntes);
+          boton.disabled = false;
+          PP.avisarError('No se pudieron guardar los ajustes. Revisa el espacio y los permisos del navegador y vuelve a intentarlo.', {
+            contexto: 'ajustes', origen: boton, formulario: form
+          });
         });
       };
     }
@@ -537,7 +615,7 @@ window.PP = window.PP || {};
   // ---------- Arranque ----------
   // Pone al día los datos (de una versión anterior o recién creados)
   // y guarda el PIN como huella en lugar de como número.
-  PP.prepararDatos = function () {
+  PP.prepararDatos = function (opciones) {
     var e = PP.completarDatos(PP.estado);
     // 'Seño' pasó a llamarse 'Profesora'
     // y los textos de España pasaron a español latino
@@ -545,7 +623,7 @@ window.PP = window.PP || {};
     e.tablero.categorias.forEach(function (c) { c.botones.forEach(function (b) { if (NUEVOS[b.texto]) b.texto = NUEVOS[b.texto]; }); });
     var listo = (e.perfil.pin && PP.cifrado.disponible) ? PP.fijarPin(e.perfil.pin) : Promise.resolve();
     if (e.perfil.pinDePrueba == null) e.perfil.pinDePrueba = e.perfil.pin === '1234';
-    return listo.then(function () { return PP.persistir(); });
+    return listo.then(function () { if (!opciones || !opciones.sinGuardar) return PP.persistir(); });
   };
 
   PP.iniciar = function () {
@@ -553,7 +631,9 @@ window.PP = window.PP || {};
       // Primera vez: si viene del onboarding, arranca con su peque; si no, con el ejemplo de Mateo
       var onboarding = !guardado && PP.leerOnboarding();
       PP.estado = guardado || (onboarding ? PP.datosDesdeOnboarding(onboarding) : PP.datosEjemplo());
-      return PP.prepararDatos();
+      return PP.prepararDatos().then(function () { PP.resolverError('arranque'); }).catch(function () {
+        PP.avisarError('Este navegador no pudo guardar los datos. Puedes seguir en esta sesión, pero los cambios podrían perderse al cerrar. Revisa el espacio y los permisos antes de continuar.', { contexto: 'arranque' });
+      });
     }).then(function () {
       // Atrás y el candado ya sirven mientras espera: la guía y el kit de calma se pueden abrir
       // desde «Revisando…» (bloqueo.js), y el kit se le puede dar al niño.
@@ -579,6 +659,8 @@ window.PP = window.PP || {};
       PP.ir('inicio', null, { raiz: true }); // sin acceso, la puerta de pintar() la cambia por 'bloqueo'
       pedirAlmacenamientoFijo();
       if (PP.estado.perfil.abrirEnEspacio && !PP.acceso.cerrada('espacio')) PP.abrirEspacio();
+    }).catch(function () {
+      PP.avisarError('No se pudieron leer los datos guardados. No los hemos reemplazado. Cierra las otras pestañas de Paso a Paso y vuelve a abrir la app para intentarlo de nuevo.', { contexto: 'arranque', reintentar: PP.iniciar });
     });
 
     // Funcionar sin internet: solo cuando la app está instalada en su propia web

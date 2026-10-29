@@ -24,7 +24,7 @@ window.PP = window.PP || {};
     pintar: function (main) {
       var nombre = PP.esc(PP.estado.perfil.nombre);
       main.innerHTML =
-        '<p class="intro">Léelas juntos unos días antes de la situación, y otra vez justo antes. Así ' + nombre + ' sabe qué va a pasar.</p>' +
+        '<p class="intro">Léelas juntos unos días antes de la situación, y otra vez justo antes. Pueden ayudar a ' + nombre + ' a anticipar lo que viene.</p>' +
         '<div class="lista-rutinas">' + lista().map(function (h) {
           return '<article class="tarjeta rutina"><div class="fila">' + PP.picto(h, 'picto-m') +
             '<div class="crece"><h2>' + PP.esc(h.titulo) + '</h2><p class="suave">' + h.paginas.length + ' páginas</p></div></div>' +
@@ -104,7 +104,7 @@ window.PP = window.PP || {};
         if (b.hasAttribute('data-borrar-no')) PP.repintar();
         if (b.hasAttribute('data-borrar-si')) {
           PP.estado.historias = lista().filter(function (x) { return x.id !== h.id; });
-          PP.persistir(); PP.avisar('Historia borrada'); PP.ir('historias', null, { raiz: true });
+          PP.persistirConAviso(function () { PP.avisar('Historia borrada'); PP.ir('historias', null, { raiz: true }); });
         }
       };
       $('#form-h').onsubmit = function (e) {
@@ -115,7 +115,7 @@ window.PP = window.PP || {};
         if (!h.paginas.length) { PP.avisar('Escribe al menos una página.'); h.paginas.push({ id: PP.nuevoId(), picto: '⭐', texto: '' }); PP.repintar(); return; }
         var i = lista().findIndex(function (x) { return x.id === h.id; });
         if (i >= 0) lista()[i] = h; else lista().push(h);
-        PP.persistir(); PP.avisar('Guardada'); PP.ir('historias', null, { raiz: true });
+        PP.persistirConAviso(function () { PP.avisar('Guardada'); PP.ir('historias', null, { raiz: true }); });
       };
     }
   };

@@ -1,5 +1,8 @@
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { llaveIngesta, supabaseIngesta } from '@/lib/servidor/ingesta';
+import { EVENTO_CARRITO, leerCarrito } from '@/lib/correos/carrito';
+import { operarCorreo } from '@/lib/correos/servidor';
+import { checkoutDe } from '@/lib/embudo/checkout';
 
 // Webhook de Hotmart (18): cuerpo crudo → hottok en tiempo constante → la base aplica el
 // evento en UNA transacción (idempotencia, catálogo, estados, ledger). Si falta el hottok
@@ -51,6 +54,21 @@ export async function POST(req: Request) {
   }
 
   delete cuerpo.hottok;
+  if (tipo === EVENTO_CARRITO) {
+    if (process.env.EMAIL_CARRITO_ACTIVO !== 'true') return Response.json({ ok: true, ignored: true });
+    const checkout = checkoutDe()?.mensual;
+    const oferta = checkout ? new URL(checkout).searchParams.get('off') : null;
+    const carrito = leerCarrito(cuerpo, oferta);
+    if (!carrito) return Response.json({ ok: true, ignored: true });
+    try {
+      // Cola idempotente, sin crear cuenta ni cambiar acceso/pagos del comprador.
+      await operarCorreo('carrito', carrito);
+      return Response.json({ ok: true });
+    } catch {
+      console.error('[hotmart] carrito no registrado');
+      return new Response(null, { status: 503 });
+    }
+  }
   const hash = createHash('sha256').update(crudo, 'utf8').digest('hex');
   const idEvento = typeof cuerpo.id === 'string' && cuerpo.id.length > 0 ? cuerpo.id.slice(0, 120) : `sha256:${hash}`;
 

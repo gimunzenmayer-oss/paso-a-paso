@@ -1,0 +1,17 @@
+{
+  "resultados": [
+    {
+      "pruebas": [
+        "correo inválido",
+        "permiso requerido",
+        "doble envío bloqueado",
+        "cargando",
+        "confirmación",
+        "sin conexión",
+        "límite"
+      ],
+      "llamadasReales": 0
+    }
+  ],
+  "errores": []
+}

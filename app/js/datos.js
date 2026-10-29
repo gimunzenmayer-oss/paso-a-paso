@@ -358,48 +358,138 @@ window.PP = window.PP || {};
 
   // ---------- 2. El "cajón" donde se guarda todo ----------
   // IndexedDB es una pequeña base de datos dentro del navegador.
-  // Si el navegador no la permite (modo privado, etc.), usamos
-  // memoria temporal para que la app siga funcionando igual.
+  // La memoria solo contiene copias confirmadas. No sustituye un guardado.
   var memoria = {};
   var bdPromesa = null;
+  var lecturasBloqueadas = Object.create(null), lecturasPendientes = Object.create(null);
+
+  function errorLectura() {
+    var e = new Error('No se pudo confirmar la lectura. Vuelve a leer los datos antes de guardarlos.');
+    e.name = 'LecturaInciertaError';
+    return e;
+  }
+
+  function comprobarLecturas(claves) {
+    claves.forEach(function (clave) {
+      if (lecturasBloqueadas[clave]) throw lecturasBloqueadas[clave];
+      if (lecturasPendientes[clave]) throw errorLectura();
+    });
+  }
+
+  function leerMemoria(clave) {
+    return memoria[clave] == null ? null : JSON.parse(JSON.stringify(memoria[clave]));
+  }
 
   function abrirBD() {
     if (bdPromesa) return bdPromesa;
-    bdPromesa = new Promise(function (ok) {
+    bdPromesa = new Promise(function (ok, fallo) {
       try {
         var pet = indexedDB.open('paso-a-paso', 1);
+        var bloqueada = false;
         pet.onupgradeneeded = function () { pet.result.createObjectStore('cajon'); };
-        pet.onsuccess = function () { ok(pet.result); };
-        pet.onerror = function () { ok(null); };
-      } catch (e) { ok(null); }
+        pet.onsuccess = function () {
+          if (bloqueada) { pet.result.close(); return; }
+          pet.result.onversionchange = function () { pet.result.close(); bdPromesa = null; };
+          ok(pet.result);
+        };
+        pet.onblocked = function () {
+          bloqueada = true;
+          fallo(new Error('Cierra las otras pestañas de Paso a Paso y vuelve a intentar.'));
+        };
+        pet.onerror = function () { fallo(pet.error || new Error('No se pudo abrir el almacenamiento.')); };
+      } catch (e) { fallo(e); }
+    }).catch(function (e) {
+      bdPromesa = null; // permitir reintentar cuando el navegador vuelva a permitirlo
+      throw e;
     });
     return bdPromesa;
   }
 
   // Guardar un valor con un nombre (por ejemplo 'estado')
   PP.guardar = function (clave, valor) {
-    memoria[clave] = valor;
+    var valores = {}; valores[clave] = valor;
+    return PP.guardarConjunto(valores);
+  };
+
+  // PIN y diario deben cambiar juntos: una sola transacción, todo o nada.
+  PP.guardarConjunto = function (valores) {
+    // Capturar AHORA: el formulario puede cambiar mientras se abre la base.
+    var copia;
+    try {
+      copia = {};
+      comprobarLecturas(Object.keys(valores));
+      Object.keys(valores).forEach(function (clave) { copia[clave] = JSON.parse(JSON.stringify(valores[clave])); });
+    }
+    catch (e) { return Promise.reject(e); }
     return abrirBD().then(function (bd) {
-      if (!bd) return;
-      try {
-        var tx = bd.transaction('cajon', 'readwrite');
-        tx.objectStore('cajon').put(JSON.parse(JSON.stringify(valor)), clave);
-      } catch (e) { /* seguimos con la copia en memoria */ }
+      comprobarLecturas(Object.keys(copia));
+      return new Promise(function (ok, fallo) {
+        var tx;
+        try {
+          try { tx = bd.transaction('cajon', 'readwrite', { durability: 'strict' }); }
+          catch (e) {
+            if (e.name !== 'TypeError') throw e; // navegadores sin opción durability
+            tx = bd.transaction('cajon', 'readwrite');
+          }
+          tx.oncomplete = function () {
+            Object.keys(copia).forEach(function (clave) { memoria[clave] = copia[clave]; });
+            ok();
+          };
+          tx.onabort = function () {
+            var error = tx.error || new Error('El guardado se interrumpió.');
+            if (!tx.error) error.name = 'AbortError';
+            fallo(error);
+          };
+          tx.onerror = function () { fallo(tx.error || new Error('No se pudo guardar.')); };
+          Object.keys(copia).forEach(function (clave) {
+            var pet = tx.objectStore('cajon').put(copia[clave], clave);
+            pet.onerror = function () { fallo(pet.error || new Error('No se pudo guardar.')); };
+          });
+          // El éxito de put NO confirma la transacción: solo oncomplete lo hace.
+        } catch (e) {
+          if (tx) tx.abort();
+          fallo(e);
+        }
+      });
     });
   };
 
-  // Leer un valor guardado; si no existe devuelve null
-  PP.leer = function (clave) {
-    return abrirBD().then(function (bd) {
-      if (!bd) return memoria[clave] || null;
-      return new Promise(function (ok) {
-        try {
-          var pet = bd.transaction('cajon').objectStore('cajon').get(clave);
-          pet.onsuccess = function () { ok(pet.result || null); };
-          pet.onerror = function () { ok(memoria[clave] || null); };
-        } catch (e) { ok(memoria[clave] || null); }
-      });
+  // Para eventos de interfaz que no devuelven una promesa al navegador.
+  // El callback de éxito solo corre después del guardado; el fallo se consume aquí.
+  // PP.persistir/PP.guardar conservan su rechazo para operaciones encadenadas.
+  PP.persistirConAviso = function (alGuardar) {
+    var contexto = PP.actual, origen = typeof document === 'undefined' ? null : document.activeElement;
+    return PP.guardar('estado', PP.estado).then(function () {
+      if (PP.resolverError) PP.resolverError(contexto);
+      if (alGuardar) alGuardar();
+      return true;
+    }, function () {
+      PP.avisarError('No se pudo guardar. Revisa el espacio y los permisos del navegador y vuelve a intentarlo. Tus cambios siguen abiertos, pero podrían perderse al cerrar.', { contexto: contexto, origen: origen });
+      return false;
     });
+  };
+
+  // null SOLO significa que una lectura confirmada no encontró el dato.
+  // Sin IndexedDB se permite la sesión temporal, pero su clave queda sin permiso de escritura.
+  PP.leer = function (clave) {
+    lecturasPendientes[clave] = (lecturasPendientes[clave] || 0) + 1;
+    return abrirBD().then(function (bd) {
+      return new Promise(function (ok, fallo) {
+        try {
+          var tx = bd.transaction('cajon'), resultado = null;
+          tx.oncomplete = function () { delete lecturasBloqueadas[clave]; ok(resultado); };
+          tx.onerror = tx.onabort = function () { fallo(tx.error || errorLectura()); };
+          var pet = tx.objectStore('cajon').get(clave);
+          pet.onsuccess = function () { resultado = pet.result == null ? null : pet.result; };
+          pet.onerror = function () { fallo(pet.error || errorLectura()); };
+        } catch (e) { fallo(e); }
+      });
+    }).catch(function (causa) {
+      var e = errorLectura(); e.cause = causa;
+      lecturasBloqueadas[clave] = e;
+      if (typeof indexedDB === 'undefined' || (causa && (causa.name === 'SecurityError' || causa.name === 'NotSupportedError'))) return leerMemoria(clave);
+      throw e;
+    }).finally(function () { lecturasPendientes[clave]--; });
   };
 
   // Fecha de hoy como texto '2026-10-19' (para saber qué se hizo hoy)

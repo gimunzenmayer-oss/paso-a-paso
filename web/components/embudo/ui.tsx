@@ -70,7 +70,7 @@ export function BotonPrincipal({
       aria-busy={ariaBusy}
       whileTap={disabled ? undefined : { scale: 0.97 }}
       animate={resaltado ? { scale: [1, 1.03, 1] } : { scale: 1 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: resaltado ? 0.5 : 0.12, ease: [0.16, 1, 0.3, 1] }}
       className={`flex h-14 w-full items-center justify-center rounded-[var(--radius-button)] bg-[var(--accent)] px-5 text-center text-[18px] leading-tight font-semibold text-[var(--bg)] transition-[opacity,box-shadow,background-color] duration-200 [touch-action:manipulation] disabled:opacity-65 ${
         resaltado
           ? 'shadow-[0_10px_34px_color-mix(in_oklab,var(--accent)_45%,transparent)]'
@@ -141,11 +141,12 @@ export function EnlacePrincipal({
 
 /* ── <BotonTexto> — salida secundaria ("Prefiero no decirlo", "Prefiero saltar esta"): 48px de
    alto para el dedo, texto secundario subrayado. La salida visible ES la técnica (02B regla 7). ── */
-export function BotonTexto({ children, onClick }: { children: ReactNode; onClick: () => void }) {
+export function BotonTexto({ children, onClick, disabled = false }: { children: ReactNode; onClick: () => void; disabled?: boolean }) {
   return (
     <button
       type="button"
       onClick={onClick}
+      disabled={disabled}
       className="mx-auto flex min-h-12 items-center justify-center px-4 text-[16px] font-semibold text-[var(--text-secondary)] underline decoration-[color-mix(in_oklab,var(--text-secondary)_45%,transparent)] underline-offset-4 [touch-action:manipulation]"
     >
       {children}
@@ -198,13 +199,13 @@ export function BotonAtras({ texto, ...destino }: { texto: string } & ({ onClick
    debajo se corta con un borde limpio (la señal normal de «hay más»), nunca un
    fantasma a medias; lo usa el precio del paywall, donde un bloque bajo las
    tarjetas asomaba borroso o, para evitarlo, dejaba un hueco. ── */
-export function PieFijo({ children, fondo = 'degradado' }: { children: ReactNode; fondo?: 'degradado' | 'solido' }) {
+export function PieFijo({ children, fondo = 'degradado', pegado = true }: { children: ReactNode; fondo?: 'degradado' | 'solido'; pegado?: boolean }) {
   const piel =
     fondo === 'solido'
       ? 'border-t border-[color-mix(in_oklab,var(--text-tertiary)_22%,transparent)] bg-[var(--bg)] pt-3'
       : 'bg-[linear-gradient(to_bottom,transparent,var(--bg)_18px)] pt-6';
   return (
-    <div className={`sticky bottom-0 z-10 -mx-5 mt-auto px-5 pb-[max(16px,env(safe-area-inset-bottom))] ${piel}`}>
+    <div className={`${pegado ? 'sticky bottom-0 mt-auto' : 'mt-6'} z-10 -mx-5 px-5 pb-[max(16px,env(safe-area-inset-bottom))] ${piel}`}>
       <div className="flex flex-col gap-1">{children}</div>
     </div>
   );
