@@ -3,8 +3,7 @@ import type { AjustesCorreo } from './envio';
 import { urlSegura } from './plantillas';
 
 export function ajustesCorreo(): AjustesCorreo {
-  // La dirección propia prevista aún no está conectada. No enviar enlaces a ella.
-  const sitio = urlSegura(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://paso-a-paso-sigma.vercel.app');
+  const sitio = urlSegura(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://pasoapaso.hadaapps.com');
   return {
     habilitado: process.env.EMAIL_ENVIO_ACTIVO === 'true',
     marketing: process.env.EMAIL_MARKETING_ACTIVO === 'true',
