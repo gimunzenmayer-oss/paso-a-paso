@@ -1,5 +1,13 @@
 # FICHA DE DIRECCIÓN DE ARTE — Paso a Paso
 
+> ⚠️ CAMBIO APROBADO POR LA DUEÑA (2026-11-03): estilo "ficha de juguete" (referencia: estilo Duolingo de styles.refero.design, elegida entre 3 opciones renderizadas). Manda sobre lo de abajo donde choque.
+> - Fondo blanco #FFFFFF · superficie 2 #F7F7F7 · borde #E5E5E5 (2px) · texto #3C3C3C / #6B6B6B
+> - Verde de acción #46A302 (relleno, texto blanco ≥19px bold) con canto #3A8700 · verde como texto chico #357F00 · azul ayuda/foco #1477AB (texto) y #1CB0F6 (decoración), lavado #DDF4FF
+> - Categorías vivas: verde #58CC02 · azul #1CB0F6 · naranja #FF9600 · rosa #FF86D0 · violeta #CE82FF · amarillo #FFC800 (lavados claros)
+> - Títulos Nunito 800-900 · texto sigue en Atkinson Hyperlegible (legibilidad)
+> - Botones y tarjetas tocables con canto inferior plano (0 4px 0) que se hunde al tocar · radios 16 (botón) / 20 (tarjeta)
+> - Sin mascota ni rachas con fuego (no presionar a familias en crisis); modo calma sigue apagando saturación y movimiento.
+
 ## Referencia del usuario (CONTRATO)
 - ¿Hay imagen de referencia del usuario?: NO como imagen externa. La referencia es la APP YA CONSTRUIDA y aprobada (app/styles.css): la landing EXTIENDE ese sistema, no lo reinterpreta.
 - Prohibiciones anti-IA que levanta: ninguna.
