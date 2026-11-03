@@ -2,7 +2,7 @@
    teléfono para que funcione sin internet. La primera vez que
    se abre con conexión, copia estos archivos; después los sirve
    desde el propio teléfono. */
-var VERSION = 'paso-a-paso-v20';
+var VERSION = 'paso-a-paso-v21';
 var ARCHIVOS = ['./index.html', './styles.css', './manifest.webmanifest', './icono.svg',
   './fonts/atkinson-400-latin.woff2', './fonts/atkinson-400-latin-ext.woff2', './fonts/atkinson-700-latin.woff2', './fonts/atkinson-700-latin-ext.woff2', './fonts/lexend-latin.woff2', './fonts/lexend-latin-ext.woff2', './fonts/nunito-latin.woff2', './fonts/nunito-latin-ext.woff2',
   './js/acceso.js', './js/medicion.js', './js/datos.js', './js/voz.js', './js/app.js', './js/agenda.js', './js/tablero.js', './js/guia-datos.js', './js/guia.js', './js/cifrado.js', './js/nino.js', './js/temporizador.js', './js/calma.js', './js/historias.js', './js/diario.js', './js/logros.js', './js/informe.js', './js/bloqueo.js',
@@ -16,7 +16,7 @@ self.addEventListener('install', function (e) {
 self.addEventListener('activate', function (e) {
   e.waitUntil(caches.keys().then(function (ks) {
     return Promise.all(ks.filter(function (k) { return k !== VERSION; }).map(function (k) { return caches.delete(k); }));
-  }));
+  }).then(function () { return self.clients.claim(); }));
 });
 // Primero intenta la copia del teléfono; si no está, va a internet y guarda una copia.
 // Solo se copian respuestas buenas de esta misma web (nunca errores, ni la API, ni otras webs).

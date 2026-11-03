@@ -665,6 +665,14 @@ window.PP = window.PP || {};
 
     // Funcionar sin internet: solo cuando la app está instalada en su propia web
     if ('serviceWorker' in navigator && window.top === window && /^https:|localhost/.test(location.href)) {
+      // Cuando llega una versión nueva de la app, se recarga una sola vez para mostrarla
+      // de inmediato (si no, el cambio recién se veía la segunda vez que se abría).
+      var habiaVersion = !!navigator.serviceWorker.controller, recargada = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        if (!habiaVersion || recargada) return;
+        recargada = true;
+        location.reload();
+      });
       navigator.serviceWorker.register('sw.js').catch(function () { });
     }
   };
