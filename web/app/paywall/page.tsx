@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Paywall } from '@/components/embudo/Paywall';
 import { APP } from '@/lib/marca';
+import { AvisoPixel } from '@/components/AvisoPixel';
 
 // Paywall en 3 páginas (plan docs/planes/entrada-de-pago.md, paso 5).
 // Es personal: no se indexa. Todo corre en el teléfono (componente cliente).
@@ -10,5 +11,10 @@ export const metadata: Metadata = {
 };
 
 export default function PaginaPaywall() {
-  return <Paywall />;
+  return (
+    <>
+      <Paywall />
+      <AvisoPixel />
+    </>
+  );
 }

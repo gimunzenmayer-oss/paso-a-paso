@@ -7,6 +7,7 @@
 // apagado, no sale ningún evento, igual que en app/js/medicion.js.
 
 import type { Plan } from '@/lib/embudo/checkout';
+import { EQUIVALENCIA_META, eventoMeta } from '@/lib/pixel-meta';
 
 function azar() {
   const b = new Uint8Array(16);
@@ -50,6 +51,10 @@ export function estadisticasApagadas(): boolean {
 export type PropsEvento = Record<string, number | Plan>;
 
 export function enviarEvento(tipo: string, props?: PropsEvento) {
+  // El píxel de Meta tiene su propio permiso (aviso Aceptar/Rechazar): viaja solo el nombre
+  // estándar equivalente, sin props, y solo si la persona aceptó (lib/pixel-meta.ts).
+  const meta = EQUIVALENCIA_META[tipo];
+  if (meta) eventoMeta(meta);
   if (estadisticasApagadas()) return;
   const cuerpo = JSON.stringify({
     type: tipo,

@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PaginaLegal } from '@/components/legal/PaginaLegal';
+import { CambiarEleccionPixel } from '@/components/legal/CambiarEleccionPixel';
 import { APP, EDAD_MINIMA, PAIS, RESPONSABLE, RESPONSABLE_LEGAL, RESPONSABLE_TIPO, SOPORTE_EMAIL } from '@/lib/marca';
 
 export const metadata: Metadata = { title: `Privacidad · ${APP}` };
 
 // Describe lo que hace el código de verdad (auditoría legal 2026-10-24):
 // datos del peque solo en IndexedDB/localStorage del teléfono; en Supabase (São Paulo)
-// solo cuenta, compra, eventos seudónimos y errores; sin IA, sin píxeles ni cookies de terceros.
+// solo cuenta, compra, eventos seudónimos y errores; sin IA. Único tercero opcional: el píxel de Meta,
+// solo en ventas/recorrido de inicio/planes y solo tras «Aceptar» (versión legal 5, 2026-11-07).
 export default function Privacidad() {
   const correo = <a href={`mailto:${SOPORTE_EMAIL}`}>{SOPORTE_EMAIL}</a>;
   return (
@@ -73,8 +75,9 @@ export default function Privacidad() {
         <li>Enviarte correos de acceso (códigos para entrar) y avisos sobre tu suscripción: misma razón.</li>
         <li>Llevar la contabilidad y cumplir obligaciones legales sobre los pagos: porque la ley lo exige.</li>
         <li>Mejorar la app con estadísticas seudónimas y registros de errores: por nuestro interés en que funcione bien, y siempre puedes apagarlas.</li>
+        <li>Saber si nuestros anuncios en Facebook e Instagram traen gente: solo si lo aceptas en el aviso del píxel (punto 8).</li>
       </ul>
-      <p>No vendemos tus datos, no los usamos para publicidad y no los cruzamos con otras empresas.</p>
+      <p>No vendemos tus datos, no los cruzamos con otras empresas y nada de lo que escribes sobre tu peque se usa para publicidad.</p>
 
       <h2>5. Con quién se comparten (proveedores)</h2>
       <p>Solo con los servicios que necesitamos para funcionar. Cada uno trata los datos bajo sus propias condiciones de seguridad:</p>
@@ -83,6 +86,7 @@ export default function Privacidad() {
         <li><strong>Supabase</strong> (servidores en São Paulo, Brasil): guarda tu cuenta, el estado de la suscripción, las estadísticas seudónimas y los errores, y envía los códigos para entrar.</li>
         <li><strong>Vercel</strong> (Estados Unidos): aloja la página y la app.</li>
         <li><strong>Resend</strong> (Estados Unidos): envía los correos de la suscripción cuando el servicio de correo esté activo.</li>
+        <li><strong>Meta</strong> (Facebook e Instagram, Irlanda y Estados Unidos): solo si aceptas su píxel, recibe tu visita a la página de ventas, al recorrido de inicio y a la pantalla de planes (punto 8). Meta trata esos datos según su propia política.</li>
       </ul>
 
       <h2>6. Transferencia a otros países</h2>
@@ -99,15 +103,22 @@ export default function Privacidad() {
         <li>Estadísticas seudónimas y errores: hasta 24 meses; después se borran.</li>
       </ul>
 
-      <h2>8. Cookies y almacenamiento en tu teléfono</h2>
-      <p>
-        No usamos cookies de publicidad ni píxeles de redes sociales, y no compartimos lo que haces con terceros. Usamos:
-      </p>
+      <h2 id="cookies">8. Cookies y almacenamiento en tu teléfono</h2>
+      <p>Usamos:</p>
       <ul>
         <li><strong>Necesarias:</strong> la cookie de sesión que te mantiene dentro de tu cuenta y el almacenamiento donde la app guarda tus datos en el teléfono. Sin ellas la app no funciona.</li>
         <li><strong>Estadísticas propias:</strong> el número al azar del teléfono del punto 3. Se apagan en Ajustes → «Compartir estadísticas de uso».</li>
+        <li>
+          <strong>Píxel de Meta (solo si lo aceptas):</strong> en la página de ventas, el recorrido de inicio y la pantalla
+          de planes te mostramos un aviso con «Aceptar» y «Rechazar», igual de fáciles. Si aceptas, Meta recibe que
+          visitaste esas páginas, que terminaste las preguntas de bienvenida y que abriste la página de pago, junto con los
+          datos técnicos de tu navegador y sus propias cookies. Así sabemos si un anuncio de Facebook o Instagram trajo
+          gente. <strong>No</strong> le mandamos tus respuestas, tu correo ni nada sobre tu peque, y el píxel no se carga
+          dentro de la app. Si rechazas, no se carga nada de Meta.
+        </li>
       </ul>
-      <p>Si algún día sumamos cookies de terceros, te pediremos permiso antes, con «Aceptar» y «Rechazar» igual de fáciles.</p>
+      <p>Puedes cambiar tu elección cuando quieras:</p>
+      <CambiarEleccionPixel />
 
       <h2>9. Tus derechos</h2>
       <p>
