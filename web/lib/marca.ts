@@ -7,9 +7,9 @@ export const SOPORTE_EMAIL = 'hadaapps@gmail.com';
 export const RESPONSABLE_LEGAL = 'Giselle Alejandra Munzenmayer Gomez';
 export const RESPONSABLE_TIPO = 'persona natural';
 export const EDAD_MINIMA = 18;
-export const ACTUALIZADO = '28 de octubre de 2026';
+export const ACTUALIZADO = '7 de noviembre de 2026';
 // Versión de las páginas legales: súbela con cada cambio importante y avisa por correo (47 §2).
-export const VERSION_LEGAL = 4;
+export const VERSION_LEGAL = 5;
 // Plazo de reembolso configurado en Hotmart (producto 8796204). Cuenta desde la compra,
 // por eso se solapa con la prueba: no se promete como "garantía" (decisión de la dueña 2026-10-25).
 export const REEMBOLSO_DIAS = 7;

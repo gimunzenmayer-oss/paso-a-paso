@@ -1,18 +1,23 @@
 import type { NextConfig } from "next";
 
-// El navegador solo carga código, estilos, imágenes y fuentes de esta misma web.
+// El navegador solo carga código, estilos, imágenes y fuentes de esta misma web
+// (y el píxel de Meta, solo si hay ID configurado y la persona lo acepta).
 // 'unsafe-inline' hace falta por los estilos en línea del kit y el arranque de la app;
 // 'unsafe-eval' solo en desarrollo (lo usa Next para recargar en caliente).
 const desarrollo = process.env.NODE_ENV !== "production";
 const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+// Píxel de Meta (solo con permiso, ver lib/pixel-meta.ts): sin ID configurado, la política no se abre.
+const pixelMeta = /^\d{10,20}$/.test((process.env.NEXT_PUBLIC_META_PIXEL_ID ?? "").trim());
+const metaScript = pixelMeta ? " https://connect.facebook.net" : "";
+const metaConexion = pixelMeta ? " https://www.facebook.com https://connect.facebook.net" : "";
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${desarrollo ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline'${desarrollo ? " 'unsafe-eval'" : ""}${metaScript}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  `img-src 'self' data: blob:${pixelMeta ? " https://www.facebook.com" : ""}`,
   "font-src 'self' data:",
   "media-src 'self' data: blob:",
-  `connect-src 'self'${supabase ? ` ${supabase}` : ""}`,
+  `connect-src 'self'${supabase ? ` ${supabase}` : ""}${metaConexion}`,
   "worker-src 'self'",
   "manifest-src 'self'",
   "object-src 'none'",

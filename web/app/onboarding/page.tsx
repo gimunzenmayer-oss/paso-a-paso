@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Onboarding } from '@/components/embudo/Onboarding';
 import { APP } from '@/lib/marca';
+import { AvisoPixel } from '@/components/AvisoPixel';
 
 // Bienvenida antes del pago (plan docs/planes/entrada-de-pago.md, paso 3).
 // Es personal: no se indexa. Todo el flujo corre en el teléfono (componente cliente).
@@ -10,5 +11,10 @@ export const metadata: Metadata = {
 };
 
 export default function PaginaOnboarding() {
-  return <Onboarding />;
+  return (
+    <>
+      <Onboarding />
+      <AvisoPixel />
+    </>
+  );
 }

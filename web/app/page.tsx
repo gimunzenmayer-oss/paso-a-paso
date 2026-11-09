@@ -17,6 +17,7 @@ import { CtaFinal } from '@/components/landing/CtaFinal';
 import { FooterLegal } from '@/components/landing/FooterLegal';
 import { StickyCtaMobile } from '@/components/landing/ui';
 import { Medicion } from '@/components/landing/Medicion';
+import { AvisoPixel } from '@/components/AvisoPixel';
 import { Logo } from '@/components/landing/Logo';
 import Image from 'next/image';
 import { MotionConfig } from 'motion/react';
@@ -49,6 +50,7 @@ export default function PaginaDeVentas() {
   return (
     <MotionConfig reducedMotion="user">
       <Medicion destinoCta={CTA_HREF} />
+      <AvisoPixel />
     <div className="min-h-dvh bg-[var(--bg)] text-[var(--text-primary)] [font-family:var(--font-body)]">
       <Hero
         appName="Paso a Paso"
